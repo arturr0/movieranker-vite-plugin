@@ -3,43 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Movies</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Assuming you have a styles.css -->
+  <title>Movie Search</title>
+  <script>
+    async function searchMovies() {
+      const title = document.getElementById('movieTitle').value;
+      const response = await fetch(`/movies/search?title=${title}`);
+      const data = await response.json();
+      
+      if (data.movies) {
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = ''; // Clear previous results
+        
+        data.movies.forEach(movie => {
+          const movieElement = document.createElement('div');
+          movieElement.innerHTML = `
+            <h3>${movie.title} (${movie.year})</h3>
+            <img src="${movie.poster}" alt="${movie.title} Poster" width="200" />
+          `;
+          resultsDiv.appendChild(movieElement);
+        });
+      } else {
+        alert('No movies found.');
+      }
+    }
+  </script>
 </head>
 <body>
   <h1>Movie Search</h1>
-  <form id="movieSearchForm">
-    <label for="title">Movie Title:</label>
-    <input type="text" id="title" name="title" required>
-    <button type="submit">Search</button>
-  </form>
-
-  <div id="movieResults">
-    <!-- Movie results will be displayed here -->
-  </div>
-
-  <script>
-    const form = document.getElementById('movieSearchForm');
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const title = document.getElementById('title').value;
-
-      const response = await fetch(`/movies/search?title=${encodeURIComponent(title)}`);
-      const data = await response.json();
-
-      const movieResults = document.getElementById('movieResults');
-      movieResults.innerHTML = ''; // Clear previous results
-
-      if (data.Search) {
-        data.Search.forEach(movie => {
-          const movieDiv = document.createElement('div');
-          movieDiv.innerHTML = `<strong>${movie.Title}</strong> (${movie.Year})`;
-          movieResults.appendChild(movieDiv);
-        });
-      } else {
-        movieResults.innerHTML = '<p>No movies found</p>';
-      }
-    });
-  </script>
+  <input type="text" id="movieTitle" placeholder="Enter movie title" />
+  <button onclick="searchMovies()">Search</button>
+  
+  <div id="results"></div>
 </body>
 </html>

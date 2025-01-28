@@ -28,7 +28,13 @@ export class MoviesController {
       
       // Check if the response is valid
       if (response.data.Response === 'True') {
-        return res.json(response.data);  // Return the movie search results
+        const moviesWithPosters = response.data.Search.map(movie => ({
+          title: movie.Title,
+          year: movie.Year,
+          poster: movie.Poster,  // Add the movie poster URL to the result
+          imdbID: movie.imdbID
+        }));
+        return res.json({ movies: moviesWithPosters });
       } else {
         return res.json({ error: 'No results found for the given title' });
       }
