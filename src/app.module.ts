@@ -11,4 +11,5 @@ import { join } from 'path';
   providers: [PrismaService], // Make PrismaService globally available
   exports: [PrismaService],   // Export PrismaService for use in other modules
 })
+
 export class AppModule {}
