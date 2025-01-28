@@ -7,19 +7,34 @@
   <script>
     
     async function handleFormSubmit(event, endpoint) {
-      event.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+  event.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
-      const response = await fetch(`http://localhost:3000/auth/${endpoint}`, {   <!-- This is the line to check -->
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+  const response = await fetch(`http://localhost:3000/auth/${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
 
-      const data = await response.json();
-      alert(data.message || JSON.stringify(data));
-    }
+  if (!response.ok) {
+    const errorResponse = await response.json();  // Expecting JSON even on failure
+    console.error('Error:', errorResponse);
+    alert(errorResponse.error || 'Login failed!');
+    return;
+  }
+
+  const data = await response.json();  // Parse as JSON
+  console.log(data);  // Log the response to see what data you're getting
+  if (data.message === 'User logged in successfully') {
+    // Redirect to /movies
+    window.location.href = '/movies';  // This triggers the browser to load the /movies page
+  } else {
+    alert(data.message || 'Error occurred');
+  }
+}
+
+
   </script>
 </head>
 <body>
