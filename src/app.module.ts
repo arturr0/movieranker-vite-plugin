@@ -4,6 +4,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { MoviesController } from './movies/movies.controller';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { MoviesController } from './movies/movies.controller';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'frontend'), // This is correct before the build process
     }),
+    DatabaseModule,
   ],
   controllers: [MoviesController],
   providers: [PrismaService],
