@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Search</title>
+  <script>
+    async function searchMovies() {
+      const title = document.getElementById('movieTitle').value;
+      const response = await fetch(`/movies/search?actor=${title}`);
+      const data = await response.json();
+      
+      if (data.movies) {
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = ''; // Clear previous results
+        
+        data.movies.forEach(movie => {
+          const movieElement = document.createElement('div');
+          movieElement.innerHTML = `
+            <h3>${movie.title} (${movie.year})</h3>
+            <img src="${movie.poster}" alt="${movie.title} Poster" width="200" />
+          `;
+          resultsDiv.appendChild(movieElement);
+        });
+      } else {
+        alert('No movies found.');
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Movie Search</h1>
+  <input type="text" id="movieTitle" placeholder="Enter movie title" />
+  <button onclick="searchMovies()">Search</button>
+  
+  <div id="results"></div>
+</body>
+</html>
