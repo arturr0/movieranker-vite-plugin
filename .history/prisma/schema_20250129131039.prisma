@@ -1,0 +1,28 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Make sure you define this in your .env file
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  ratings  Rating[] // One user can have multiple ratings
+}
+
+model Rating {
+  id      Int    @id @default(autoincrement())
+  userId  Int    
+  email   String 
+  rating  Int
+  comment String
+
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, email]) // Ensures that each user-email pair is unique in the rating table
+}

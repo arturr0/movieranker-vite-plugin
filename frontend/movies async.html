@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Search</title>
+  <style>
+    .result-container {
+      display: none; /* Hide results until images load */
+    }
+    .loading {
+      font-weight: bold;
+      font-size: 18px;
+      color: blue;
+    }
+    .movie-card {
+      display: inline-block;
+      margin: 10px;
+      text-align: center;
+    }
+  </style>
+  <script>
+    async function searchMovies() {
+      const query = document.getElementById('searchQuery').value;
+      const type = document.querySelector('input[name="searchType"]:checked').value;
+      const resultsDiv = document.getElementById('results');
+      const loadingMessage = document.getElementById('loading');
+
+      // Show "Searching..." message and clear old results
+      resultsDiv.style.display = 'none';
+      resultsDiv.innerHTML = '';
+      loadingMessage.style.display = 'block';
+      loadingMessage.innerText = 'Searching...';
+
+      try {
+        const response = await fetch(`/movies/search?query=${query}&type=${type}`);
+        const data = await response.json();
+        
+        if (data.movies?.length || data.people?.length) {
+          const elements = [];
+
+          if (data.movies) {
+            data.movies.forEach(movie => {
+              const movieElement = document.createElement('div');
+              movieElement.classList.add('movie-card');
+              movieElement.innerHTML = `
+                <h3>${movie.title} (${movie.year})</h3>
+                <img src="${movie.poster}" alt="${movie.title} Poster" width="200" class="movie-img"/>
+              `;
+              elements.push(movieElement);
+            });
+          }
+
+          if (data.people) {
+            data.people.forEach(person => {
+              const personElement = document.createElement('div');
+              personElement.classList.add('movie-card');
+              personElement.innerHTML = `
+                <h3>${person.name}</h3>
+                <img src="${person.profile}" alt="${person.name} Profile" width="200" class="movie-img"/>
+              `;
+              elements.push(personElement);
+            });
+          }
+
+          // Wait for all images to load
+          await Promise.all(
+            elements.map(element => {
+              const img = element.querySelector('img');
+              return new Promise(resolve => {
+                img.onload = resolve;
+                img.onerror = resolve; // Prevent blocking on broken images
+              });
+            })
+          );
+
+          // Remove loading message and show results
+          loadingMessage.style.display = 'none';
+          resultsDiv.style.display = 'block';
+          elements.forEach(el => resultsDiv.appendChild(el));
+        } else {
+          loadingMessage.innerText = 'No results found.';
+        }
+      } catch (error) {
+        loadingMessage.innerText = 'Error fetching results.';
+        console.error(error);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Movie Search</h1>
+  <input type="text" id="searchQuery" placeholder="Enter search query" />
+  <br>
+  <label><input type="radio" name="searchType" value="title" checked> Title</label>
+  <label><input type="radio" name="searchType" value="actor"> Actor</label>
+  <label><input type="radio" name="searchType" value="director"> Director</label>
+  <br>
+  <button onclick="searchMovies()">Search</button>
+
+  <p id="loading" class="loading"></p> <!-- Loading message -->
+  <div id="results" class="result-container"></div> <!-- Results container -->
+
+</body>
+</html>
