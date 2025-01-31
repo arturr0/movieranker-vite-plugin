@@ -7,7 +7,7 @@
   <script>
     // Handle form submission dynamically for login & register
     async function handleFormSubmit(event, endpoint) {
-  event.preventDefault();
+  event.preventDefault(); // Prevent form reload
 
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
@@ -19,18 +19,15 @@
       body: JSON.stringify({ email, password })
     });
 
-    const data = await response.json().catch(() => null);
+    const data = await response.json().catch(() => null); // Prevent crash on empty response
 
     if (response.ok && data) {
-      if (endpoint === 'login' && data.token) {
+      if (data.token) {
         localStorage.setItem('jwtToken', data.token);
         window.location.href = "/movies";
-      } else if (endpoint === 'register') {
-        alert('Registration successful! Please log in.');
-        window.location.href = "/";  // Redirect to login
       } else {
-        console.error(`${endpoint} failed:`, data.error || 'Unexpected response');
-        alert(`${endpoint} failed: ${data.error || 'Unexpected response'}`);
+        console.error(`${endpoint} failed:`, data.error || 'No token received');
+        alert(`${endpoint} failed: ${data.error || 'No token received'}`);
       }
     } else {
       console.error(`${endpoint} failed:`, data?.error || 'Server error');
@@ -41,7 +38,6 @@
     alert(`Network error: ${error.message}`);
   }
 }
-
 
   </script>
 </head>

@@ -9,10 +9,8 @@ async function bootstrap() {
   app.enableCors({
     origin: 'http://localhost:3000/movies', // Allow only this domain
     methods: 'GET, POST, PUT, DELETE',
-    allowedHeaders: 'Content-Type, Authorization', // Allow Authorization header for JWT
-    credentials: true, // Allow cookies and authentication headers
+    allowedHeaders: 'Content-Type, Authorization',
   });
-  
   
   await app.listen(port);
 

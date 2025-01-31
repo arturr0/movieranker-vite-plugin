@@ -6,27 +6,24 @@ import { CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/co
 export class JwtAuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
 
+  // Marking the function as async to use await
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    console.log("Request Headers:", request.headers);  // Log all headers to check if Authorization is present
-    const authHeader = request.headers.authorization;
-    console.log('Authorization Header:', authHeader);  // Debug log the Authorization header
-  
+    const authHeader = request.headers['authorization'] || request.headers['Authorization'];
+    console.log("authHeader", authHeader)
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new UnauthorizedException('Invalid Authorization header');
     }
-  
-    const token = authHeader.split(' ')[1];  // Extract token
-    console.log('Extracted Token:', token);  // Log the extracted token for debugging
-  
+
+    const token = authHeader.split(' ')[1]; // Extract the token
+
     try {
-      const user = await this.jwtService.verifyAsync(token);  // Verify token
-      request.user = user;  // Attach user to request
+      const user = await this.jwtService.verifyAsync(token); // Async verify
+
+      request.user = user; // Attach user info to request
       return true;
     } catch (error) {
-      console.error('Token verification failed:', error);
       throw new UnauthorizedException('Invalid or expired token');
     }
   }
-  
 }
