@@ -12,12 +12,11 @@ export class MoviesController {
   constructor(private readonly httpService: HttpService) {}
 
   @Get()
-@UseGuards(JwtAuthGuard)
-findAll(@Req() req: RequestWithUser) {
-  console.log('User:', req.user); // Should log user info from the token
-  return 'This is a protected movies route';
-}
-
+  @UseGuards(JwtAuthGuard)
+  findAll(@Req() req: RequestWithUser) { // Use the custom request interface here
+    console.log('User:', req.user); // Should log user info from the token
+    return 'This is a protected movies route';
+  }
 
   @Get('search')
   async searchMovies(

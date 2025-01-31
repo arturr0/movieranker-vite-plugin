@@ -32,8 +32,11 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const secret = this.configService.get<string>('JWT_SECRET'); // ✅ Use ConfigService
-    const token = this.jwtService.sign({ id: user.id, email: user.email }, { secret });
+    // ✅ Use the same secret when signing JWT
+    const token = this.jwtService.sign(
+      { id: user.id, email: user.email },
+      { secret: this.configService.get<string>('JWT_SECRET') }, // ✅ Ensure secret is used here
+    );
 
     return { message: 'Login successful', token };
   }
