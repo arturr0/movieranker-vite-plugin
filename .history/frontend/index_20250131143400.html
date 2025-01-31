@@ -36,33 +36,14 @@
     }
 
     // Function to fetch movies after login and redirection
-    async function fetchMovies() {
-  const token = localStorage.getItem('jwt'); // Retrieve token
-  if (!token) {
-    console.error('No JWT token found!');
-    return;
-  }
+    // async function fetchMovies() {
+      
+    //   const movies = await response.json();
+    //   console.log(movies); // Display movies in console, or render them in the page
+    // }
 
-  const response = await fetch('http://localhost:3000/movies', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    console.error('Request failed:', await response.text());
-    return;
-  }
-
-  const movies = await response.json();
-  console.log('Movies:', movies);
-}
-
-
-    // Call fetchMovies when the page loads (after redirection)
-    window.onload = fetchMovies;
+    // // Call fetchMovies when the page loads (after redirection)
+    // window.onload = fetchMovies;
   </script>
 </head>
 <body>

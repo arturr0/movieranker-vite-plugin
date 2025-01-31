@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login & Register</title>
   <script>
-    
+    // Handle form submission for login or registration
     async function handleFormSubmit(event, endpoint) {
       event.preventDefault();
       const email = document.getElementById('email').value;
@@ -28,41 +28,12 @@
 
       if (data.token) {
         localStorage.setItem('jwt', data.token); // Store JWT in localStorage
-        console.log(localStorage);
-        window.location.href = '/movies'; // Redirect to the /movies page
+        console.log('Stored JWT:', localStorage);
+        window.location.href = '/movies'; // Redirect to /movies page
       } else {
         alert(data.message || 'Error occurred');
       }
     }
-
-    // Function to fetch movies after login and redirection
-    async function fetchMovies() {
-  const token = localStorage.getItem('jwt'); // Retrieve token
-  if (!token) {
-    console.error('No JWT token found!');
-    return;
-  }
-
-  const response = await fetch('http://localhost:3000/movies', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    console.error('Request failed:', await response.text());
-    return;
-  }
-
-  const movies = await response.json();
-  console.log('Movies:', movies);
-}
-
-
-    // Call fetchMovies when the page loads (after redirection)
-    window.onload = fetchMovies;
   </script>
 </head>
 <body>

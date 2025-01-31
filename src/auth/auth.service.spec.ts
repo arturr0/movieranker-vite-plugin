@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { PrismaService } from '../prisma/prisma.service';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { PrismaService } from '../prisma/prisma.service'; // Import PrismaService
+import { JwtService } from '@nestjs/jwt'; // Import JwtService
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -13,28 +12,11 @@ describe('AuthService', () => {
         AuthService,
         {
           provide: PrismaService,
-          useValue: {
-            user: {
-              findUnique: jest.fn(),
-              create: jest.fn(),
-            },
-          },
+          useValue: {}, // Mock PrismaService
         },
         {
           provide: JwtService,
-          useValue: {
-            sign: jest.fn(() => 'test-token'),
-            verify: jest.fn(), // ✅ Ensure verify function is mocked
-          },
-        },
-        {
-          provide: ConfigService,
-          useValue: {
-            get: jest.fn((key: string) => {
-              if (key === 'JWT_SECRET') return 'test-secret';
-              return null;
-            }),
-          },
+          useValue: {}, // Mock JwtService
         },
       ],
     }).compile();

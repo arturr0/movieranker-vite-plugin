@@ -11,7 +11,7 @@ import { MoviesModule } from './movies/movies.module'; // Movies module
   imports: [
     AuthModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'frontend'), // This is correct before the build process
+      rootPath: join(__dirname, '..', '..','frontend'), // This is correct before the build process
     }),
     DatabaseModule,
     ConfigModule.forRoot({

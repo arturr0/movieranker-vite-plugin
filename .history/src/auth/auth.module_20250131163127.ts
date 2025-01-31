@@ -5,7 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtStrategy } from './jwt.strategy';
 import 'dotenv/config';
-
+import { JwtService } from '@nestjs/jwt';
 @Module({
   imports: [
     JwtModule.register({
@@ -14,7 +14,7 @@ import 'dotenv/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, PrismaService, JwtStrategy],
-  exports: [AuthService],
+  providers: [AuthService, PrismaService, JwtStrategy, JwtService],
+  exports: [AuthService, JwtService, JwtModule],
 })
 export class AuthModule {}

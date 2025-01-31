@@ -13,7 +13,7 @@ export class JwtAuthGuard implements CanActivate {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new UnauthorizedException('No or invalid token provided');
     }
-    console.log("authHeader", authHeader);
+    
     const token = authHeader.split(' ')[1];
     try {
       const decoded = this.jwtService.verify(token); // Verify the token
