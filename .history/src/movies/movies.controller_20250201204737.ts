@@ -17,15 +17,14 @@ export class MoviesController {
   }
 
   @Get('protected')
-@UseGuards(JwtAuthGuard)
-findAll(@Req() req: RequestWithUser, @Res() res: Response) {
-  console.log('User:', req.user);
-  return res.json({
-    message: 'This is a protected movies route',
-    user: req.user,  // Send user data in the response
-  });
-}
-
+  @UseGuards(JwtAuthGuard)
+  findAll(@Req() req: RequestWithUser, @Res() res: Response) {
+    console.log('User:', req.user);
+    return res.json({
+      message: 'This is a protected movies route',
+      user: req.user,  // Send user data in the response
+    });
+  }
   @Get('search')
   async searchMovies(
     @Query('query') query: string,
