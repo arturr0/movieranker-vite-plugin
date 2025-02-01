@@ -46,17 +46,20 @@
     alert('An error occurred. Check the console.');
   }
 }
-
+document.getElementById("loginButton").addEventListener("click", function (event) {
+  alert("Login button clicked!"); // Should show an alert
+  handleFormSubmit(event, "login");
+});
 
   </script>
   
 </head>
 <body>
   <h1>Login & Register</h1>
-  <form id="auth-form">
+  <form id="auth-form" onsubmit="handleFormSubmit(event, 'login')">
     <input type="email" id="email" placeholder="Email" required />
     <input type="password" id="password" placeholder="Password" required />
-    <button id="loginButton" onclick="handleFormSubmit(event, 'login')">Login</button>
+    <button id="loginButton" type="submit">Login</button>
   </form>
   <button type="button" onclick="handleFormSubmit(event, 'register')">Create Account</button>
 </body>
