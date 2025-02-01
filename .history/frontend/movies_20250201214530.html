@@ -54,39 +54,37 @@
     async function searchMovies() {
   const query = document.getElementById('searchQuery').value;
   const type = document.querySelector('input[name="searchType"]:checked').value;
-  console.log("type", type);  // Ensure the correct type is logged before making the request
   const response = await fetch(`/movies/search?query=${query}&type=${type}`);
   const data = await response.json();
-  console.log('Movies Data:', data);  // Log the entire response from server
-
+  
   const resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = '';
   
   if (data.movies) {
-    // Handle movie results
     data.movies.forEach(movie => {
       const movieElement = document.createElement('div');
       movieElement.innerHTML = `
         <h3>${movie.title} (${movie.year})</h3>
         <img src="${movie.poster}" alt="${movie.title} Poster" width="200" data-id="${movie.id}" data-title="${movie.title}" />
-        <p>Rating: ${movie.rating ? movie.rating : 'No rating yet'}</p>
+        <p>Rating: ${movie.rating ? movie.rating : 'No rating yet'}</p>  <!-- Display rating -->
       `;
       resultsDiv.appendChild(movieElement);
-      
+
+      // Add a click event listener to the movie image
       const movieImg = movieElement.querySelector('img');
       movieImg.addEventListener('click', () => rateItem('movie', movie.id, movie.title));
     });
   } else if (data.people) {
-    // Handle person results (actor, director)
     data.people.forEach(person => {
       const personElement = document.createElement('div');
       personElement.innerHTML = `
         <h3>${person.name}</h3>
         <img src="${person.profile}" alt="${person.name} Profile" width="200" data-id="${person.id}" data-name="${person.name}" />
-        <p>Rating: ${person.rating ? person.rating : 'No rating yet'}</p>
+        <p>Rating: ${person.rating ? person.rating : 'No rating yet'}</p>  <!-- Display rating -->
       `;
       resultsDiv.appendChild(personElement);
 
+      // Add a click event listener to the person image
       const personImg = personElement.querySelector('img');
       personImg.addEventListener('click', () => rateItem('person', person.id, person.name));
     });
@@ -94,8 +92,6 @@
     alert('No results found.');
   }
 }
-
-
 
 async function rateItem(type, id, title) {
   const token = localStorage.getItem('jwt');

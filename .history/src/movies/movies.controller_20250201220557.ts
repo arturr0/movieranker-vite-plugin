@@ -48,7 +48,7 @@ export class MoviesController {
       case 'director':
         searchUrl = `https://api.themoviedb.org/3/search/person?api_key=${apiKey}&query=${encodeURIComponent(query)}`;
         break;
-      default:
+        case 'title':
         searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(query)}`;
     }
     
@@ -61,12 +61,12 @@ export class MoviesController {
       }
 
       // Fetch ratings for movies or people
-      if (type === 'title') {
+      if (type === 'movie') {
         const movies = await Promise.all(results.map(async (movie) => {
           const rating = await this.prisma.ratingMovie.findFirst({
             where: { tmdbId: movie.id },
           });
-          console.log(movie.title);
+
           return {
             title: movie.title,
             year: movie.release_date ? movie.release_date.split('-')[0] : 'N/A',
