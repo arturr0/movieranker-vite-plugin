@@ -23,26 +23,45 @@
       }
 
       const data = await response.json();
-      console.log('Token received:', data.token);
+      console.log(`${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)} response:`, data);
 
       if (data.token) {
         localStorage.setItem('jwt', data.token);
+        console.log('Token saved:', data.token);
+
+        // Ensure localStorage update before redirecting
         setTimeout(() => {
           window.location.href = '/movies';
         }, 100);
       } else {
-        alert(data.message || 'Error occurred');
+        alert('Authentication failed');
       }
+    }
+
+    // Separate handler for Register button
+    function handleRegister() {
+      handleFormSubmit(event, 'register');
     }
   </script>
 </head>
 <body>
   <h1>Login & Register</h1>
-  <form id="auth-form" onsubmit="handleFormSubmit(event, 'login')">
+  
+  <!-- Login Form -->
+  <form id="auth-form-login" onsubmit="handleFormSubmit(event, 'login')">
+    <h2>Login</h2>
     <input type="email" id="email" placeholder="Email" required />
     <input type="password" id="password" placeholder="Password" required />
     <button type="submit">Login</button>
   </form>
-  <button type="button" onclick="handleFormSubmit(event, 'register')">Create Account</button>
+  
+  <!-- Register Form -->
+  <form id="auth-form-register" onsubmit="handleFormSubmit(event, 'register')">
+    <h2>Register</h2>
+    <input type="email" id="email-register" placeholder="Email" required />
+    <input type="password" id="password-register" placeholder="Password" required />
+    <button type="submit">Create Account</button>
+  </form>
+
 </body>
 </html>

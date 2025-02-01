@@ -26,13 +26,24 @@
       console.log('Token received:', data.token);
 
       if (data.token) {
-        localStorage.setItem('jwt', data.token);
-        setTimeout(() => {
-          window.location.href = '/movies';
-        }, 100);
-      } else {
-        alert(data.message || 'Error occurred');
-      }
+  localStorage.setItem('jwt', data.token);
+  console.log('Token saved:', data.token);
+
+  // Instead of redirecting, manually fetch movies first
+  fetch('http://localhost:3000/movies', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${data.token}`,
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => response.json())
+  .then(movies => {
+    console.log('Fetched movies before redirect:', movies);
+    window.location.href = '/movies';
+  });
+}
+
     }
   </script>
 </head>
