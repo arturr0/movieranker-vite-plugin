@@ -13,7 +13,7 @@ import { AuthModule } from '../auth/auth.module';  // Import AuthModule if JwtSe
     }),
     AuthModule,  // Ensure that the AuthModule is also imported if it provides any services needed
   ],
-  controllers: [MoviesController],  // Register MoviesController here
+  controllers: [MoviesController],  // Register MoviesController
   providers: [],  // Add providers if necessary for services
 })
 export class MoviesModule {}

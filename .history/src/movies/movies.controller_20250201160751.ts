@@ -1,9 +1,11 @@
 import { Controller, Get, Query, Res, Req, UseGuards } from '@nestjs/common';
-import { RequestWithUser } from '../auth/request-with-user.interface';
+import { RequestWithUser } from '../auth/request-with-user.interface'; // Import the custom request interface
 import { Response } from 'express';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { HttpService } from '@nestjs/axios';  // Import HttpService
+import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import 'dotenv/config';
+import { join } from 'path';
 
 @Controller('movies')
 export class MoviesController {
@@ -12,7 +14,7 @@ export class MoviesController {
   @Get()
   @UseGuards(JwtAuthGuard)
   findAll(@Req() req: RequestWithUser) {
-    console.log('User:', req.user);  // Logs the user info from the token
+    console.log('User:', req.user); // Should log user info from the token
     return 'This is a protected movies route';
   }
 
@@ -24,6 +26,7 @@ export class MoviesController {
   ) {
     const apiKey = process.env.TMDB_API_KEY;
     let searchUrl = '';
+
     switch (type) {
       case 'actor':
       case 'director':
@@ -36,13 +39,36 @@ export class MoviesController {
     try {
       const searchResponse = await firstValueFrom(this.httpService.get(searchUrl));
       const results = searchResponse.data.results;
+
       if (!results || results.length === 0) {
         return res.json({ error: `No results found for ${type}: ${query}` });
       }
-      return res.json(type === 'title' ? { movies: results } : { people: results });
+
+      if (type === 'title') {
+        const movies = results.map(movie => ({
+          title: movie.title,
+          year: movie.release_date ? movie.release_date.split('-')[0] : 'N/A',
+          poster: movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : '',
+        }));
+        return res.json({ movies });
+      } else {
+        const people = results.map(person => ({
+          name: person.name,
+          profile: person.profile_path ? `https://image.tmdb.org/t/p/w200${person.profile_path}` : '',
+        }));
+        return res.json({ people });
+      }
     } catch (error) {
       console.error('Error fetching movies:', error);
       return res.json({ error: 'Failed to fetch movies', details: error.message });
     }
+  }
+
+  // Serve the movies.html file at the /movies route
+  @Get('movies')
+  async getMoviesPage(@Res() res: Response) {
+    const filePath = join(__dirname, '..', '..', 'frontend', 'movies.html');
+    console.log('Serving file:', filePath);  // Ensure the path is correct
+    return res.sendFile(filePath);
   }
 }

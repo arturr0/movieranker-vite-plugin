@@ -26,7 +26,7 @@ import { JwtService } from '@nestjs/jwt';
     }),
     MoviesModule,  // Ensure MoviesModule is imported here
   ],
-  controllers: [],  // No need to include MoviesController here anymore
+  controllers: [],
   providers: [PrismaService, JwtAuthGuard, JwtService],
 })
 export class AppModule {}

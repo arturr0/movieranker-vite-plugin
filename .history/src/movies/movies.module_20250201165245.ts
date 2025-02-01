@@ -6,14 +6,14 @@ import { AuthModule } from '../auth/auth.module';  // Import AuthModule if JwtSe
 
 @Module({
   imports: [
-    HttpModule,  // Ensure HttpModule is included here
+    HttpModule,  // Add HttpModule to your imports to make HttpService available
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'default-secret',  // Ensure correct JWT secret from environment
       signOptions: { expiresIn: '1h' },  // JWT expiration
     }),
-    AuthModule,  // Ensure that the AuthModule is also imported if it provides any services needed
+    AuthModule,  // If JwtService is provided here, make sure it's imported
   ],
-  controllers: [MoviesController],  // Register MoviesController here
+  controllers: [MoviesController],  // Register MoviesController
   providers: [],  // Add providers if necessary for services
 })
 export class MoviesModule {}

@@ -9,7 +9,7 @@ import { MoviesModule } from './movies/movies.module';  // Import MoviesModule
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';  // Import JwtAuthGuard
 import { JwtService } from '@nestjs/jwt';
-
+import { MoviesController } from './movies/movies.controller';
 @Module({
   imports: [
     JwtModule.register({
@@ -26,7 +26,7 @@ import { JwtService } from '@nestjs/jwt';
     }),
     MoviesModule,  // Ensure MoviesModule is imported here
   ],
-  controllers: [],  // No need to include MoviesController here anymore
+  controllers: [MoviesController],
   providers: [PrismaService, JwtAuthGuard, JwtService],
 })
 export class AppModule {}

@@ -28,7 +28,7 @@
       if (data.token) {
         localStorage.setItem('jwt', data.token);
         // Redirect to /movies after successful login or registration
-        //window.location.href = '/movies';
+        window.location.href = '/movies';
       } else {
         alert(data.message || 'Error occurred');
       }

@@ -6,6 +6,7 @@ import { join } from 'path';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { MoviesModule } from './movies/movies.module';  // Import MoviesModule
+import { MoviesController } from './movies/movies.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';  // Import JwtAuthGuard
 import { JwtService } from '@nestjs/jwt';
@@ -26,7 +27,7 @@ import { JwtService } from '@nestjs/jwt';
     }),
     MoviesModule,  // Ensure MoviesModule is imported here
   ],
-  controllers: [],  // No need to include MoviesController here anymore
+  controllers: [MoviesController],  // Add MoviesController if needed in AppModule
   providers: [PrismaService, JwtAuthGuard, JwtService],
 })
 export class AppModule {}

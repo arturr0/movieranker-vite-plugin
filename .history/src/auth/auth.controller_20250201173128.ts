@@ -15,7 +15,7 @@ export class AuthController {
       if (result.token) {
         // Send JWT token after successful registration
         return res.status(HttpStatus.CREATED).json({
-          message: 'User registered successfully',
+          message: result.message,
           token: result.token,
         });
       } else {

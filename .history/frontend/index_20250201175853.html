@@ -28,21 +28,59 @@
       if (data.token) {
         localStorage.setItem('jwt', data.token);
         // Redirect to /movies after successful login or registration
-        //window.location.href = '/movies';
+        window.location.href = '/movies';
       } else {
         alert(data.message || 'Error occurred');
       }
     }
+
+    // Separate handler for register
+    async function handleRegister() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch('http://localhost:3000/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        alert(errorResponse.error || 'Request failed!');
+        return;
+      }
+
+      // Now trigger the login after successful registration
+      const loginResponse = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!loginResponse.ok) {
+        const errorResponse = await loginResponse.json();
+        alert(errorResponse.error || 'Login failed after registration!');
+        return;
+      }
+
+      const loginData = await loginResponse.json();
+      localStorage.setItem('jwt', loginData.token);
+      //window.location.href = '/movies';
+    }
   </script>
-  
 </head>
 <body>
   <h1>Login & Register</h1>
+
+  <!-- Login form -->
   <form id="auth-form" onsubmit="handleFormSubmit(event, 'login')">
     <input type="email" id="email" placeholder="Email" required />
     <input type="password" id="password" placeholder="Password" required />
     <button type="submit">Login</button>
   </form>
-  <button type="button" onclick="handleFormSubmit(event, 'register')">Create Account</button>
+
+  <!-- Button to trigger account creation -->
+  <button type="button" onclick="handleRegister()">Create Account</button>
 </body>
 </html>

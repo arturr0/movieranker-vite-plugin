@@ -1,16 +1,16 @@
 import { Controller, Get, Query, Res, Req, UseGuards } from '@nestjs/common';
-import { RequestWithUser } from '../auth/request-with-user.interface';
+import { RequestWithUser } from '../auth/request-with-user.interface'; // Custom request interface
 import { Response } from 'express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { HttpService } from '@nestjs/axios';  // Import HttpService
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs'; // To handle the response
 
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly httpService: HttpService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)  // Protecting the route with JwtAuthGuard
   findAll(@Req() req: RequestWithUser) {
     console.log('User:', req.user);  // Logs the user info from the token
     return 'This is a protected movies route';
@@ -22,6 +22,7 @@ export class MoviesController {
     @Query('type') type: string,
     @Res() res: Response
   ) {
+    // Similar to your original logic for searching movies
     const apiKey = process.env.TMDB_API_KEY;
     let searchUrl = '';
     switch (type) {
