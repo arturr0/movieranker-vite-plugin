@@ -10,6 +10,7 @@
     }
   </style>
   <script>
+    // Function to fetch movies
     async function fetchMovies() {
       let token = localStorage.getItem('jwt'); // Retrieve token
 
@@ -18,8 +19,6 @@
         window.location.href = '/'; // Redirect to login page if no token
         return;
       }
-
-      console.log('Token Before Request:', token);
 
       const response = await fetch('http://localhost:3000/movies', {
         method: 'GET',
@@ -36,19 +35,21 @@
 
       const movies = await response.json();
       console.log('Movies:', movies);
-      displayMovies(movies);
     }
 
-    function displayMovies(movies) {
-      const resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = movies.map(movie => `<p>${movie.title}</p>`).join('');
-    }
-
+    // Call fetchMovies when the page loads
     window.onload = fetchMovies; // Trigger fetchMovies when page loads
   </script>
 </head>
 <body>
   <h1>Movie Search</h1>
-  <div id="results">Loading...</div>
+  <input type="text" id="searchQuery" placeholder="Enter search query" />
+  <br>
+  <label><input type="radio" name="searchType" value="title" checked> Title</label>
+  <label><input type="radio" name="searchType" value="actor"> Actor</label>
+  <label><input type="radio" name="searchType" value="director"> Director</label>
+  <br>
+  <button onclick="searchMovies()">Search</button>
+  <div id="results"></div>
 </body>
 </html>

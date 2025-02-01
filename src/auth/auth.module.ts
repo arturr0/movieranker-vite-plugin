@@ -15,7 +15,6 @@ import 'dotenv/config';
   ],
   controllers: [AuthController],
   providers: [AuthService, PrismaService, JwtStrategy],
-  exports: [AuthService, JwtModule], // <-- Add JwtModule here
+  exports: [AuthService],
 })
-
 export class AuthModule {}
