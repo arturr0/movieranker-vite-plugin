@@ -21,18 +21,17 @@ async register(@Body() body: { email: string; password: string }, @Res() res: Re
 }
 
 
-@Post('login')
-async login(@Body() body: { email: string; password: string }, @Res() res: Response) {
-  try {
-    const result = await this.authService.login(body.email, body.password);
+  @Post('login')
+  async login(@Body() body: { email: string; password: string }, @Res() res: Response) {
+    try {
+      const result = await this.authService.login(body.email, body.password);
 
-    return res.status(HttpStatus.OK).json({
-      message: result.message,
-      jwt: result.token,  // Change from "token" to "jwt" to match frontend expectation
-    });
-  } catch (error) {
-    res.status(HttpStatus.UNAUTHORIZED).json({ error: error.message });
+      return res.status(HttpStatus.OK).json({
+        message: result.message,
+        token: result.token, // Send JWT token
+      });
+    } catch (error) {
+      res.status(HttpStatus.UNAUTHORIZED).json({ error: error.message });
+    }
   }
-}
-
 }
