@@ -1,19 +1,14 @@
-import { Controller, Get, Query, Res, Req, UseGuards, Post, Body } from '@nestjs/common';
+import { Controller, Get, Query, Res, Req, UseGuards } from '@nestjs/common';
 import { RequestWithUser } from '../auth/request-with-user.interface';
 import { Response } from 'express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { HttpService } from '@nestjs/axios';  // Import HttpService
 import { firstValueFrom } from 'rxjs';
 import { join } from 'path';
-import { PrismaService } from '../prisma/prisma.service';  // Import PrismaService
 
 @Controller('movies')
 export class MoviesController {
-  constructor(
-    private readonly httpService: HttpService,
-    private readonly prisma: PrismaService  // Inject PrismaService here
-  ) {}
-
+  constructor(private readonly httpService: HttpService) {}
   @Get()
   async getMoviesPage(@Res() res: Response) {
     const filePath = join(__dirname, '..', '..', 'frontend', 'movies.html');
@@ -22,14 +17,14 @@ export class MoviesController {
   }
 
   @Get('protected')
-  @UseGuards(JwtAuthGuard)
-  findAll(@Req() req: RequestWithUser, @Res() res: Response) {
-    console.log('User:', req.user);
-    return res.json({
-      message: 'This is a protected movies route',
-      user: req.user,  // Send user data in the response
-    });
-  }
+@UseGuards(JwtAuthGuard)
+findAll(@Req() req: RequestWithUser, @Res() res: Response) {
+  console.log('User:', req.user);
+  return res.json({
+    message: 'This is a protected movies route',
+    user: req.user,  // Send user data in the response
+  });
+}
 
   @Get('search')
   async searchMovies(
@@ -79,47 +74,5 @@ export class MoviesController {
       console.error('Error fetching movies:', error);
       return res.json({ error: 'Failed to fetch movies', details: error.message });
     }
-  }
-
-  @Post('rate')
-  @UseGuards(JwtAuthGuard)
-  async rateItem(
-    @Req() req: RequestWithUser,
-    @Body() body: { type: string, id: number, title: string, rating: number },
-  ) {
-    const userId = req.user.id;
-    const { type, id, title, rating } = body;
-
-    let ratingRecord;
-
-    if (type === 'movie') {
-      ratingRecord = await this.prisma.ratingMovie.upsert({
-        where: { userId_tmdbId: { userId, tmdbId: id } },
-        update: { rating, comment: `Rated ${title}` },
-        create: {
-          userId,
-          userEmail: req.user.email,
-          tmdbId: id,
-          title,
-          rating,
-          comment: `Rated ${title}`,
-        },
-      });
-    } else if (type === 'person') {
-      ratingRecord = await this.prisma.ratingPerson.upsert({
-        where: { userId_tmdbId: { userId, tmdbId: id } },
-        update: { rating, comment: `Rated ${title}` },
-        create: {
-          userId,
-          userEmail: req.user.email,
-          tmdbId: id,
-          title,
-          rating,
-          comment: `Rated ${title}`,
-        },
-      });
-    }
-
-    return { success: true, ratingRecord };
   } 
 }
