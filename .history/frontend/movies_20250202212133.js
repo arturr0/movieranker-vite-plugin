@@ -224,13 +224,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     alert('Thank you for your rating!');
                     
                     await searchMovies();  // Wait until moviesRanks is updated
-                    
+
                     const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
                     console.log(clickedMovie);
-                    const avgRating = Math.round(
-                        clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
-                    );
-                    rankAvg.textContent = avgRating; 
+
                     rankPosts.innerHTML = ''; // Clear previous posts
                     clickedMovie.forEach(moviePost => {
                         const postDiv = document.createElement("div");

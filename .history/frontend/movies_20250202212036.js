@@ -220,34 +220,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 const data = await response.json();
-                if (data.success) {
-                    alert('Thank you for your rating!');
-                    
-                    await searchMovies();  // Wait until moviesRanks is updated
-                    
-                    const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
-                    console.log(clickedMovie);
-                    const avgRating = Math.round(
-                        clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
-                    );
-                    rankAvg.textContent = avgRating; 
-                    rankPosts.innerHTML = ''; // Clear previous posts
-                    clickedMovie.forEach(moviePost => {
-                        const postDiv = document.createElement("div");
-                        const user = document.createElement("p");
-                        user.textContent = moviePost.rankerName;
-                        rankPosts.appendChild(postDiv);
-                        const postRank = document.createElement("div");
-                        postRank.textContent = moviePost.rank;
-                        postDiv.classList.add("post");
-                        postDiv.setAttribute("user", moviePost.rankerName);
-                        const post = document.createElement("p");
-                        post.textContent = moviePost.post;
-                        postDiv.appendChild(user);
-                        postDiv.appendChild(postRank);
-                        postDiv.appendChild(post);
-                    });
-                }
+if (data.success) {
+    alert('Thank you for your rating!');
+    
+    await searchMovies();  // Wait until moviesRanks is updated
+
+    const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
+    console.log(clickedMovie);
+
+    rankPosts.innerHTML = ''; // Clear previous posts
+    clickedMovie.forEach(moviePost => {
+        const postDiv = document.createElement("div");
+        const user = document.createElement("p");
+        user.textContent = moviePost.rankerName;
+        rankPosts.appendChild(postDiv);
+        const postRank = document.createElement("div");
+        postRank.textContent = moviePost.rank;
+        postDiv.classList.add("post");
+        postDiv.setAttribute("user", moviePost.rankerName);
+        const post = document.createElement("p");
+        post.textContent = moviePost.post;
+        postDiv.appendChild(user);
+        postDiv.appendChild(postRank);
+        postDiv.appendChild(post);
+    });
+}
 
             } catch (error) {
                 console.error('Error rating item:', error);

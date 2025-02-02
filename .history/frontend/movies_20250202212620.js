@@ -227,10 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                     const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
                     console.log(clickedMovie);
-                    const avgRating = Math.round(
-                        clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
-                    );
-                    rankAvg.textContent = avgRating; 
+                    Math.round(clickedMovie.rank.reduce((sum, r) => sum + r.rating, 0) / clickedMovie.rank.length)
                     rankPosts.innerHTML = ''; // Clear previous posts
                     clickedMovie.forEach(moviePost => {
                         const postDiv = document.createElement("div");
