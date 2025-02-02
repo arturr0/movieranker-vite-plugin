@@ -24,12 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <img src="${movie.poster}" alt="${movie.title} Poster" width="200" data-id="${movie.id}" data-title="${movie.title}" />
               <p>Rating: ${movie.rating ? movie.rating : 'No rating yet'}</p>
             `;
-            
-            const avgRating = movie.ratings.length 
-            ? Math.round(movie.ratings.reduce((sum, r) => sum + r.rating, 0) / movie.ratings.length) 
-            : 'No rating yet';
-        
-            console.log(avgRating);
+            console.log(movie.ratings.rating);
             resultsDiv.appendChild(movieElement);
             
             const movieImg = movieElement.querySelector('img');

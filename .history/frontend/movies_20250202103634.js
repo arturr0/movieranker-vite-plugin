@@ -25,11 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
               <p>Rating: ${movie.rating ? movie.rating : 'No rating yet'}</p>
             `;
             
-            const avgRating = movie.ratings.length 
-            ? Math.round(movie.ratings.reduce((sum, r) => sum + r.rating, 0) / movie.ratings.length) 
-            : 'No rating yet';
-        
-            console.log(avgRating);
+                const avgRating = movie.ratings.length 
+                    ? (movie.ratings.reduce((sum, r) => sum + r.rating, 0) / movie.ratings.length).toFixed(1) 
+                    : 'No rating yet';
+                console.log(avgRating);
             resultsDiv.appendChild(movieElement);
             
             const movieImg = movieElement.querySelector('img');
