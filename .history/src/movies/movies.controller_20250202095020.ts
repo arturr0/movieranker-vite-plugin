@@ -62,7 +62,7 @@ async searchMovies(
       const movies = await Promise.all(results.map(async (movie) => {
         const ratings = await this.prisma.ratingMovie.findMany({
           where: { tmdbId: movie.id },
-          select: { rating: true, userId: true, userEmail: true },
+          select: { rating: true, userId: true },
         });
 
         return {
@@ -78,7 +78,7 @@ async searchMovies(
       const people = await Promise.all(results.map(async (person) => {
         const ratings = await this.prisma.ratingPerson.findMany({
           where: { tmdbId: person.id },
-          select: { rating: true, userId: true, userEmail: true },
+          select: { rating: true, userId: true },
         });
 
         return {
