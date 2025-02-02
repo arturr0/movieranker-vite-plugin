@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             postDiv.classList.add("post");
                             postDiv.setAttribute("user", personPost.rankerName)
                             const post = document.createElement("p");
-                            post.textContent = personPost.post;
+                            post.textContent = moviePost.post;
                             postDiv.appendChild(user);
                             postDiv.appendChild(postRank);
                             postDiv.appendChild(post);

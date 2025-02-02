@@ -160,22 +160,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
                         rankPosts.innerHTML = ''; // Clear previous posts
                         clickedPerson.forEach(personPost => {
-                            // const div = document.createElement("div");
-                            // div.textContent = personPost.rank;
-                            // rankPosts.appendChild(div);
-                            const postDiv = document.createElement("div");
-                            const user = document.createElement("p");
-                            user.textContent = personPost.rankerName;
-                            rankPosts.appendChild(postDiv)
-                            const postRank = document.createElement("div");
-                            postRank.textContent = personPost.rank;
-                            postDiv.classList.add("post");
-                            postDiv.setAttribute("user", personPost.rankerName)
-                            const post = document.createElement("p");
-                            post.textContent = personPost.post;
-                            postDiv.appendChild(user);
-                            postDiv.appendChild(postRank);
-                            postDiv.appendChild(post);
+                            const div = document.createElement("div");
+                            div.textContent = personPost.rank;
+                            rankPosts.appendChild(div);
                         });
     
                         searchContainer.style.display = 'none';
