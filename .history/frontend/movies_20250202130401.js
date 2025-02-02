@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const movieImg = movieElement.querySelector('img');
                 movieImg.addEventListener('click', () => {
                     // Log clicked movie data from moviesRanks
-                    const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === movie.id);
+                    const clickedMovie = moviesRanks.find(movieRank => movieRank.id === movie.id);
                     console.log('Clicked Movie Data:', clickedMovie);
                     rateItem('movie', movie.id, movie.title);
                 });
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const personImg = personElement.querySelector('img');
                 personImg.addEventListener('click', () => {
                     // Log clicked person data from peopleRanks
-                    const clickedPerson = peopleRanks.filter(personRank => personRank.id === person.id);
+                    const clickedPerson = peopleRanks.find(personRank => personRank.id === person.id);
                     console.log('Clicked Person Data:', clickedPerson);
                     rateItem('person', person.id, person.name);
                 });
