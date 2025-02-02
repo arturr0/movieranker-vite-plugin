@@ -35,8 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("cancel").addEventListener("click", () => {
         searchContainer.style.display = 'block';
         ranksContainer.style.display = 'none';
-        rankPosts.innerHTML = '';
-        
+        rankPosts.innerHTML = ''
     });
 
     async function searchMovies() {
@@ -46,8 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await fetch(`/movies/search?query=${query}&type=${type}`);
         const data = await response.json();
         console.log('Movies Data:', data);
-        moviesRanks.length = 0;
-        peopleRanks.length = 0;
+
         const resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = '';
 
@@ -155,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function rateItem(type, id, title) {
         const token = localStorage.getItem('jwt');
-        const rating = prompt(`Please rate this ${type}: ${title}`);
+        //const rating = prompt(`Please rate this ${type}: ${title}`);
 
         if (rating && !isNaN(rating) && rating >= 1 && rating <= 5) {
             try {

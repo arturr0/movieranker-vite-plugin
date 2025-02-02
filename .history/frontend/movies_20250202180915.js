@@ -36,7 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
         searchContainer.style.display = 'block';
         ranksContainer.style.display = 'none';
         rankPosts.innerHTML = '';
-        
+        moviesRanks.length = 0;
+        peopleRanks.length = 0;
     });
 
     async function searchMovies() {
@@ -46,8 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await fetch(`/movies/search?query=${query}&type=${type}`);
         const data = await response.json();
         console.log('Movies Data:', data);
-        moviesRanks.length = 0;
-        peopleRanks.length = 0;
+
         const resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = '';
 
