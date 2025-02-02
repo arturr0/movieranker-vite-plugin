@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     
     let lastQuerry = {};
-    const moviesRanks = [];
-    class Item {
+    const movies = [];
+    class Movie {
         constructor(id, title, rank, rankerName, post) {
             this.id = id;
             this.title = title;
@@ -11,10 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
             this.post = post;
         }
     }
-    
-    class Movie extends Item {}
-    class Person extends Item {}
-    
 
 
 
@@ -44,12 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <img src="${movie.poster}" alt="${movie.title} Poster" width="200" data-id="${movie.id}" data-title="${movie.title}" />
               <p>Rating: ${movie.rating ? movie.rating : 'No rating yet'}</p>
             `;
-            if (movie.ratings) {
-                movie.ratings.forEach(rank => {
-                    const rankMovie = new Movie(movie.id, movie.title, rank.rating, rank.userEmail, "post");
-                    moviesRanks.push(rankMovie);
-                });
-            }
+            
             const avgRating = movie.ratings && movie.ratings.length 
               ? Math.round(movie.ratings.reduce((sum, r) => sum + r.rating, 0) / movie.ratings.length) 
               : 'No rating yet';
@@ -88,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
         else {
           alert('No results found.');
         }
-        console.log("array", moviesRanks)
     }
       async function rateItem(type, id, title) {
         const token = localStorage.getItem('jwt');
