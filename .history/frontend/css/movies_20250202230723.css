@@ -3,11 +3,11 @@ body {
     height: 100vh; */
     margin: 0;
     padding: 0;
-    /* background-image: url('bg.png'); */
-    /* background-size: cover; or 'contain' depending on your desired result */
-    /* background-position: center; */
+    background-image: url('bg.png');
+    background-size: cover; /* or 'contain' depending on your desired result */
+    background-position: center;
     /* background-repeat: no-repeat; */
-    /* height: 100vh; Ensure body takes up full height of the viewport */
+    height: 100vh; /* Ensure body takes up full height of the viewport */
 }
 #mainContent {
     position: relative;

@@ -61,12 +61,7 @@ export class MoviesController {
         const movies = await Promise.all(results.map(async (movie) => {
           const ratings = await this.prisma.ratingMovie.findMany({
             where: { tmdbId: movie.id },
-            select: {
-              rating: true,
-              userId: true,
-              userEmail: true,
-              comment: true,
-            },
+            select: { rating: true, userId: true, userEmail: true, comment: true },
           });
 
           return {
@@ -82,12 +77,7 @@ export class MoviesController {
         const people = await Promise.all(results.map(async (person) => {
           const ratings = await this.prisma.ratingPerson.findMany({
             where: { tmdbId: person.id },
-            select: {
-              rating: true,
-              userId: true,
-              userEmail: true,
-              comment: true,
-            },
+            select: { rating: true, userId: true, userEmail: true, comment: true },
           });
 
           return {
@@ -109,49 +99,40 @@ export class MoviesController {
   @UseGuards(JwtAuthGuard)
   async rateItem(
     @Req() req: RequestWithUser,
-    @Body() body: { type: string; id: number; title: string; rating: number; post: string },
+    @Body() body: { type: string, id: number, title: string, rating: number, post: string },
   ) {
     const userId = req.user.id;
-    const userEmail = req.user.email;
     const { type, id, title, rating, post } = body;
+    let ratingRecord;
 
-    try {
-      let ratingRecord;
-
-      if (type === 'movie') {
-        ratingRecord = await this.prisma.ratingMovie.upsert({
-          where: { userId_tmdbId: { userId, tmdbId: id } },  // Ensure unique constraint exists in Prisma schema
-          update: { rating, comment: post },
-          create: {
-            userId,
-            userEmail,
-            tmdbId: id,
-            title,
-            rating,
-            comment: post,
-          },
-        });
-      } else if (type === 'person') {
-        ratingRecord = await this.prisma.ratingPerson.upsert({
-          where: { userId_tmdbId: { userId, tmdbId: id } },  // Ensure unique constraint exists in Prisma schema
-          update: { rating, comment: post },
-          create: {
-            userId,
-            userEmail,
-            tmdbId: id,
-            title,
-            rating,
-            comment: post,
-          },
-        });
-      } else {
-        return { success: false, error: 'Invalid type specified' };
-      }
-
-      return { success: true, ratingRecord };
-    } catch (error) {
-      console.error('Error saving rating:', error);
-      return { success: false, error: error.message };
+    if (type === 'movie') {
+      ratingRecord = await this.prisma.ratingMovie.upsert({
+        where: { userId_tmdbId: { userId, tmdbId: id } },
+        update: { rating, comment: post },
+        create: {
+          userId,
+          userEmail: req.user.email,
+          tmdbId: id,
+          title,
+          rating,
+          comment: post,
+        },
+      });
+    } else if (type === 'person') {
+      ratingRecord = await this.prisma.ratingPerson.upsert({
+        where: { userId_tmdbId: { userId, tmdbId: id } },
+        update: { rating, comment: post },
+        create: {
+          userId,
+          userEmail: req.user.email,
+          tmdbId: id,
+          title,
+          rating,
+          comment: post,
+        },
+      });
     }
+
+    return { success: true, ratingRecord };
   }
 }
