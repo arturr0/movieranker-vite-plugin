@@ -44,137 +44,119 @@ document.addEventListener("DOMContentLoaded", () => {
         const query = document.getElementById('searchQuery').value;
         const type = document.querySelector('input[name="searchType"]:checked').value;
         console.log("Search Type:", type);
-    
         const response = await fetch(`/movies/search?query=${query}&type=${type}`);
         const data = await response.json();
         console.log('Movies Data:', data);
-    
         moviesRanks.length = 0;
         peopleRanks.length = 0;
-    
         const resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = '';
-    
+
         if (data.movies) {
             data.movies.forEach(movie => {
                 console.log(`Movie: ${movie.title}`, movie.ratings);
-    
+
                 const movieElement = document.createElement('div');
-    
                 movieElement.innerHTML = `
-                    <h3>${movie.title} (${movie.year})</h3>
-                    <img src="${movie.poster}" alt="${movie.title} Poster" width="200" data-id="${movie.id}" data-title="${movie.title}" />
+                  <h3>${movie.title} (${movie.year})</h3>
+                  <img src="${movie.poster}" alt="${movie.title} Poster" width="200" data-id="${movie.id}" data-title="${movie.title}" />
                 `;
-    
+
                 if (movie.ratings) {
                     movie.ratings.forEach(rank => {
                         const rankMovie = new Movie(movie.id, movie.title, rank.rating, rank.userEmail, "post");
                         moviesRanks.push(rankMovie);
                     });
                 }
-    
+
                 const avgRating = movie.ratings && movie.ratings.length
-                    ? Math.round(movie.ratings.reduce((sum, r) => sum + r.rating, 0) / movie.ratings.length)
-                    : 'No rating yet';
-    
-                const ratingElement = document.createElement('p');
-                ratingElement.textContent = `Rating: ${avgRating}`;
-                movieElement.appendChild(ratingElement);
-    
+                  ? Math.round(movie.ratings.reduce((sum, r) => sum + r.rating, 0) / movie.ratings.length)
+                  : 'No rating yet';
+                movieElement.innerHTML = `
+                  <p>Rating: ${avgRating ? avgRating : 'No rating yet'}</p>
+                `;
+                console.log(`Average Rating for ${movie.title}:`, avgRating);
                 resultsDiv.appendChild(movieElement);
-    
+
                 const movieImg = movieElement.querySelector('img');
-                if (movieImg) {
-                    movieImg.addEventListener('click', () => {
-                        const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === movie.id);
-                        console.log('Clicked Movie Data:', clickedMovie);
-    
-                        searchContainer.style.display = 'none';
-                        rankTitle.textContent = movie.title;
-                        rankAvg.textContent = avgRating;
-    
-                        rankPosts.innerHTML = ''; // Clear previous posts
-                        clickedMovie.forEach(moviePost => {
-                            const div = document.createElement("div");
-                            div.textContent = moviePost.rank;
-                            rankPosts.appendChild(div);
-                        });
-    
-                        rankImg.src = movie.poster;
-                        ranksContainer.style.display = 'block';
-    
-                        sendPost.setAttribute("type", "movie");
-                        sendPost.setAttribute("id", movie.id);
-                        sendPost.setAttribute("title", movie.title);
-                    });
-                } else {
-                    console.error('Movie image not found for:', movie.title);
-                }
+                movieImg.addEventListener('click', () => {
+                    // Log clicked movie data from moviesRanks
+                    const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === movie.id);
+                    console.log('Clicked Movie Data:', clickedMovie);
+                    searchContainer.style.display = 'none';
+                    rankTitle.textContent = movie.title;
+                    rankAvg.textContent = avgRating;
+                    clickedMovie.forEach(moviePost => {
+                        const div = document.createElement("div");
+                        div.textContent = moviePost.rank;
+                        rankPosts.appendChild(div);
+                    })
+                    //ranksContainer.appendChild(movieImg);
+                    rankImg.src = movie.poster;
+                    ranksContainer.style.display = 'block';
+                    sendPost.setAttribute("type", "movie");
+                    sendPost.setAttribute("id", movie.id);
+                    sendPost.setAttribute("title", movie.title);
+                    //rateItem('movie', movie.id, movie.title);
+                    
+                });
             });
         } else if (data.people) {
             data.people.forEach(person => {
                 console.log(`Person: ${person.name}`, person.ratings);
-    
+
                 const personElement = document.createElement('div');
-    
                 personElement.innerHTML = `
-                    <h3>${person.name}</h3>
-                    <img src="${person.profile}" alt="${person.name} Profile" width="200" data-id="${person.id}" data-name="${person.name}" />
+                  <h3>${person.name}</h3>
+                  <img src="${person.profile}" alt="${person.name} Profile" width="200" data-id="${person.id}" data-name="${person.name}" />
+                  <p>Rating: ${person.rating ? person.rating : 'No rating yet'}</p>
                 `;
-    
+
                 if (person.ratings) {
                     person.ratings.forEach(rank => {
                         const rankPerson = new Person(person.id, person.name, rank.rating, rank.userEmail, "post");
                         peopleRanks.push(rankPerson);
                     });
                 }
-    
+
                 const avgRating = person.ratings && person.ratings.length
-                    ? Math.round(person.ratings.reduce((sum, r) => sum + r.rating, 0) / person.ratings.length)
-                    : 'No rating yet';
-    
-                const ratingElement = document.createElement('p');
-                ratingElement.textContent = `Rating: ${avgRating}`;
-                personElement.appendChild(ratingElement);
-    
+                  ? Math.round(person.ratings.reduce((sum, r) => sum + r.rating, 0) / person.ratings.length)
+                  : 'No rating yet';
+                  movieElement.innerHTML = `
+                  <p>Rating: ${avgRating ? avgRating : 'No rating yet'}</p>
+                `;
+                console.log(`Average Rating for ${person.name}:`, avgRating);
                 resultsDiv.appendChild(personElement);
-    
+
                 const personImg = personElement.querySelector('img');
-                if (personImg) {
-                    personImg.addEventListener('click', () => {
-                        const clickedPerson = peopleRanks.filter(personRank => personRank.id === person.id);
-                        console.log('Clicked Person Data:', clickedPerson);
-    
-                        rankTitle.textContent = person.name;
-                        rankAvg.textContent = avgRating;
-    
-                        rankPosts.innerHTML = ''; // Clear previous posts
-                        clickedPerson.forEach(personPost => {
-                            const div = document.createElement("div");
-                            div.textContent = personPost.rank;
-                            rankPosts.appendChild(div);
-                        });
-    
-                        searchContainer.style.display = 'none';
-                        rankImg.src = person.profile;
-                        ranksContainer.style.display = 'block';
-    
-                        sendPost.setAttribute("type", "person");
-                        sendPost.setAttribute("id", person.id);
-                        sendPost.setAttribute("title", person.name);
-                    });
-                } else {
-                    console.error('Person image not found for:', person.name);
-                }
+                personImg.addEventListener('click', () => {
+                    // Log clicked person data from peopleRanks
+                    const clickedPerson = peopleRanks.filter(personRank => personRank.id === person.id);
+                    console.log('Clicked Person Data:', clickedPerson);
+                    rankTitle.textContent = person.name;
+                    rankAvg.textContent = avgRating;
+                    clickedPerson.forEach(personPost => {
+                        const div = document.createElement("div");
+                        div.textContent = personPost.rank;
+                        rankPosts.appendChild(div);
+                    })
+                    sendPost.setAttribute("type", "person");
+                    sendPost.setAttribute("id", person.id);
+                    sendPost.setAttribute("title", person.name);
+                    //rateItem('person', person.id, person.name);
+                    searchContainer.style.display = 'none';
+                    //ranksContainer.appendChild(personImg);
+                    rankImg.src = person.profile;
+                    ranksContainer.style.display = 'block';
+                });
             });
         } else {
             alert('No results found.');
         }
-    
         console.log("Movies Ranks Array:", moviesRanks);
         console.log("People Ranks Array:", peopleRanks);
     }
-    
+
     async function rateItem(type, id, title) {
         const token = localStorage.getItem('jwt');
         const rating = prompt(`Please rate this ${type}: ${title}`);
