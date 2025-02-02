@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         searchMovies();
     });
 
-    document.getElementById("cancel").addEventListener("click", () => {
+    document.getElementsByClassName("icon-cancel-outline").addEventListener("click", () => {
         searchContainer.style.display = 'block';
         ranksContainer.style.display = 'none';
     });

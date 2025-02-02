@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         searchMovies();
     });
 
-    document.getElementById("cancel").addEventListener("click", () => {
+    document.getElementsByClassName("icon-cancel-outline").addEventListener("click", () => {
         searchContainer.style.display = 'block';
         ranksContainer.style.display = 'none';
     });
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log('Clicked Movie Data:', clickedMovie);
                     searchContainer.style.display = 'none';
                     ranksContainer.style.display = 'block';
-                    //rateItem('movie', movie.id, movie.title);
+                    rateItem('movie', movie.id, movie.title);
                 });
             });
         } else if (data.people) {
