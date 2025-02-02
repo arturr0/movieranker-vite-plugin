@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         id,        // TMDB ID of the movie/person
                         title,     // Title or name of the movie/person
                         rating: parseInt(rating),  // Rating from user
-                        post: document.getElementById('writePost').value,
+                        post: document.getElementById('writePost').value
                     }),
                 });
 
