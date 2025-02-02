@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
                 if (movie.ratings) {
                     movie.ratings.forEach(rank => {
-                        const rankMovie = new Movie(movie.id, movie.title, rank.rating, rank.userEmail, rank.comment);
+                        const rankMovie = new Movie(movie.id, movie.title, rank.rating, rank.userEmail, "post");
                         moviesRanks.push(rankMovie);
                     });
                 }
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
                 if (person.ratings) {
                     person.ratings.forEach(rank => {
-                        const rankPerson = new Person(person.id, person.name, rank.rating, rank.userEmail, rank.comment);
+                        const rankPerson = new Person(person.id, person.name, rank.rating, rank.userEmail, "post");
                         peopleRanks.push(rankPerson);
                     });
                 }
