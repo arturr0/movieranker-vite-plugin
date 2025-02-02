@@ -119,13 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Log clicked person data from peopleRanks
                     const clickedPerson = peopleRanks.filter(personRank => personRank.id === person.id);
                     console.log('Clicked Person Data:', clickedPerson);
-                    rankTitle.textContent = person.name;
-                    rankAvg.textContent = avgRating;
-                    clickedPerson.forEach(personPost => {
-                        const div = document.createElement("div");
-                        div.textContent = personPost.rank;
-                        rankPosts.appendChild(div);
-                    })
                     //rateItem('person', person.id, person.name);
                     searchContainer.style.display = 'none';
                     //ranksContainer.appendChild(personImg);

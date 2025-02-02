@@ -2,10 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const searchContainer = document.getElementById("searchContent");
     const ranksContainer = document.getElementById("ranks");
-    const rankImg = document.getElementById("rankImg");
-    const rankTitle = document.getElementById("title");
-    const rankAvg = document.getElementById("rank");
-    const rankPosts = document.getElementById("posts");
     
     let lastQuery = {};
     const moviesRanks = [];
@@ -30,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("cancel").addEventListener("click", () => {
         searchContainer.style.display = 'block';
         ranksContainer.style.display = 'none';
-        rankPosts.innerHTML = ''
     });
 
     async function searchMovies() {
@@ -75,15 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === movie.id);
                     console.log('Clicked Movie Data:', clickedMovie);
                     searchContainer.style.display = 'none';
-                    rankTitle.textContent = movie.title;
-                    rankAvg.textContent = avgRating;
-                    clickedMovie.forEach(moviePost => {
-                        const div = document.createElement("div");
-                        div.textContent = moviePost.rank;
-                        rankPosts.appendChild(div);
-                    })
-                    //ranksContainer.appendChild(movieImg);
-                    rankImg.src = movie.poster;
+                    ranksContainer.appendChild(movieImg);
                     ranksContainer.style.display = 'block';
                     //rateItem('movie', movie.id, movie.title);
                     
@@ -119,17 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Log clicked person data from peopleRanks
                     const clickedPerson = peopleRanks.filter(personRank => personRank.id === person.id);
                     console.log('Clicked Person Data:', clickedPerson);
-                    rankTitle.textContent = person.name;
-                    rankAvg.textContent = avgRating;
-                    clickedPerson.forEach(personPost => {
-                        const div = document.createElement("div");
-                        div.textContent = personPost.rank;
-                        rankPosts.appendChild(div);
-                    })
                     //rateItem('person', person.id, person.name);
                     searchContainer.style.display = 'none';
-                    //ranksContainer.appendChild(personImg);
-                    rankImg.src = person.profile;
+                    ranksContainer.appendChild(personImg);
                     ranksContainer.style.display = 'block';
                 });
             });

@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log('Clicked Person Data:', clickedPerson);
                     rankTitle.textContent = person.name;
                     rankAvg.textContent = avgRating;
-                    clickedPerson.forEach(personPost => {
+                    clickedMovie.forEach(personPost => {
                         const div = document.createElement("div");
                         div.textContent = personPost.rank;
                         rankPosts.appendChild(div);
