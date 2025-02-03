@@ -12,11 +12,7 @@ body {
 #mainContent {
     position: relative;
 }
-#logoDiv {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-}
+
 #searchContainer {
     display: inline-flex;
     padding: 10px;

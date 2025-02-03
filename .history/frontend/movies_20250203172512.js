@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
-    const query = document.getElementById('searchQuery').value;
-    const searchContent = document.getElementById("searchContent");
+
+    const searchContainer = document.getElementById("searchContent");
     const ranksContainer = document.getElementById("ranks");
     const rankImg = document.getElementById("rankImg");
     const rankTitle = document.getElementById("title");
@@ -9,43 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const rankPosts = document.getElementById("posts");
     const sendPost = document.getElementById("sendPost");
     const tooltip = document.getElementById("tooltip");
-    const searchQuery = document.getElementById('searchQuery');
-    const searchContainer = document.getElementById('searchContainer');
-    const magnifier = document.getElementById('magnifier');
-    magnifier.addEventListener('click', function() {
-        const query = document.getElementById('searchQuery').value;
-        console.log("query", query);
-        if (query !== null && query.trim() !== '') {
-            searchMovies();
-        }
-    });
-// Detect if the input is focused
-    searchQuery.addEventListener('focus', () => {
-        console.log('Input is active (focused)');
-        searchContainer.style.border = '4px solid black';
-        searchContainer.style.padding = '8px';
-
-        // Add custom styles or classes here if needed
-    });
-
-    // Detect when the input loses focus
-    searchQuery.addEventListener('blur', () => {
-        console.log('Input is not active (blurred)');
-        searchContainer.style.border = '2px solid black'
-        searchContainer.style.padding = '10px';
-
-        // Remove custom styles or classes here if needed
-    });
-    document.addEventListener('keydown', function(event) {
-        console.log('Event listener registered');
-        const query = document.getElementById('searchQuery').value;
-        console.log("query", query);
-        if (event.key === 'Enter' && query !== null && query.trim() !== '') {
-            console.log("enter");
-            searchMovies();
-        }
-    });
-    
     let lastQuery = {};
     const moviesRanks = [];
     const peopleRanks = [];
@@ -62,7 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     class Movie extends Item {}
     class Person extends Item {}
 
-    
+    document.getElementById("search").addEventListener("click", () => {
+        searchMovies();
+    });
 
     document.getElementById("sendPost").addEventListener("click", () => {
         rateItem(sendPost.getAttribute("type"), parseInt(sendPost.getAttribute("id")), sendPost.getAttribute("title"));
@@ -70,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("cancel").addEventListener("click", () => {
-        searchContent.style.display = 'block';
+        searchContainer.style.display = 'block';
         ranksContainer.style.display = 'none';
         rankPosts.innerHTML = '';
         
@@ -98,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const movieElement = document.createElement('div');
                 movieElement.classList.add('item');      
                 movieElement.innerHTML = `
-                    <h3 class="title" data-title="${movie.title} (${movie.year})">${movie.title} (${movie.year})</h3>
+                    <h3 class="title" data-title="${movie.title}">${movie.title} (${movie.year})</h3>
                     <div class="img" style="background-image: url(${movie.poster});"></div>`
                     ;
                 if (movie.ratings) {
@@ -137,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === movie.id);
                         console.log('Clicked Movie Data:', clickedMovie);
     
-                        searchContent.style.display = 'none';
+                        searchContainer.style.display = 'none';
                         rankTitle.textContent = movie.title;
                         rankAvg.textContent = avgRating;
     
@@ -228,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             postDiv.appendChild(post);
                         });
     
-                        searchContent.style.display = 'none';
+                        searchContainer.style.display = 'none';
                         rankImg.src = person.profile;
                         ranksContainer.style.display = 'block';
     

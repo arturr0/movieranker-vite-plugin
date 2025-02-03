@@ -37,15 +37,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Remove custom styles or classes here if needed
     });
     document.addEventListener('keydown', function(event) {
-        console.log('Event listener registered');
         const query = document.getElementById('searchQuery').value;
+        // Check if the pressed key is "Enter" (keyCode 13)
         console.log("query", query);
         if (event.key === 'Enter' && query !== null && query.trim() !== '') {
             console.log("enter");
+            // Perform your action here (e.g., submitting a form, triggering a search)
             searchMovies();
         }
     });
-    
     let lastQuery = {};
     const moviesRanks = [];
     const peopleRanks = [];

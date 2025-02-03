@@ -13,11 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchContainer = document.getElementById('searchContainer');
     const magnifier = document.getElementById('magnifier');
     magnifier.addEventListener('click', function() {
-        const query = document.getElementById('searchQuery').value;
-        console.log("query", query);
-        if (query !== null && query.trim() !== '') {
-            searchMovies();
-        }
+        searchMovies();
     });
 // Detect if the input is focused
     searchQuery.addEventListener('focus', () => {
@@ -36,16 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Remove custom styles or classes here if needed
     });
-    document.addEventListener('keydown', function(event) {
-        console.log('Event listener registered');
-        const query = document.getElementById('searchQuery').value;
-        console.log("query", query);
+    searchQuery.addEventListener('keydown', function(event) {
+        // Check if the pressed key is "Enter" (keyCode 13)
         if (event.key === 'Enter' && query !== null && query.trim() !== '') {
-            console.log("enter");
+            
+            // Perform your action here (e.g., submitting a form, triggering a search)
             searchMovies();
         }
     });
-    
     let lastQuery = {};
     const moviesRanks = [];
     const peopleRanks = [];
@@ -62,7 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
     class Movie extends Item {}
     class Person extends Item {}
 
-    
+    document.getElementById("search").addEventListener("click", () => {
+        searchMovies();
+    });
 
     document.getElementById("sendPost").addEventListener("click", () => {
         rateItem(sendPost.getAttribute("type"), parseInt(sendPost.getAttribute("id")), sendPost.getAttribute("title"));
@@ -77,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     async function searchMovies() {
-        const query = document.getElementById('searchQuery').value;
+        
         const type = document.querySelector('input[name="searchType"]:checked').value;
         console.log("Search Type:", type);
     

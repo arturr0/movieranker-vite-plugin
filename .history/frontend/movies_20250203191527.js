@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
-    const query = document.getElementById('searchQuery').value;
+
     const searchContent = document.getElementById("searchContent");
     const ranksContainer = document.getElementById("ranks");
     const rankImg = document.getElementById("rankImg");
@@ -13,11 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchContainer = document.getElementById('searchContainer');
     const magnifier = document.getElementById('magnifier');
     magnifier.addEventListener('click', function() {
-        const query = document.getElementById('searchQuery').value;
-        console.log("query", query);
-        if (query !== null && query.trim() !== '') {
-            searchMovies();
-        }
+        searchMovies();
     });
 // Detect if the input is focused
     searchQuery.addEventListener('focus', () => {
@@ -36,16 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Remove custom styles or classes here if needed
     });
-    document.addEventListener('keydown', function(event) {
-        console.log('Event listener registered');
-        const query = document.getElementById('searchQuery').value;
-        console.log("query", query);
-        if (event.key === 'Enter' && query !== null && query.trim() !== '') {
-            console.log("enter");
-            searchMovies();
-        }
-    });
-    
+
     let lastQuery = {};
     const moviesRanks = [];
     const peopleRanks = [];
@@ -62,7 +48,9 @@ document.addEventListener("DOMContentLoaded", () => {
     class Movie extends Item {}
     class Person extends Item {}
 
-    
+    document.getElementById("search").addEventListener("click", () => {
+        searchMovies();
+    });
 
     document.getElementById("sendPost").addEventListener("click", () => {
         rateItem(sendPost.getAttribute("type"), parseInt(sendPost.getAttribute("id")), sendPost.getAttribute("title"));

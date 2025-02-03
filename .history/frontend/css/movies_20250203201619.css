@@ -11,11 +11,7 @@ body {
 }
 #mainContent {
     position: relative;
-}
-#logoDiv {
-    position: absolute;
-    top: 20px;
-    left: 20px;
+    
 }
 #searchContainer {
     display: inline-flex;
@@ -50,7 +46,7 @@ body {
 }
 #searchDiv {
     margin: 0 auto; /* Centers horizontally */
-    display: flex; /* Ensures it respects the margin */
+    display: block; /* Ensures it respects the margin */
     width: fit-content; /* Adjusts width to its content */
 }
 

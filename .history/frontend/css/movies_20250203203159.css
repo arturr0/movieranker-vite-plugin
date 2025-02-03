@@ -12,6 +12,9 @@ body {
 #mainContent {
     position: relative;
 }
+#searchContent {
+    display: flex;
+}
 #logoDiv {
     position: absolute;
     top: 20px;
