@@ -82,12 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const ratingElement = document.createElement('div');
                 moviesVotes.textContent = voteText;
                 //ratingElement.textContent = `Rating: ${avgRating}`;
-                for (let i = 0; i < 5; i++) {
-                    const star = document.createElement("span");
-                    star.style.color = i < avgRating ? "gold" : "gray";
-                    star.innerHTML = "&#9733;";
-                    ratingElement.appendChild(star); // Append each star
-                } 
+                for (let i = 0; i < 5; i++) 
+                    if (i < movie.ratings.length)
+                        ratingElement.innerHTML = '<span style="color: gold;">&#9733;</span>';
+                    else
+                        ratingElement.innerHTML = '<span style="color: gray;">&#9733;</span>';  
                 
                 movieElement.appendChild(moviesVotes);
                 movieElement.appendChild(ratingElement);

@@ -53,25 +53,16 @@ body {
     height: 100%;
 }
 /*  */
-#results {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
-    gap: 10px; /* Spacing between items */
-    padding: 10px; /* Prevent items from touching screen edges */
-    box-sizing: border-box; /* Ensures padding is included */
-    width: 100%; /* Makes sure it fits inside the viewport */
-    max-width: 1200px; /* Prevents items from stretching too much on wide screens */
-    margin: 0 auto; /* Centers the entire grid */
-}
-
-
-.item {
-    display: inline-block; /* If needed */
-    /* background: lightgray; */
-    padding: 20px;
+.container {
+    display: table;
+    width: 100%;
     text-align: center;
 }
 
+#resultContainer {
+    display: table-cell;
+    text-align: center;
+}
 .img {
     background-size: cover; /* or 'contain' depending on your desired result */
     background-position: center;

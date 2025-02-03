@@ -21,7 +21,7 @@ body {
     display: inline-block;
     vertical-align: top;
     border: 1px solid #ccc;
-    padding: 5px;
+    
     font-size: 16px;
 }
 
@@ -52,24 +52,23 @@ body {
     width: 100%;
     height: 100%;
 }
-/*  */
 #results {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
-    gap: 10px; /* Spacing between items */
-    padding: 10px; /* Prevent items from touching screen edges */
-    box-sizing: border-box; /* Ensures padding is included */
-    width: 100%; /* Makes sure it fits inside the viewport */
-    max-width: 1200px; /* Prevents items from stretching too much on wide screens */
-    margin: 0 auto; /* Centers the entire grid */
+    position: relative;
+    width: auto; /* Adjust to fit the content inside */
+    margin: 0 auto; /* Centers the #results div within the container */
+    overflow: auto; /* Handle overflow in case the content is too large */
+    overflow: auto;
 }
+#resultContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 
-
+}
 .item {
-    display: inline-block; /* If needed */
-    /* background: lightgray; */
-    padding: 20px;
-    text-align: center;
+    display:inline-block;
+    margin: 15px;
 }
 
 .img {
@@ -80,9 +79,7 @@ body {
     height: 300px;
 }
 
-#results {
-    overflow: auto;
-}
+
 /* margin: top right bottom left; */
 .icon-cancel-outline {
     margin: 10px 10px auto auto;

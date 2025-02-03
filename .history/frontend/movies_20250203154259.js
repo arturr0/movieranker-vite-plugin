@@ -78,20 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     : 'No rating yet';
                 const moviesVotes = document.createElement('p');
                 moviesVotes.textContent = voteCount;
-                
-                const ratingElement = document.createElement('div');
-                moviesVotes.textContent = voteText;
-                //ratingElement.textContent = `Rating: ${avgRating}`;
-                for (let i = 0; i < 5; i++) {
-                    const star = document.createElement("span");
-                    star.style.color = i < avgRating ? "gold" : "gray";
-                    star.innerHTML = "&#9733;";
-                    ratingElement.appendChild(star); // Append each star
-                } 
-                
                 movieElement.appendChild(moviesVotes);
+                const ratingElement = document.createElement('p');
+                ratingElement.textContent = `Rating: ${avgRating}`;
                 movieElement.appendChild(ratingElement);
-                
+    
                 resultsDiv.appendChild(movieElement);
     
                 const movieImg = movieElement.querySelector('.img');

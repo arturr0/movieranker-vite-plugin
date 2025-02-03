@@ -55,15 +55,14 @@ body {
 /*  */
 #results {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Dynamic columns */
     gap: 10px; /* Spacing between items */
-    padding: 10px; /* Prevent items from touching screen edges */
-    box-sizing: border-box; /* Ensures padding is included */
-    width: 100%; /* Makes sure it fits inside the viewport */
-    max-width: 1200px; /* Prevents items from stretching too much on wide screens */
-    margin: 0 auto; /* Centers the entire grid */
+    justify-content: center; /* Center items */
+    padding: 10px; /* Prevents items from touching the edge */
+    box-sizing: border-box; /* Ensures padding is included in width calculation */
+    width: 100vw; /* Ensures it spans the full viewport width */
+    max-width: 100%; /* Prevents overflow */
 }
-
 
 .item {
     display: inline-block; /* If needed */

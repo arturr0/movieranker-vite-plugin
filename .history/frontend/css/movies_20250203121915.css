@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;  /* Ensure the body takes up the full viewport width */
+    height: 100vh; /* Ensure the body takes up the full viewport height */
+    box-sizing: border-box; /* Include padding and borders in width/height calculations */
+}
+
+#mainContent {
+    position: relative;
+    width: 100%;
+    max-width: 100%; /* Prevent overflow horizontally */
+    box-sizing: border-box;
+}
+
+.title {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    display: none;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none; /* Ensures it doesn't interfere with mouse events */
+}
+
+#ranks {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+#results {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Limit to 5 columns max */
+    gap: 15px; /* Gap between grid items */
+    width: 100%;
+    max-width: 100%; /* Ensure grid doesn't overflow horizontally */
+    box-sizing: border-box;
+    margin: 0 auto; /* Centers the grid horizontally with automatic left and right margins */
+    padding: 0 15px; /* Adds padding on left and right, adjust as needed */
+}
+
+
+#resultContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.item {
+    display: inline-block;
+    /* margin: 10px; */
+    box-sizing: border-box; /* Ensure item doesn't overflow its container */
+}
+
+.img {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%; /* Make sure the image fills the width of the item */
+    height: 300px; /* Fixed height for images */
+    object-fit: cover; /* Ensure the image scales nicely within the given space */
+}
+
+/* Cancel icon styling */
+.icon-cancel-outline {
+    margin: 10px 10px auto auto;
+    padding: 10px;
+    box-sizing: border-box; /* Ensures size remains the same */
+    border: 2px solid transparent; /* Transparent border to reserve space */
+    border-radius: 50%;
+}
+
+.icon-cancel-outline:hover {
+    border: 2px solid black; /* Border appears but doesn't affect size */
+}
