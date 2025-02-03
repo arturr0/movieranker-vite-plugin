@@ -261,15 +261,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 tooltip.style.display = "block";
                 tooltip.style.position = "absolute";
                 
-                // Update position on hover
-                updateTooltipPosition(e);
+                // Position tooltip dynamically based on cursor
+                tooltip.style.left = `${e.clientX + 10}px`; // Offset to the right of the cursor
+                tooltip.style.top = `${e.clientY + 20}px`; // Offset below the cursor
             }
-        }
-    });
-    
-    document.getElementById('results').addEventListener('mousemove', (e) => {
-        if (e.target.classList.contains("title")) {
-            updateTooltipPosition(e);
         }
     });
     
@@ -279,37 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
     
-    // Function to update the tooltip position
-    function updateTooltipPosition(e) {
-        const tooltipRect = tooltip.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const documentScrollTop = window.scrollY;  // Get the current page scroll
-    
-        // Get the mouse position relative to the document
-        let tooltipX = e.pageX + 10; // Offset 10px to the right of the cursor
-        let tooltipY = e.pageY + 20; // Offset 20px below the cursor
-    
-        // Check if the tooltip would overflow horizontally (on the right side)
-        if (tooltipX + tooltipRect.width > viewportWidth) {
-            tooltipX = viewportWidth - tooltipRect.width - 10; // Adjust to the left if it overflows on the right
-        }
-    
-        // Check if the tooltip would overflow vertically (on the bottom)
-        if (tooltipY + tooltipRect.height > viewportHeight + documentScrollTop) {
-            tooltipY = (viewportHeight + documentScrollTop) - tooltipRect.height - 10; // Adjust upwards if it overflows on the bottom
-        }
-    
-        tooltip.style.left = `${tooltipX}px`;
-        tooltip.style.top = `${tooltipY}px`;
-    
-        // Ensure the tooltip stays within the document boundaries even when scrolling
-        if (tooltipY + tooltipRect.height > documentScrollTop + viewportHeight) {
-            tooltip.style.transform = `translateY(-${tooltipRect.height + 10}px)`;
-        } else {
-            tooltip.style.transform = "none"; // Reset if the tooltip fits within the screen
-        }
-    }
     
     
 });

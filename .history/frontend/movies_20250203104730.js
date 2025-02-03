@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const movieElement = document.createElement('div');
                 movieElement.classList.add('item');      
                 movieElement.innerHTML = `
-                    <h3 class="title" data-title="${movie.title}">${movie.title} (${movie.year})</h3>
+                    <h3 class="title">${movie.title} (${movie.year})</h3>
                     <div class="img" style="background-image: url(${movie.poster});"></div>`
                     ;
                 if (movie.ratings) {
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const personElement = document.createElement('div');
                 personElement.classList.add('item');
                 personElement.innerHTML = `
-                    <h3 class="title" data-title="${person.name}">${person.name}</h3>
+                    <h3 class="title">${person.name}</h3>
                     <div class="img" style="background-image: url(${person.profile});"></div>`;
                 if (person.ratings) {
                     person.ratings.forEach(rank => {
@@ -253,63 +253,28 @@ document.addEventListener("DOMContentLoaded", () => {
             alert('Invalid rating! Please provide a number between 1 and 5.');
         }
     }
-    document.getElementById('results').addEventListener('mouseover', (e) => {
-        if (e.target.classList.contains("title")) {
-            // Check if text overflows
-            if (e.target.scrollWidth > e.target.clientWidth) {
-                tooltip.textContent = e.target.getAttribute("data-title");
+    document.querySelectorAll(".title").forEach((element) => {
+        // Check if text overflows
+        if (element.scrollWidth > element.clientWidth) {
+            element.setAttribute("data-overflow", "true");
+        }
+
+        element.addEventListener("mouseenter", (e) => {
+            if (element.getAttribute("data-overflow") === "true") {
+                tooltip.textContent = element.getAttribute("data-title");
                 tooltip.style.display = "block";
-                tooltip.style.position = "absolute";
-                
-                // Update position on hover
-                updateTooltipPosition(e);
             }
-        }
-    });
-    
-    document.getElementById('results').addEventListener('mousemove', (e) => {
-        if (e.target.classList.contains("title")) {
-            updateTooltipPosition(e);
-        }
-    });
-    
-    document.getElementById('results').addEventListener('mouseout', (e) => {
-        if (e.target.classList.contains("title")) {
+        });
+
+        element.addEventListener("mousemove", (e) => {
+            if (element.getAttribute("data-overflow") === "true") {
+                tooltip.style.left = `${e.pageX + 10}px`;
+                tooltip.style.top = `${e.pageY + 10}px`;
+            }
+        });
+
+        element.addEventListener("mouseleave", () => {
             tooltip.style.display = "none";
-        }
+        });
     });
-    
-    // Function to update the tooltip position
-    function updateTooltipPosition(e) {
-        const tooltipRect = tooltip.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const documentScrollTop = window.scrollY;  // Get the current page scroll
-    
-        // Get the mouse position relative to the document
-        let tooltipX = e.pageX + 10; // Offset 10px to the right of the cursor
-        let tooltipY = e.pageY + 20; // Offset 20px below the cursor
-    
-        // Check if the tooltip would overflow horizontally (on the right side)
-        if (tooltipX + tooltipRect.width > viewportWidth) {
-            tooltipX = viewportWidth - tooltipRect.width - 10; // Adjust to the left if it overflows on the right
-        }
-    
-        // Check if the tooltip would overflow vertically (on the bottom)
-        if (tooltipY + tooltipRect.height > viewportHeight + documentScrollTop) {
-            tooltipY = (viewportHeight + documentScrollTop) - tooltipRect.height - 10; // Adjust upwards if it overflows on the bottom
-        }
-    
-        tooltip.style.left = `${tooltipX}px`;
-        tooltip.style.top = `${tooltipY}px`;
-    
-        // Ensure the tooltip stays within the document boundaries even when scrolling
-        if (tooltipY + tooltipRect.height > documentScrollTop + viewportHeight) {
-            tooltip.style.transform = `translateY(-${tooltipRect.height + 10}px)`;
-        } else {
-            tooltip.style.transform = "none"; // Reset if the tooltip fits within the screen
-        }
-    }
-    
-    
 });

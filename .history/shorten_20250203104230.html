@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Truncate with Tooltip</title>
+    <style>
+        .shortened-text {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            vertical-align: top;
+            border: 1px solid #ccc;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: none;
+            white-space: nowrap;
+            z-index: 1000;
+            pointer-events: none; /* Ensures it doesn't interfere with mouse events */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="shortened-text" data-title="This is a very long text that will be shortened">
+        This is a very long text that will be shortened
+    </div>
+
+    <div class="shortened-text" data-title="Short text">
+        Short text
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tooltip = document.getElementById("tooltip");
+
+            document.querySelectorAll(".shortened-text").forEach((element) => {
+                // Check if text overflows
+                if (element.scrollWidth > element.clientWidth) {
+                    element.setAttribute("data-overflow", "true");
+                }
+
+                element.addEventListener("mouseenter", (e) => {
+                    if (element.getAttribute("data-overflow") === "true") {
+                        tooltip.textContent = element.getAttribute("data-title");
+                        tooltip.style.display = "block";
+                    }
+                });
+
+                element.addEventListener("mousemove", (e) => {
+                    if (element.getAttribute("data-overflow") === "true") {
+                        tooltip.style.left = `${e.pageX + 10}px`;
+                        tooltip.style.top = `${e.pageY + 10}px`;
+                    }
+                });
+
+                element.addEventListener("mouseleave", () => {
+                    tooltip.style.display = "none";
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

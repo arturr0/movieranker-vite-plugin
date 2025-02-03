@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const rankAvg = document.getElementById("rank");
     const rankPosts = document.getElementById("posts");
     const sendPost = document.getElementById("sendPost");
-    const tooltip = document.getElementById("tooltip");
+    
     let lastQuery = {};
     const moviesRanks = [];
     const peopleRanks = [];
@@ -58,13 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.movies) {
             data.movies.forEach(movie => {
                 console.log(`Movie: ${movie.title}`, movie.ratings);
-                if (!movie.poster) return;
+    
                 const movieElement = document.createElement('div');
                 movieElement.classList.add('item');      
                 movieElement.innerHTML = `
-                    <h3 class="title" data-title="${movie.title}">${movie.title} (${movie.year})</h3>
-                    <div class="img" style="background-image: url(${movie.poster});"></div>`
-                    ;
+                    <h3>${movie.title} (${movie.year})</h3>
+                    <img src="${movie.poster}" alt="${movie.title} Poster" width="200" data-id="${movie.id}" data-title="${movie.title}" />
+                `;
+    
                 if (movie.ratings) {
                     movie.ratings.forEach(rank => {
                         const rankMovie = new Movie(movie.id, movie.title, rank.rating, rank.userEmail, rank.comment);
@@ -82,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
                 resultsDiv.appendChild(movieElement);
     
-                const movieImg = movieElement.querySelector('.img');
+                const movieImg = movieElement.querySelector('img');
                 if (movieImg) {
                     movieImg.addEventListener('click', () => {
                         const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === movie.id);
@@ -123,12 +124,14 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (data.people) {
             data.people.forEach(person => {
                 console.log(`Person: ${person.name}`, person.ratings);
-                if (!person.profile) return; 
+    
                 const personElement = document.createElement('div');
                 personElement.classList.add('item');
                 personElement.innerHTML = `
-                    <h3 class="title" data-title="${person.name}">${person.name}</h3>
-                    <div class="img" style="background-image: url(${person.profile});"></div>`;
+                    <h3>${person.name}</h3>
+                    <img src="${person.profile}" alt="${person.name} Profile" width="200" data-id="${person.id}" data-name="${person.name}" />
+                `;
+    
                 if (person.ratings) {
                     person.ratings.forEach(rank => {
                         const rankPerson = new Person(person.id, person.name, rank.rating, rank.userEmail, rank.comment);
@@ -146,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
                 resultsDiv.appendChild(personElement);
     
-                const personImg = personElement.querySelector('.img');
+                const personImg = personElement.querySelector('img');
                 if (personImg) {
                     personImg.addEventListener('click', () => {
                         const clickedPerson = peopleRanks.filter(personRank => personRank.id === person.id);
@@ -253,63 +256,4 @@ document.addEventListener("DOMContentLoaded", () => {
             alert('Invalid rating! Please provide a number between 1 and 5.');
         }
     }
-    document.getElementById('results').addEventListener('mouseover', (e) => {
-        if (e.target.classList.contains("title")) {
-            // Check if text overflows
-            if (e.target.scrollWidth > e.target.clientWidth) {
-                tooltip.textContent = e.target.getAttribute("data-title");
-                tooltip.style.display = "block";
-                tooltip.style.position = "absolute";
-                
-                // Update position on hover
-                updateTooltipPosition(e);
-            }
-        }
-    });
-    
-    document.getElementById('results').addEventListener('mousemove', (e) => {
-        if (e.target.classList.contains("title")) {
-            updateTooltipPosition(e);
-        }
-    });
-    
-    document.getElementById('results').addEventListener('mouseout', (e) => {
-        if (e.target.classList.contains("title")) {
-            tooltip.style.display = "none";
-        }
-    });
-    
-    // Function to update the tooltip position
-    function updateTooltipPosition(e) {
-        const tooltipRect = tooltip.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const documentScrollTop = window.scrollY;  // Get the current page scroll
-    
-        // Get the mouse position relative to the document
-        let tooltipX = e.pageX + 10; // Offset 10px to the right of the cursor
-        let tooltipY = e.pageY + 20; // Offset 20px below the cursor
-    
-        // Check if the tooltip would overflow horizontally (on the right side)
-        if (tooltipX + tooltipRect.width > viewportWidth) {
-            tooltipX = viewportWidth - tooltipRect.width - 10; // Adjust to the left if it overflows on the right
-        }
-    
-        // Check if the tooltip would overflow vertically (on the bottom)
-        if (tooltipY + tooltipRect.height > viewportHeight + documentScrollTop) {
-            tooltipY = (viewportHeight + documentScrollTop) - tooltipRect.height - 10; // Adjust upwards if it overflows on the bottom
-        }
-    
-        tooltip.style.left = `${tooltipX}px`;
-        tooltip.style.top = `${tooltipY}px`;
-    
-        // Ensure the tooltip stays within the document boundaries even when scrolling
-        if (tooltipY + tooltipRect.height > documentScrollTop + viewportHeight) {
-            tooltip.style.transform = `translateY(-${tooltipRect.height + 10}px)`;
-        } else {
-            tooltip.style.transform = "none"; // Reset if the tooltip fits within the screen
-        }
-    }
-    
-    
 });
