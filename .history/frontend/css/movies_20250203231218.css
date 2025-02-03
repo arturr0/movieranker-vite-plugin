@@ -128,19 +128,22 @@ span {
 
 
 
-.item {
-    display: inline-block; /* If needed */
-    /* background: lightgray; */
-    padding: 20px;
-    text-align: center;
-    margin: auto;
-    
-        
-        word-wrap: break-word;  /* Breaks only if necessary */
-        overflow-wrap: break-word; /* Ensures long words break */
-        white-space: normal; /* Allows text to wrap */
-    
+#results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 auto;
+    align-items: stretch; /* Forces children to stretch to equal height */
 }
+
+.item {
+    display: flex; /* Ensures content inside stretches properly */
+    flex-direction: column; /* Keeps content aligned properly */
+}
+
 .img:hover {
     transform: scale(1.1);
     

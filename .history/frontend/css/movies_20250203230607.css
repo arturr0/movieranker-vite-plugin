@@ -112,20 +112,14 @@ span {
 /*  */
 #results {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-    gap: 10px;
-    padding: 10px;
-    box-sizing: border-box;
-    width: 100%;
-    margin: 0 auto;
-    align-items: stretch; /* Forces children to stretch to equal height */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Responsive columns */
+    gap: 10px; /* Spacing between items */
+    padding: 10px; /* Prevent items from touching screen edges */
+    box-sizing: border-box; /* Ensures padding is included */
+    width: 100%; /* Makes sure it fits inside the viewport */
+    /* max-width: 1200px; Prevents items from stretching too much on wide screens */
+    margin: 0 auto; /* Centers the entire grid */
 }
-
-.item {
-    display: flex; /* Ensures content inside stretches properly */
-    flex-direction: column; /* Keeps content aligned properly */
-}
-
 
 
 .item {

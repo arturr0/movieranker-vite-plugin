@@ -129,7 +129,7 @@ span {
 
 
 .item {
-    display: inline-block; /* If needed */
+    /* display: inline-block; If needed */
     /* background: lightgray; */
     padding: 20px;
     text-align: center;
