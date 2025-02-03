@@ -114,7 +114,7 @@ span {
 #results {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    grid-auto-rows: auto;
+    grid-auto-rows: auto; /* Let rows adjust to content height */
     gap: 10px;
     padding: 10px;
     box-sizing: border-box;
@@ -123,31 +123,29 @@ span {
     overflow: hidden; /* Prevent vertical scrollbar in the grid */
 }
 
+/* Flexbox container for each grid item */
 .item {
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 10px; /* Reduced padding for better alignment */
     text-align: center;
-    margin: 0;
+    margin: 0; /* No extra margins */
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
-    justify-content: space-between; /* Space between title and bottom content */
-    height: 100%;
-    box-sizing: border-box;
+    justify-content: flex-start; /* Start aligning content at the top */
+    height: 100%; /* Ensure the item stretches vertically */
+    box-sizing: border-box; /* Include padding in the height */
 }
 
+/* Title that needs to grow */
 .title {
     flex-grow: 1; /* Allow the title to take available space */
     font-size: 1.5rem;
+    margin-bottom: 10px; /* Space between title and bottom content */
     display: flex;
     align-items: center; /* Vertically center the title */
-    justify-content: center; /* Horizontally center the title */
-    margin-bottom: 10px; /* Space between title and bottom content */
 }
-
-
-
 
 /* Bottom content such as the votes number */
 

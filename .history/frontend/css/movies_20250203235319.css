@@ -110,46 +110,37 @@ span {
     height: 100%;
 }
 /*  */
-/* Ensuring grid items are adjusted properly */
 #results {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    grid-auto-rows: auto;
+    grid-auto-rows: minmax(100px, auto); /* Adjusts row height to content, ensures no overflow */
     gap: 10px;
     padding: 10px;
     box-sizing: border-box;
     width: 100%;
     margin: 0 auto;
-    overflow: hidden; /* Prevent vertical scrollbar in the grid */
+    overflow: hidden; /* Prevents unwanted scrollbar */
 }
 
 .item {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
+    display: flex; /* Makes the content stretch properly */
+    flex-direction: column; /* Aligns content vertically */
+    height: 100%; /* Ensures the item stretches vertically */
+    padding: 10px; /* Adjust padding to reduce excess space */
     text-align: center;
-    margin: 0;
+    margin: 0; /* Remove auto margin to prevent extra spacing */
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
-    justify-content: space-between; /* Space between title and bottom content */
-    height: 100%;
-    box-sizing: border-box;
 }
 
 .title {
-    flex-grow: 1; /* Allow the title to take available space */
-    font-size: 1.5rem;
+    flex-grow: 1; /* Makes the title fill the available space */
+    margin-bottom: 0; /* Removes unnecessary margin beneath the title */
+    font-size: 1.5rem; /* Optional: Adjust font size */
     display: flex;
-    align-items: center; /* Vertically center the title */
-    justify-content: center; /* Horizontally center the title */
-    margin-bottom: 10px; /* Space between title and bottom content */
+    align-items: center; /* Vertically centers the title */
 }
-
-
-
-
-/* Bottom content such as the votes number */
 
 
 .img:hover {
