@@ -195,12 +195,10 @@ span {
     display: flex;
     flex-direction: column;
 }
-#rateContainer {
-    display: flex;
-}
+
 #ratedContainer {
     display: flex;
-    /* justify-content: center; */
+    justify-content: center;
 }
 #title {
     font-size: 1.5rem;

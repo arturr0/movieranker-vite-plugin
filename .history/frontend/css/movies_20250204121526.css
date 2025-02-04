@@ -195,12 +195,10 @@ span {
     display: flex;
     flex-direction: column;
 }
-#rateContainer {
-    display: flex;
-}
+
 #ratedContainer {
     display: flex;
-    /* justify-content: center; */
+    justify-content: center;
 }
 #title {
     font-size: 1.5rem;
@@ -218,6 +216,6 @@ span {
 #starsInfo, #votesInfo {
     text-align: center;
     font-size: 1.2rem;
-    /* height: 1rem; */
+    height: 1rem;
     margin: 0;
 }

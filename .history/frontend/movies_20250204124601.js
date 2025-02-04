@@ -237,10 +237,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     alert('Thank you for your rating!');
                     
                     await searchMovies();  // Wait until moviesRanks is updated
-                    console.log(peopleRanks, type);
-                    //const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
-                    const ranksArray = type === "movie" ? moviesRanks : peopleRanks;
-                    clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("id")));
+                    
+                    const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
                     console.log(clickedMovie);
                     const avgRating = Math.round(
                         clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
@@ -253,9 +251,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         star.innerHTML = "&#9733;";
                         starsInfo.appendChild(star);
                     }
-                    const voteCount = clickedMovie.length;
-                    const voteText = voteCount === 1 ? '1 vote' : `${voteCount} votes`;
-                    votesInfo.textContent = voteText;
                     rankPosts.innerHTML = ''; // Clear previous posts
                     clickedMovie.forEach(moviePost => {
                         const postDiv = document.createElement("div");

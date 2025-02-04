@@ -238,9 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                     await searchMovies();  // Wait until moviesRanks is updated
                     console.log(peopleRanks, type);
-                    //const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
-                    const ranksArray = type === "movie" ? moviesRanks : peopleRanks;
-                    clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("id")));
+                    const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
                     console.log(clickedMovie);
                     const avgRating = Math.round(
                         clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
