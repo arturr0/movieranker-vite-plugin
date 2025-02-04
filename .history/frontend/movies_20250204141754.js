@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     document.getElementById("sendPost").addEventListener("click", () => {
-        rateItem(sendPost.getAttribute("type"), parseInt(sendPost.getAttribute("itemID")), sendPost.getAttribute("title"));
+        rateItem(sendPost.getAttribute("type"), parseInt(sendPost.getAttribute("id")), sendPost.getAttribute("title"));
         
     });
 
@@ -100,13 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (!movie.poster) return;
                 resultsDiv.appendChild(createItemElement(movie, 'movie'));
             });
-            
+            equalizeTitleHeights();
         } else if (data.people) {
             data.people.forEach(person => {
                 if (!person.profile) return;
                 resultsDiv.appendChild(createItemElement(person, 'person'));
             });
-            //
+            equalizeTitleHeights();
         } else {
             alert('No results found.');
         }
@@ -184,27 +184,17 @@ document.addEventListener("DOMContentLoaded", () => {
             postDiv.setAttribute("user", post.rankerName);
     
             const user = document.createElement("p");
-            user.classList.add("userName");
             user.textContent = post.rankerName;
             
             const postRank = document.createElement("div");
-            postRank.classList.add("userRank")
-            // postRank.textContent = post.rank;
+            postRank.textContent = post.rank;
             
             const postText = document.createElement("p");
-            postText.classList.add("userPost");
-
             postText.textContent = post.post;
     
             postDiv.appendChild(user);
-            postDiv.appendChild(postText);
             postDiv.appendChild(postRank);
-            for (let i = 0; i < 5; i++) {
-                const star = document.createElement("span");
-                star.style.color = i < post.rank ? "gold" : "gray";
-                star.innerHTML = "&#9733;";
-                postRank.appendChild(star);
-            }
+            postDiv.appendChild(postText);
     
             rankPosts.appendChild(postDiv);
         });
@@ -216,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ranksContainer.style.display = 'block';
     
         sendPost.setAttribute("type", type);
-        sendPost.setAttribute("itemID", item.id);
+        sendPost.setAttribute("id", item.id);
         sendPost.setAttribute("title", type === 'movie' ? item.title : item.name);
     }
     
@@ -250,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log(peopleRanks, type);
                     //const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
                     const ranksArray = type === "movie" ? moviesRanks : peopleRanks;
-                    clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
+                    clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("id")));
                     console.log(clickedMovie);
                     const avgRating = Math.round(
                         clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
@@ -270,27 +260,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     clickedMovie.forEach(moviePost => {
                         const postDiv = document.createElement("div");
                         const user = document.createElement("p");
-                        user.classList.add("userName");
                         user.textContent = moviePost.rankerName;
                         rankPosts.appendChild(postDiv);
                         const postRank = document.createElement("div");
-                        postRank.classList.add("userRank")
-                        // postRank.textContent = moviePost.rank;
+                        postRank.textContent = moviePost.rank;
                         postDiv.classList.add("post");
                         postDiv.setAttribute("user", moviePost.rankerName);
                         const post = document.createElement("p");
-                        post.classList.add("userPost");
                         post.textContent = moviePost.post;
                         postDiv.appendChild(user);
-                        postDiv.appendChild(post);
                         postDiv.appendChild(postRank);
-                        for (let i = 0; i < 5; i++) {
-                            const star = document.createElement("span");
-                            star.style.color = i < moviePost.rank ? "gold" : "gray";
-                            star.innerHTML = "&#9733;";
-                            postRank.appendChild(star);
-                        }
-                        
+                        postDiv.appendChild(post);
                     });
                 }
 
@@ -301,7 +281,115 @@ document.addEventListener("DOMContentLoaded", () => {
             alert('Invalid rating! Please provide a number between 1 and 5.');
         }
     }
+    // document.getElementById('results').addEventListener('mouseover', (e) => {
+    //     if (e.target.classList.contains("title")) {
+    //         // Check if text overflows
+    //         if (e.target.scrollWidth > e.target.clientWidth) {
+    //             tooltip.textContent = e.target.getAttribute("data-title");
+    //             tooltip.style.display = "block";
+    //             tooltip.style.position = "absolute";
+                
+    //             // Update position on hover
+    //             updateTooltipPosition(e);
+    //         }
+    //     }
+    // });
     
+    // document.getElementById('results').addEventListener('mousemove', (e) => {
+    //     if (e.target.classList.contains("title")) {
+    //         updateTooltipPosition(e);
+    //     }
+    // });
+    
+    // document.getElementById('results').addEventListener('mouseout', (e) => {
+    //     if (e.target.classList.contains("title")) {
+    //         tooltip.style.display = "none";
+    //     }
+    // });
+    
+    // // Function to update the tooltip position
+    // function updateTooltipPosition(e) {
+    //     const tooltipRect = tooltip.getBoundingClientRect();
+    //     const viewportWidth = window.innerWidth;
+    //     const viewportHeight = window.innerHeight;
+    //     const documentScrollTop = window.scrollY;  // Get the current page scroll
+    
+    //     // Get the mouse position relative to the document
+    //     let tooltipX = e.pageX + 10; // Offset 10px to the right of the cursor
+    //     let tooltipY = e.pageY + 20; // Offset 20px below the cursor
+    
+    //     // Check if the tooltip would overflow horizontally (on the right side)
+    //     if (tooltipX + tooltipRect.width > viewportWidth) {
+    //         tooltipX = viewportWidth - tooltipRect.width - 10; // Adjust to the left if it overflows on the right
+    //     }
+    
+    //     // Check if the tooltip would overflow vertically (on the bottom)
+    //     if (tooltipY + tooltipRect.height > viewportHeight + documentScrollTop) {
+    //         tooltipY = (viewportHeight + documentScrollTop) - tooltipRect.height - 10; // Adjust upwards if it overflows on the bottom
+    //     }
+    
+    //     tooltip.style.left = `${tooltipX}px`;
+    //     tooltip.style.top = `${tooltipY}px`;
+    
+    //     // Ensure the tooltip stays within the document boundaries even when scrolling
+    //     if (tooltipY + tooltipRect.height > documentScrollTop + viewportHeight) {
+    //         tooltip.style.transform = `translateY(-${tooltipRect.height + 10}px)`;
+    //     } else {
+    //         tooltip.style.transform = "none"; // Reset if the tooltip fits within the screen
+    //     }
+    // }
+    function equalizeTitleHeights() {
+        const titles = document.querySelectorAll('.title');
+        const rows = getRows(titles);  // Group titles by their rows
+    
+        rows.forEach(row => {
+            let maxHeight = 0;
+    
+            // Find the maximum height in the current row
+            row.forEach(title => {
+                const height = title.offsetHeight;
+                if (height > maxHeight) {
+                    maxHeight = height;
+                }
+            });
+    
+            // Set all titles in this row to the maximum height
+            row.forEach(title => {
+                title.style.height = `${maxHeight}px`;
+            });
+        });
+    }
+    
+    function getRows(titles) {
+        const rows = [];
+        let currentRow = [];
+        let lastTop = null;
+    
+        // Group titles based on their vertical position (top offset)
+        titles.forEach(title => {
+            const titleTop = title.getBoundingClientRect().top;
+    
+            if (lastTop === null || Math.abs(titleTop - lastTop) < 10) {
+                currentRow.push(title);  // Titles in the same row
+            } else {
+                rows.push(currentRow);  // Move to the next row
+                currentRow = [title];    // Start a new row
+            }
+    
+            lastTop = titleTop;
+        });
+    
+        // Push the last row into rows
+        if (currentRow.length > 0) {
+            rows.push(currentRow);
+        }
+    
+        return rows;
+    }
+    
+    // Call the function when the page loads or after any content update
+    //window.addEventListener('load', equalizeTitleHeights);
+    //window.addEventListener('resize', equalizeTitleHeights); // Optionally add for responsive layout changes
     
     
 });

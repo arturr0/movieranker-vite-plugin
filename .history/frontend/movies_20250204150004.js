@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     document.getElementById("sendPost").addEventListener("click", () => {
-        rateItem(sendPost.getAttribute("type"), parseInt(sendPost.getAttribute("itemID")), sendPost.getAttribute("title"));
+        rateItem(sendPost.getAttribute("type"), parseInt(sendPost.getAttribute("id")), sendPost.getAttribute("title"));
         
     });
 
@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ranksContainer.style.display = 'block';
     
         sendPost.setAttribute("type", type);
-        sendPost.setAttribute("itemID", item.id);
+        sendPost.setAttribute("id", item.id);
         sendPost.setAttribute("title", type === 'movie' ? item.title : item.name);
     }
     
@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log(peopleRanks, type);
                     //const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
                     const ranksArray = type === "movie" ? moviesRanks : peopleRanks;
-                    clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
+                    clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("id")));
                     console.log(clickedMovie);
                     const avgRating = Math.round(
                         clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length

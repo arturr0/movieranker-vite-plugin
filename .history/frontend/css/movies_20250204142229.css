@@ -223,7 +223,7 @@ span {
     height: 100%;
 }
 #writePost {
-    min-height: 200px;
+    height: 200px;
     width: 300px;
 }
 #starsInfo, #votesInfo {
@@ -239,10 +239,4 @@ textarea::placeholder {
 #posts {
     width: 100%;
     /* border: 2px solid black; */
-}
-.userName {
-    margin-top: 0;
-}
-#sendPost {
-    height: 100%;
 }

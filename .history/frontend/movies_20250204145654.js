@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     document.getElementById("sendPost").addEventListener("click", () => {
-        rateItem(sendPost.getAttribute("type"), parseInt(sendPost.getAttribute("itemID")), sendPost.getAttribute("title"));
+        rateItem(sendPost.getAttribute("type"), parseInt(sendPost.getAttribute("id")), sendPost.getAttribute("title"));
         
     });
 
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             const postRank = document.createElement("div");
             postRank.classList.add("userRank")
-            // postRank.textContent = post.rank;
+            postRank.textContent = post.rank;
             
             const postText = document.createElement("p");
             postText.classList.add("userPost");
@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ranksContainer.style.display = 'block';
     
         sendPost.setAttribute("type", type);
-        sendPost.setAttribute("itemID", item.id);
+        sendPost.setAttribute("id", item.id);
         sendPost.setAttribute("title", type === 'movie' ? item.title : item.name);
     }
     
@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log(peopleRanks, type);
                     //const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
                     const ranksArray = type === "movie" ? moviesRanks : peopleRanks;
-                    clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
+                    clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("id")));
                     console.log(clickedMovie);
                     const avgRating = Math.round(
                         clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         rankPosts.appendChild(postDiv);
                         const postRank = document.createElement("div");
                         postRank.classList.add("userRank")
-                        // postRank.textContent = moviePost.rank;
+                        postRank.textContent = moviePost.rank;
                         postDiv.classList.add("post");
                         postDiv.setAttribute("user", moviePost.rankerName);
                         const post = document.createElement("p");
@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             const star = document.createElement("span");
                             star.style.color = i < moviePost.rank ? "gold" : "gray";
                             star.innerHTML = "&#9733;";
-                            postRank.appendChild(star);
+                            ratingElement.appendChild(star);
                         }
                         
                     });

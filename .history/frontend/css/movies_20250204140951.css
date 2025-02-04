@@ -207,15 +207,10 @@ span {
 #title {
     font-size: 1.5rem;
     text-align: center;
-    margin-bottom: 20px;
 }
 #stars {
     display: flex;
     justify-content: center;
-}
-#myPost {
-    margin-left: 20px;
-    margin-right: 20px;
 }
 #postInput {
     display: flex;
@@ -223,7 +218,7 @@ span {
     height: 100%;
 }
 #writePost {
-    min-height: 200px;
+    height: 200px;
     width: 300px;
 }
 #starsInfo, #votesInfo {
@@ -235,14 +230,4 @@ span {
 textarea::placeholder {
     text-align: center;
     font-size: 1.5rem;
-}
-#posts {
-    width: 100%;
-    /* border: 2px solid black; */
-}
-.userName {
-    margin-top: 0;
-}
-#sendPost {
-    height: 100%;
 }
