@@ -229,7 +229,38 @@ document.addEventListener("userDataReady", () => {
 		const token = localStorage.getItem('jwt');
 		const rating = prompt(`Please rate this ${type}: ${title}`);
 
+		const stars = document.querySelectorAll('.star');
+		const ratingContainer = document.getElementById('ratingContainer');
+		let selectedRating = 0;
 		
+		stars.forEach((star, index) => {
+			star.addEventListener('mouseover', function() {
+				stars.forEach((s, i) => {
+					s.classList.toggle('filled', i <= index); // Light up stars progressively
+				});
+			});
+			
+			star.addEventListener('mouseleave', function() {
+				stars.forEach((s, i) => {
+					s.classList.toggle('filled', i < selectedRating); // Restore previous selection
+				});
+			});
+			
+			star.addEventListener('click', function() {
+				selectedRating = index + 1;
+				console.log(`Selected Rating: ${selectedRating} stars`);
+				
+				// Lock in selected stars
+				stars.forEach((s, i) => {
+					s.classList.toggle('filled', i < selectedRating);
+				});
+				
+				// Hide the stars after 5 seconds
+				setTimeout(() => {
+					ratingContainer.classList.add('hidden');
+				}, 5000);
+			});
+		});
 
 		if (rating && !isNaN(rating) && rating >= 1 && rating <= 5) {
 			try {
@@ -313,36 +344,5 @@ document.addEventListener("userDataReady", () => {
 	}
 	
 	
-	const stars = document.querySelectorAll('.star');
-		const ratingContainer = document.getElementById('ratingContainer');
-		let selectedRating = 0;
-		
-	stars.forEach((star, index) => {
-		star.addEventListener('mouseover', function() {
-			stars.forEach((s, i) => {
-				s.classList.toggle('filled', i <= index); // Light up stars progressively
-			});
-		});
-		
-		star.addEventListener('mouseleave', function() {
-			stars.forEach((s, i) => {
-				s.classList.toggle('filled', i < selectedRating); // Restore previous selection
-			});
-		});
-		
-		star.addEventListener('click', function() {
-			selectedRating = index + 1;
-			console.log(`Selected Rating: ${selectedRating} stars`);
-			
-			// Lock in selected stars
-			stars.forEach((s, i) => {
-				s.classList.toggle('filled', i < selectedRating);
-			});
-			
-			// Hide the stars after 5 seconds
-			// setTimeout(() => {
-			// 	ratingContainer.classList.add('hidden');
-			// }, 5000);
-		});
-	});
+	
 });

@@ -282,7 +282,7 @@ textarea::placeholder {
 }
 
 /* Hover effect */
-/* .star:hover,
+.star:hover,
 .star:hover ~ .star {
 	color: gold;
-	} */
+	}
