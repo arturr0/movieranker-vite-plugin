@@ -8,20 +8,20 @@ generator client {
 }
 
 model Movie {
-  id          Int            @id @default(autoincrement())
-  title       String
+  id        Int            @id @default(autoincrement())
+  title     String
   releaseDate String?
-  rating      Float?
-  posterPath  String?
-  ratings     RatingMovie[]  @relation("RatingMovieToMovie")
+  rating    Float?
+  posterPath String?
+  ratings   RatingMovie[]  @relation("RatingMovieToMovie")
 }
 
 model Person {
-  id          Int            @id @default(autoincrement())
-  name        String
-  biography   String?
+  id        Int            @id @default(autoincrement())
+  name      String
+  biography String?
   profilePath String?
-  ratings     RatingPerson[] @relation("RatingPersonToPerson")
+  ratings   RatingPerson[] @relation("RatingPersonToPerson")
 }
 
 model User {

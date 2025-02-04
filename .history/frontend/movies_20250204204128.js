@@ -138,7 +138,7 @@ document.addEventListener("userDataReady", () => {
 	}
 
 	// Run searchMovies every 5 seconds, aborting previous requests if new ones start
-	//setInterval(searchMovies, 5000);
+	setInterval(searchMovies, 5000);
 
 	
 	function createItemElement(item, type) {

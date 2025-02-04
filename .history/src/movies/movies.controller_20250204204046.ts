@@ -1,19 +1,29 @@
-import { Controller, Get, Query, Res, Req, UseGuards, Post, Body, Sse } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Res,
+  Req,
+  UseGuards,
+  Post,
+  Body,
+  Sse,
+} from '@nestjs/common';
+import { RequestWithUser } from '../auth/request-with-user.interface';
 import { Response } from 'express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { join } from 'path';
 import { PrismaService } from '../prisma/prisma.service';
-import { MoviesService } from './movies.service';
-import { RequestWithUser } from '../auth/request-with-user'; // Adjust the import path accordingly
+import { MoviesService } from './movies.service';  // ✅ Correct Import
 
 @Controller('movies')
 export class MoviesController {
   constructor(
     private readonly httpService: HttpService,
     private readonly prisma: PrismaService,
-    private readonly moviesService: MoviesService,
+    private readonly moviesService: MoviesService, // Injecting SSE Service
   ) {}
 
   @Get()
@@ -22,6 +32,7 @@ export class MoviesController {
     console.log('Serving file:', filePath);
     return res.sendFile(filePath);
   }
+
   @Get('protected')
   @UseGuards(JwtAuthGuard)
   findAll(@Req() req: RequestWithUser, @Res() res: Response) {
@@ -40,7 +51,7 @@ export class MoviesController {
   ) {
     const apiKey = process.env.TMDB_API_KEY;
     let searchUrl = '';
-    console.log('search')
+
     switch (type) {
       case 'actor':
       case 'director':
@@ -107,98 +118,59 @@ export class MoviesController {
   }
 
   @Post('rate')
-@UseGuards(JwtAuthGuard)
-async rateItem(
-  @Req() req: RequestWithUser,
-  @Body() body: { type: string; id: number; title: string; rating: number; post: string },
-  @Res() res: Response
-) {
-  const userId = req.user.id;
-  const userEmail = req.user.email;
-  const { type, id, title, rating, post } = body;
+  @UseGuards(JwtAuthGuard)
+  async rateItem(
+    @Req() req: RequestWithUser,
+    @Body() body: { type: string; id: number; title: string; rating: number; post: string },
+  ) {
+    const userId = req.user.id;
+    const userEmail = req.user.email;
+    const { type, id, title, rating, post } = body;
 
-  try {
-    let ratingRecord;
+    try {
+      let ratingRecord;
 
-    if (type === 'movie') {
-      // Check if the movie exists
-      const movie = await this.prisma.movie.findUnique({
-        where: { id },
-      });
-
-      if (!movie) {
-        // If the movie doesn't exist, create it
-        await this.prisma.movie.create({
-          data: {
-            id,
+      if (type === 'movie') {
+        ratingRecord = await this.prisma.ratingMovie.upsert({
+          where: { userId_tmdbId: { userId, tmdbId: id } },
+          update: { rating, comment: post },
+          create: {
+            userId,
+            userEmail,
+            tmdbId: id,
             title,
-            // Add other necessary movie fields here
+            rating,
+            comment: post,
           },
         });
-      }
-
-      // Upsert the rating for the movie
-      ratingRecord = await this.prisma.ratingMovie.upsert({
-        where: { userEmail_tmdbId: { userEmail, tmdbId: id } },
-        update: { rating, comment: post },
-        create: {
-          userId,
-          userEmail,
-          tmdbId: id,
-          title,
-          rating,
-          comment: post,
-        },
-      });
-
-    } else if (type === 'person') {
-      // Check if the person exists
-      const person = await this.prisma.person.findUnique({
-        where: { id },
-      });
-
-      if (!person) {
-        // If the person doesn't exist, create it
-        await this.prisma.person.create({
-          data: {
-            id,
-            name: title,
-            // Add other necessary person fields here
+      } else if (type === 'person') {
+        ratingRecord = await this.prisma.ratingPerson.upsert({
+          where: { userId_tmdbId: { userId, tmdbId: id } },
+          update: { rating, comment: post },
+          create: {
+            userId,
+            userEmail,
+            tmdbId: id,
+            title,
+            rating,
+            comment: post,
           },
         });
+      } else {
+        return { success: false, error: 'Invalid type specified' };
       }
 
-      // Upsert the rating for the person
-      ratingRecord = await this.prisma.ratingPerson.upsert({
-        where: { userEmail_tmdbId: { userEmail, tmdbId: id } },
-        update: { rating, comment: post },
-        create: {
-          userId,
-          userEmail,
-          tmdbId: id,
-          title,
-          rating,
-          comment: post,
-        },
-      });
-
-    } else {
-      return res.json({ success: false, error: 'Invalid type specified' });
+      return { success: true, ratingRecord };
+    } catch (error) {
+      console.error('Error saving rating:', error);
+      return { success: false, error: error.message };
     }
-
-    return res.json({ success: true, ratingRecord });
-
-  } catch (error) {
-    console.error('Error saving rating:', error);
-    return res.json({ success: false, error: error.message });
   }
-}
 
-
-
+  /** SSE Route for Live Updates **/
   @Get('updates')
   @Sse()
-  sendUpdates() {
+  sendUpdates(): Observable<any> {
     return this.moviesService.getUpdates();
   }
 }
