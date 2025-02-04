@@ -1,25 +1,19 @@
-body {
+html, body {
+    /* width: 100vw;
+    height: 100vh; */
     margin: 0;
     padding: 0;
-    height: 100%;
-    width: 100%;
+    /* background-image: url('bg.png'); */
+    /* background-size: cover; or 'contain' depending on your desired result */
+    /* background-position: center; */
+    /* background-repeat: no-repeat; */
+    /* height: 100vh; Ensure body takes up full height of the viewport */
     background: rgb(81,99,130);
-    /* background: radial-gradient(circle, rgba(81,99,130,1) 0%, rgba(78,88,106,1) 100%);
-    background-attachment: fixed; */
+background: radial-gradient(circle, rgba(81,99,130,1) 0%, rgba(78,88,106,1) 100%);
+    background-attachment: fixed;
     scrollbar-gutter: stable;
-    overflow-y: auto;
-    overflow-x: hidden;
-    width: 100vw;
-
     
 }
-
-/*  */
-
-body {
-    overflow-y: auto;  /* Allows vertical scrolling if content overflows */
-}
-
 #mainContent {
     position: relative;
 }
@@ -128,7 +122,8 @@ span {
     box-sizing: border-box;
     width: 100%;
     margin: 0 auto;
-    
+    overflow: hidden; /* Prevent vertical scrollbar in the grid */
+    scrollbar-gutter: stable;
 }
 
 .item {

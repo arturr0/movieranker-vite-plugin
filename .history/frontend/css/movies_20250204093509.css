@@ -7,8 +7,7 @@ body {
     /* background: radial-gradient(circle, rgba(81,99,130,1) 0%, rgba(78,88,106,1) 100%);
     background-attachment: fixed; */
     scrollbar-gutter: stable;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: auto;
     width: 100vw;
 
     
@@ -128,7 +127,8 @@ span {
     box-sizing: border-box;
     width: 100%;
     margin: 0 auto;
-    
+    overflow: hidden; /* Prevent vertical scrollbar in the grid */
+    scrollbar-gutter: stable;
 }
 
 .item {

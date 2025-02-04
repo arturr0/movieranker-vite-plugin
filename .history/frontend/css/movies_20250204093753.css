@@ -128,7 +128,8 @@ span {
     box-sizing: border-box;
     width: 100%;
     margin: 0 auto;
-    
+    overflow: hidden; /* Prevent vertical scrollbar in the grid */
+    scrollbar-gutter: stable;
 }
 
 .item {

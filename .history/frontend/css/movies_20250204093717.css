@@ -8,8 +8,8 @@ body {
     background-attachment: fixed; */
     scrollbar-gutter: stable;
     overflow-y: auto;
-    overflow-x: hidden;
-    width: 100vw;
+    /* overflow-x: hidden; */
+    width: 100%;
 
     
 }
@@ -128,7 +128,8 @@ span {
     box-sizing: border-box;
     width: 100%;
     margin: 0 auto;
-    
+    overflow: hidden; /* Prevent vertical scrollbar in the grid */
+    scrollbar-gutter: stable;
 }
 
 .item {

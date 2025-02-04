@@ -1,4 +1,4 @@
-body {
+html, body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -6,15 +6,14 @@ body {
     background: rgb(81,99,130);
     /* background: radial-gradient(circle, rgba(81,99,130,1) 0%, rgba(78,88,106,1) 100%);
     background-attachment: fixed; */
-    scrollbar-gutter: stable;
-    overflow-y: auto;
-    overflow-x: hidden;
-    width: 100vw;
-
     
 }
 
-/*  */
+html {
+    scrollbar-gutter: stable;
+    overflow-y: hidden;  /* Ensures reserved space for scrollbar when not visible */
+    
+}
 
 body {
     overflow-y: auto;  /* Allows vertical scrolling if content overflows */
@@ -128,7 +127,8 @@ span {
     box-sizing: border-box;
     width: 100%;
     margin: 0 auto;
-    
+    overflow: hidden; /* Prevent vertical scrollbar in the grid */
+    scrollbar-gutter: stable;
 }
 
 .item {
