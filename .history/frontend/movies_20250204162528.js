@@ -185,7 +185,7 @@ document.addEventListener("userDataReady", () => {
     
             const user = document.createElement("p");
             user.classList.add("userName");
-            console.log("user", userData.user.email);
+            
             const userName = userData.user.email === post.rankerName ? "Your post" : post.rankerName; 
             user.textContent = userName;
             
@@ -273,7 +273,6 @@ document.addEventListener("userDataReady", () => {
                         const postDiv = document.createElement("div");
                         const user = document.createElement("p");
                         user.classList.add("userName");
-                        console.log("user", userData.user.email);
                         const userName = userData.user.email === moviePost.rankerName ? "Your post" : moviePost.rankerName
                         user.textContent = userName;
                         rankPosts.appendChild(postDiv);

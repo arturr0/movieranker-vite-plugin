@@ -1,5 +1,5 @@
-document.addEventListener("userDataReady", () => {
-    console.log(userData.user);
+document.addEventListener("DOMContentLoaded", () => {
+    //console.log(userData.email);
     const query = document.getElementById('searchQuery').value;
     const searchContent = document.getElementById("searchContent");
     const ranksContainer = document.getElementById("ranks");
@@ -185,8 +185,8 @@ document.addEventListener("userDataReady", () => {
     
             const user = document.createElement("p");
             user.classList.add("userName");
-            console.log("user", userData.user.email);
-            const userName = userData.user.email === post.rankerName ? "Your post" : post.rankerName; 
+            
+            const userName = userData.user === post.rankerName ? "Your post" : post.rankerName; 
             user.textContent = userName;
             
             const postRank = document.createElement("div");
@@ -273,8 +273,7 @@ document.addEventListener("userDataReady", () => {
                         const postDiv = document.createElement("div");
                         const user = document.createElement("p");
                         user.classList.add("userName");
-                        console.log("user", userData.user.email);
-                        const userName = userData.user.email === moviePost.rankerName ? "Your post" : moviePost.rankerName
+                        const userName = userData.user === moviePost.rankerName ? "Your post" : moviePost.rankerName
                         user.textContent = userName;
                         rankPosts.appendChild(postDiv);
                         const postRank = document.createElement("div");
