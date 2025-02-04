@@ -206,12 +206,8 @@ span {
 }
 #stars {
     display: flex;
-    justify-content: center;
 }
 #postInput {
     display: flex;
-    flex-direction: column;
-}
-#starsInfo, #votesInfo {
-    text-align: center;
+    flex-direction: row;
 }

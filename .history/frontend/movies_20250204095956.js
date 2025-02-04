@@ -11,11 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tooltip = document.getElementById("tooltip");
     const searchQuery = document.getElementById('searchQuery');
     const searchContainer = document.getElementById('searchContainer');
-    const starsInfo = document.getElementById('starsInfo');
-    const votesInfo = document.getElementById('votesInfo');
-
     const magnifier = document.getElementById('magnifier');
- 
     magnifier.addEventListener('click', function() {
         const query = document.getElementById('searchQuery').value;
         console.log("query", query);
@@ -160,18 +156,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             postDiv.appendChild(user);
                             postDiv.appendChild(postRank);
                             postDiv.appendChild(post);
-                            
-                            
                         });
-                        starsInfo.innerHTML = '';
-                        votesInfo.textContent = voteText;
-
-                        for (let i = 0; i < 5; i++) {
-                            const star = document.createElement("span");
-                            star.style.color = i < avgRating ? "gold" : "gray";
-                            star.innerHTML = "&#9733;";
-                            starsInfo.appendChild(star); // Append each star
-                        } 
+    
                         rankImg.src = movie.poster;
                         ranksContainer.style.display = 'block';
     
@@ -210,10 +196,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 moviesVotes.textContent = voteCount;
                 
                 const ratingElement = document.createElement('div');
-                ratingElement.classList.add('ratedStrars');
                 moviesVotes.textContent = voteText;
                 //ratingElement.textContent = `Rating: ${avgRating}`;
-                starsInfo.innerHTML = '';
                 for (let i = 0; i < 5; i++) {
                     const star = document.createElement("span");
                     star.style.color = i < avgRating ? "gold" : "gray";
@@ -223,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 personElement.appendChild(moviesVotes);
                 personElement.appendChild(ratingElement);
                 
-                resultsDiv.appendChild(personElement);            
+                resultsDiv.appendChild(movieElement);            
     
                 const personImg = personElement.querySelector('.img');
                 if (personImg) {
@@ -253,14 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             postDiv.appendChild(postRank);
                             postDiv.appendChild(post);
                         });
-                        starsInfo.innerHTML = '';
-                        votesInfo.textContent = voteText;
-                        for (let i = 0; i < 5; i++) {
-                            const star = document.createElement("span");
-                            star.style.color = i < avgRating ? "gold" : "gray";
-                            star.innerHTML = "&#9733;";
-                            starsInfo.appendChild(star); // Append each star
-                        } 
+    
                         searchContent.style.display = 'none';
                         rankImg.src = person.profile;
                         ranksContainer.style.display = 'block';

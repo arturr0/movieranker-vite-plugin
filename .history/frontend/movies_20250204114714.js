@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchQuery = document.getElementById('searchQuery');
     const searchContainer = document.getElementById('searchContainer');
     const starsInfo = document.getElementById('starsInfo');
-    const votesInfo = document.getElementById('votesInfo');
 
     const magnifier = document.getElementById('magnifier');
  
@@ -164,8 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             
                         });
                         starsInfo.innerHTML = '';
-                        votesInfo.textContent = voteText;
-
                         for (let i = 0; i < 5; i++) {
                             const star = document.createElement("span");
                             star.style.color = i < avgRating ? "gold" : "gray";
@@ -254,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             postDiv.appendChild(post);
                         });
                         starsInfo.innerHTML = '';
-                        votesInfo.textContent = voteText;
+
                         for (let i = 0; i < 5; i++) {
                             const star = document.createElement("span");
                             star.style.color = i < avgRating ? "gold" : "gray";

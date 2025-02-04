@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             
                         });
                         starsInfo.innerHTML = '';
-                        votesInfo.textContent = voteText;
+                        votesInfo.textContent = movie.ratings.length;
 
                         for (let i = 0; i < 5; i++) {
                             const star = document.createElement("span");
@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             postDiv.appendChild(post);
                         });
                         starsInfo.innerHTML = '';
-                        votesInfo.textContent = voteText;
+                        votesInfo.textContent = person.ratings.length;
                         for (let i = 0; i < 5; i++) {
                             const star = document.createElement("span");
                             star.style.color = i < avgRating ? "gold" : "gray";

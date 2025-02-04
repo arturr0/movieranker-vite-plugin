@@ -212,6 +212,6 @@ span {
     display: flex;
     flex-direction: column;
 }
-#starsInfo, #votesInfo {
+#starsInfo {
     text-align: center;
 }

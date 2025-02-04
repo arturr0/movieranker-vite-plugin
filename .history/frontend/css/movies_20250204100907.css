@@ -193,25 +193,4 @@ span {
 }
 #rateContainer {
     display: flex;
-    flex-direction: column;
-}
-
-#ratedContainer {
-    display: flex;
-    justify-content: center;
-}
-#title {
-    font-size: 1.5rem;
-    text-align: center;
-}
-#stars {
-    display: flex;
-    justify-content: center;
-}
-#postInput {
-    display: flex;
-    flex-direction: column;
-}
-#starsInfo, #votesInfo {
-    text-align: center;
 }
