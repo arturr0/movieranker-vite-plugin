@@ -79,7 +79,7 @@ document.addEventListener("userDataReady", () => {
 		ranksContainer.style.display = 'none';
 		rankPosts.innerHTML = '';
 		selectedRating = 0;
-		const elements = document.querySelectorAll('.star'); 
+		const elements = document.querySelector('.star'); 
 		elements.forEach(element => {
 			if (element.classList.contains('star')) {
 				element.classList.remove('filled');
@@ -90,56 +90,40 @@ document.addEventListener("userDataReady", () => {
 		
 	});
 
-	let controller = new AbortController();
-
 	async function searchMovies() {
-		controller.abort(); // Cancel previous request
-		controller = new AbortController(); // Create a new controller
-
-		try {
-			const query = document.getElementById('searchQuery').value;
-			const type = document.querySelector('input[name="searchType"]:checked').value;
-			console.log("Search Type:", type);
-
-			const response = await fetch(`/movies/search?query=${query}&type=${type}`, {
-				signal: controller.signal, // Attach abort signal
+		const query = document.getElementById('searchQuery').value;
+		const type = document.querySelector('input[name="searchType"]:checked').value;
+		console.log("Search Type:", type);
+	
+		const response = await fetch(`/movies/search?query=${query}&type=${type}`);
+		const data = await response.json();
+		console.log('Movies Data:', data);
+	
+		moviesRanks.length = 0;
+		peopleRanks.length = 0;
+	
+		const resultsDiv = document.getElementById('results');
+		resultsDiv.innerHTML = '';
+	
+		if (data.movies) {
+			data.movies.forEach(movie => {
+				if (!movie.poster) return;
+				resultsDiv.appendChild(createItemElement(movie, 'movie'));
 			});
-
-			const data = await response.json();
-			console.log('Movies Data:', data);
-
-			moviesRanks.length = 0;
-			peopleRanks.length = 0;
-
-			const resultsDiv = document.getElementById('results');
-			resultsDiv.innerHTML = '';
-
-			if (data.movies) {
-				data.movies.forEach(movie => {
-					if (!movie.poster) return;
-					resultsDiv.appendChild(createItemElement(movie, 'movie'));
-				});
-			} else if (data.people) {
-				data.people.forEach(person => {
-					if (!person.profile) return;
-					resultsDiv.appendChild(createItemElement(person, 'person'));
-				});
-			} else {
-				alert('No results found.');
-			}
-
-		} catch (error) {
-			if (error.name === 'AbortError') {
-				console.log("Previous request aborted");
-			} else {
-				console.error("Error fetching movies:", error);
-			}
+			
+		} else if (data.people) {
+			data.people.forEach(person => {
+				if (!person.profile) return;
+				resultsDiv.appendChild(createItemElement(person, 'person'));
+			});
+			//
+		} else {
+			alert('No results found.');
 		}
+	
+		console.log("Movies Ranks Array:", moviesRanks);
+		console.log("People Ranks Array:", peopleRanks);
 	}
-
-	// Run searchMovies every 5 seconds, aborting previous requests if new ones start
-	setInterval(searchMovies, 5000);
-
 	
 	function createItemElement(item, type) {
 		const itemElement = document.createElement('div');
