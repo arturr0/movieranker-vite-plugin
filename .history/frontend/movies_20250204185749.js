@@ -227,12 +227,11 @@ document.addEventListener("userDataReady", () => {
 	
 	async function rateItem(type, id, title) {
 		const token = localStorage.getItem('jwt');
-		//const rating = prompt(`Please rate this ${type}: ${title}`);
-		//const rating = prompt(`Please rate this ${type}: ${title}`);
+		const rating = prompt(`Please rate this ${type}: ${title}`);
 
 		
 
-		if (selectedRating && !isNaN(selectedRating) && selectedRating >= 0 && selectedRating <= 5) {
+		if (rating && !isNaN(rating) && rating >= 1 && rating <= 5) {
 			try {
 				const response = await fetch(`http://localhost:3000/movies/rate`, {
 					method: 'POST',
@@ -244,7 +243,7 @@ document.addEventListener("userDataReady", () => {
 						type,      // "movie" or "person"
 						id,        // TMDB ID of the movie/person
 						title,     // Title or name of the movie/person
-						rating: selectedRating,  // Rating from user
+						rating: parseInt(rating),  // Rating from user
 						post: document.getElementById('writePost').value,
 					}),
 				});
