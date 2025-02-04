@@ -202,7 +202,7 @@ document.addEventListener("userDataReady", () => {
             postDiv.appendChild(user);
             postDiv.appendChild(postText);
             postDiv.appendChild(postRank);
-            if (userName === "Your post") postDiv.style.border = "2px solid green"
+            if (userName === "Your post") post.style.border = "2px solid green"
             for (let i = 0; i < 5; i++) {
                 const star = document.createElement("span");
                 star.style.color = i < post.rank ? "gold" : "gray";

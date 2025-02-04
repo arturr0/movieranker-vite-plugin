@@ -220,7 +220,7 @@ span {
 #postInput {
     display: flex;
     flex-direction: column;
-    height: 300px;
+    height: 100%;
 }
 #writePost {
     min-height: 200px;
@@ -242,15 +242,12 @@ textarea::placeholder {
 }
 .post {
     border: 2px solid black;
-    margin-right: 20px;
-    margin-bottom: 5px;
+    width: 100%;
 }
-
-.userName, .userRank, .userPost {
+.userName {
     margin-top: 0;
-    text-align: center;
 }
- 
 #sendPost {
-    height: 100%;
+    height: auto;
+    
 }

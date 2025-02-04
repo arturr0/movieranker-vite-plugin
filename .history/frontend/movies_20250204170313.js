@@ -188,6 +188,7 @@ document.addEventListener("userDataReady", () => {
             user.classList.add("userName");
             console.log("user", userData.user.email);
             const userName = userData.user.email === post.rankerName ? "Your post" : post.rankerName; 
+            if (userName === "Your post") document.querySelector('post').style.border = "2px solid green"
             user.textContent = userName;
             
             const postRank = document.createElement("div");
@@ -202,7 +203,6 @@ document.addEventListener("userDataReady", () => {
             postDiv.appendChild(user);
             postDiv.appendChild(postText);
             postDiv.appendChild(postRank);
-            if (userName === "Your post") postDiv.style.border = "2px solid green"
             for (let i = 0; i < 5; i++) {
                 const star = document.createElement("span");
                 star.style.color = i < post.rank ? "gold" : "gray";
@@ -277,6 +277,7 @@ document.addEventListener("userDataReady", () => {
                         user.classList.add("userName");
                         console.log("user", userData.user.email);
                         const userName = userData.user.email === moviePost.rankerName ? "Your post" : moviePost.rankerName
+                        if (userName === "Your post") document.querySelector('post').style.border = "2px solid green"
                         user.textContent = userName;
                         rankPosts.appendChild(postDiv);
                         const postRank = document.createElement("div");
@@ -290,8 +291,6 @@ document.addEventListener("userDataReady", () => {
                         postDiv.appendChild(user);
                         postDiv.appendChild(post);
                         postDiv.appendChild(postRank);
-                        if (userName === "Your post") post.style.border = "2px solid green"
-
                         for (let i = 0; i < 5; i++) {
                             const star = document.createElement("span");
                             star.style.color = i < moviePost.rank ? "gold" : "gray";

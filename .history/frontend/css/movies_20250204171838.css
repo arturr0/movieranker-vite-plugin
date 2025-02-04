@@ -246,11 +246,12 @@ textarea::placeholder {
     margin-bottom: 5px;
 }
 
-.userName, .userRank, .userPost {
+.userName, .userRank {
     margin-top: 0;
     text-align: center;
 }
  
 #sendPost {
     height: 100%;
+    
 }
