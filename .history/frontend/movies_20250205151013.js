@@ -19,7 +19,13 @@ document.addEventListener("userDataReady", () => {
 
 	const magnifier = document.getElementById('magnifier');
  
-	
+	magnifier.addEventListener('click', function() {
+		const query = document.getElementById('searchQuery').value;
+		console.log("query", query);
+		if (query !== null && query.trim() !== '') {
+			searchMovies();
+		}
+	});
 // Detect if the input is focused
 	searchQuery.addEventListener('focus', () => {
 		console.log('Input is active (focused)');
@@ -36,13 +42,6 @@ document.addEventListener("userDataReady", () => {
 		searchContainer.style.padding = '10px';
 
 		// Remove custom styles or classes here if needed
-	});
-	magnifier.addEventListener('click', function() {
-		const query = document.getElementById('searchQuery').value;
-		console.log("query", query);
-		if (query !== null && query.trim() !== '') {
-			searchMovies();
-		}
 	});
 	document.addEventListener('keydown', function(event) {
 		console.log('Event listener registered');
@@ -104,16 +103,13 @@ document.addEventListener("userDataReady", () => {
 			const type = document.querySelector('input[name="searchType"]:checked').value;
 			console.log("Search Type:", type);
 
-			const response = await fetch(`/movies/search?query=${query}&type=${type}&id=${userData.user.id}`, {
+			const response = await fetch(`/movies/search?query=${query}&type=${type}`, {
 				signal: controller.signal, // Attach abort signal
 			});
 
 			const data = await response.json();
 			console.log('Movies Data:', data);
-			currentQuerry.type = data.queryType;
-			currentQuerry.text = data.queryText;
-			currentQuerry.id = Number(data.querySenderID);
-			console.log(currentQuerry);
+
 			moviesRanks.length = 0;
 			peopleRanks.length = 0;
 

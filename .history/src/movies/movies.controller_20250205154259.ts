@@ -78,10 +78,12 @@ async searchMovies(
 			poster: movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : '',
 			id: movie.id,
 			ratings,
-			
+			queryType: type,
+			queryText: query,
+			querySenderID: id,
 		};
 		}));
-		return res.json({ movies, queryType: type, queryText: query, querySenderID: id });
+		return res.json({ movies });
 	} else {
 		const people = await Promise.all(results.map(async (person) => {
 		const ratings = await this.prisma.ratingPerson.findMany({
@@ -99,10 +101,12 @@ async searchMovies(
 			profile: person.profile_path ? `https://image.tmdb.org/t/p/w200${person.profile_path}` : '',
 			id: person.id,
 			ratings,
-			
+			queryType: type,
+			queryText: query,
+			querySenderID: id,
 		};
 		}));
-		return res.json({ people, queryType: type, queryText: query, querySenderID: id });
+		return res.json({ people });
 	}
 	} catch (error) {
 	console.error('Error fetching movies:', error);

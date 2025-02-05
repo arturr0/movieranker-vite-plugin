@@ -104,16 +104,13 @@ document.addEventListener("userDataReady", () => {
 			const type = document.querySelector('input[name="searchType"]:checked').value;
 			console.log("Search Type:", type);
 
-			const response = await fetch(`/movies/search?query=${query}&type=${type}&id=${userData.user.id}`, {
+			const response = await fetch(`/movies/search?query=${query}&type=${type}`, {
 				signal: controller.signal, // Attach abort signal
 			});
 
 			const data = await response.json();
 			console.log('Movies Data:', data);
-			currentQuerry.type = data.queryType;
-			currentQuerry.text = data.queryText;
-			currentQuerry.id = Number(data.querySenderID);
-			console.log(currentQuerry);
+
 			moviesRanks.length = 0;
 			peopleRanks.length = 0;
 

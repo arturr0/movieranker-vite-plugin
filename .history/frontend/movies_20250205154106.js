@@ -110,10 +110,7 @@ document.addEventListener("userDataReady", () => {
 
 			const data = await response.json();
 			console.log('Movies Data:', data);
-			currentQuerry.type = data.queryType;
-			currentQuerry.text = data.queryText;
-			currentQuerry.id = Number(data.querySenderID);
-			console.log(currentQuerry);
+
 			moviesRanks.length = 0;
 			peopleRanks.length = 0;
 
