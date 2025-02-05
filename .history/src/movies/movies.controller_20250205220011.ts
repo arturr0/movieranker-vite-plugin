@@ -167,16 +167,16 @@ async rateItem(@Req() req: RequestWithUser, @Body() body, @Res() res: Response) 
 @Sse()
 @UseGuards(JwtAuthGuard)
 sendUpdates(@Req() req: RequestWithUser) {
-    const userId = req.user.id;
-    console.log(`✅ User ${userId} subscribed to SSE`);
+    console.log(`✅ User ${req.user.id} subscribed to SSE updates`);
 
-    return this.moviesService.subscribe(userId).pipe(
+    return this.moviesService.subscribe(req.user.id).pipe(
         map((event) => {
-            console.log(`📡 Sending SSE update to user ${userId}:`, event);
+            console.log(`📡 Sending SSE update to user ${req.user.id}:`, event);
             return { data: event };
         })
     );
 }
+
 
 
 }

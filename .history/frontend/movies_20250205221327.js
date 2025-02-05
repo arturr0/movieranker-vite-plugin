@@ -1,94 +1,94 @@
 const currentQuerry =  {};
 
 document.addEventListener("userDataReady", () => {
-	const eventSource = new EventSource('/movies/updates', { withCredentials: true });
+// 	const eventSource = new EventSource('/movies/updates');
 
-eventSource.onopen = () => {
-  console.log('Connection to server opened.');
-};
+// eventSource.onopen = () => {
+//   console.log('Connection to server opened.');
+// };
 
-eventSource.onerror = (error) => {
-  console.error('Error in EventSource connection:', error);
-};
+// eventSource.onerror = (error) => {
+//   console.error('Error in EventSource connection:', error);
+// };
 
 
-eventSource.onmessage = async (event) => {
-    const updateData = JSON.parse(event.data);
-    console.log("update", updateData);
-	console.log(currentQuerry);
-    await searchMovies(); // Wait for searchMovies to complete
-	console.log(moviesRanks);
-    const ranksArray = currentQuerry.type === "title" ? moviesRanks : peopleRanks;
-    clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
-    console.log(clickedMovie);
+// eventSource.onmessage = async (event) => {
+//     const updateData = JSON.parse(event.data);
+//     console.log("update", updateData);
+// 	console.log(currentQuerry);
+//     await searchMovies(); // Wait for searchMovies to complete
+// 	console.log(moviesRanks);
+//     const ranksArray = currentQuerry.type === "title" ? moviesRanks : peopleRanks;
+//     clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
+//     console.log(clickedMovie);
 
-    const avgRating = Math.round(
-        clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
-    );
+//     const avgRating = Math.round(
+//         clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
+//     );
 
-    starsInfo.innerHTML = '';
-    for (let i = 0; i < 5; i++) {
-        const star = document.createElement("span");
-        star.style.color = i < avgRating ? "gold" : "gray";
-        star.innerHTML = "&#9733;";
-        starsInfo.appendChild(star);
-    }
+//     starsInfo.innerHTML = '';
+//     for (let i = 0; i < 5; i++) {
+//         const star = document.createElement("span");
+//         star.style.color = i < avgRating ? "gold" : "gray";
+//         star.innerHTML = "&#9733;";
+//         starsInfo.appendChild(star);
+//     }
 
-    const voteCount = clickedMovie.length;
-    const voteText = voteCount === 1 ? '1 vote' : `${voteCount} votes`;
-    votesInfo.textContent = voteText;
+//     const voteCount = clickedMovie.length;
+//     const voteText = voteCount === 1 ? '1 vote' : `${voteCount} votes`;
+//     votesInfo.textContent = voteText;
     
-    rankPosts.innerHTML = ''; // Clear previous posts
-    clickedMovie.forEach(moviePost => {
-        const postDiv = document.createElement("div");
-        const user = document.createElement("p");
-        user.classList.add("userName");
-        console.log("user", userData.user.email, moviePost.rankerName);
-        const userName = userData.user.email == moviePost.rankerName ? "Your post" : moviePost.rankerName;
-        user.textContent = userName;
-        rankPosts.appendChild(postDiv);
-        const postRank = document.createElement("div");
-        postRank.classList.add("userRank");
-        postDiv.classList.add("post");
-        postDiv.setAttribute("user", moviePost.rankerName);
-        const post = document.createElement("p");
-        post.classList.add("userPost");
-        post.textContent = moviePost.post;
-        postDiv.appendChild(user);
-        postDiv.appendChild(post);
-        postDiv.appendChild(postRank);
-        if (userData.user.email == moviePost.rankerName) postDiv.style.border = "2px solid green";
+//     rankPosts.innerHTML = ''; // Clear previous posts
+//     clickedMovie.forEach(moviePost => {
+//         const postDiv = document.createElement("div");
+//         const user = document.createElement("p");
+//         user.classList.add("userName");
+//         console.log("user", userData.user.email, moviePost.rankerName);
+//         const userName = userData.user.email == moviePost.rankerName ? "Your post" : moviePost.rankerName;
+//         user.textContent = userName;
+//         rankPosts.appendChild(postDiv);
+//         const postRank = document.createElement("div");
+//         postRank.classList.add("userRank");
+//         postDiv.classList.add("post");
+//         postDiv.setAttribute("user", moviePost.rankerName);
+//         const post = document.createElement("p");
+//         post.classList.add("userPost");
+//         post.textContent = moviePost.post;
+//         postDiv.appendChild(user);
+//         postDiv.appendChild(post);
+//         postDiv.appendChild(postRank);
+//         if (userData.user.email == moviePost.rankerName) postDiv.style.border = "2px solid green";
 
-        for (let i = 0; i < 5; i++) {
-            const star = document.createElement("span");
-            star.style.color = i < moviePost.rank ? "gold" : "gray";
-            star.innerHTML = "&#9733;";
-            postRank.appendChild(star);
-        }
-    });
+//         for (let i = 0; i < 5; i++) {
+//             const star = document.createElement("span");
+//             star.style.color = i < moviePost.rank ? "gold" : "gray";
+//             star.innerHTML = "&#9733;";
+//             postRank.appendChild(star);
+//         }
+//     });
+// };
+// if (eventSource) {
+// 	eventSource.close();  // Close any existing connection
+// }
+
+console.log(`🔄 Starting SSE for user ${userId}`);
+eventSource = new EventSource('http://localhost:3000/movies/updates', { withCredentials: true });
+
+eventSource.onmessage = (event) => {
+	const data = JSON.parse(event.data);
+	console.log('🔸 [Frontend] Received SSE Update:', data);
+
+	if (data.querySenderID !== userId) {
+		console.warn(`⚠️ Ignoring update for user ${data.querySenderID}, current user is ${userId}`);
+		return;
+	}
+
+	updateUIWithNewRating(data);
 };
-if (eventSource) {
-	eventSource.close();  // Close any existing connection
-}
 
-//console.log(`🔄 Starting SSE for user ${userId}`);
-// const eventSource = new EventSource('http://localhost:3000/movies/updates', { withCredentials: true });
-
-// eventSource.onmessage = (event) => {
-// 	const data = JSON.parse(event.data);
-// 	console.log('🔸 [Frontend] Received SSE Update:', data);
-
-// 	if (data.querySenderID !== userId) {
-// 		console.warn(`⚠️ Ignoring update for user ${data.querySenderID}, current user is ${userId}`);
-// 		return;
-// 	}
-
-// 	updateUIWithNewRating(data);
-// };
-
-// eventSource.onerror = (err) => {
-// 	console.error('❌ SSE Error:', err);
-// };
+eventSource.onerror = (err) => {
+	console.error('❌ SSE Error:', err);
+};
   
 	console.log(userData.user);
 	const query = document.getElementById('searchQuery').value;

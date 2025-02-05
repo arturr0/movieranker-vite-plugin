@@ -1,7 +1,7 @@
 const currentQuerry =  {};
 
 document.addEventListener("userDataReady", () => {
-	const eventSource = new EventSource('/movies/updates', { withCredentials: true });
+	const eventSource = new EventSource('/movies/updates');
 
 eventSource.onopen = () => {
   console.log('Connection to server opened.');
@@ -15,10 +15,10 @@ eventSource.onerror = (error) => {
 eventSource.onmessage = async (event) => {
     const updateData = JSON.parse(event.data);
     console.log("update", updateData);
-	console.log(currentQuerry);
+
     await searchMovies(); // Wait for searchMovies to complete
-	console.log(moviesRanks);
-    const ranksArray = currentQuerry.type === "title" ? moviesRanks : peopleRanks;
+
+    const ranksArray = currentQuerry.type === "movie" ? moviesRanks : peopleRanks;
     clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
     console.log(clickedMovie);
 
@@ -43,8 +43,8 @@ eventSource.onmessage = async (event) => {
         const postDiv = document.createElement("div");
         const user = document.createElement("p");
         user.classList.add("userName");
-        console.log("user", userData.user.email, moviePost.rankerName);
-        const userName = userData.user.email == moviePost.rankerName ? "Your post" : moviePost.rankerName;
+        console.log("user", userData.user.email);
+        const userName = userData.user.email === moviePost.rankerName ? "Your post" : moviePost.rankerName;
         user.textContent = userName;
         rankPosts.appendChild(postDiv);
         const postRank = document.createElement("div");
@@ -67,28 +67,7 @@ eventSource.onmessage = async (event) => {
         }
     });
 };
-if (eventSource) {
-	eventSource.close();  // Close any existing connection
-}
 
-//console.log(`🔄 Starting SSE for user ${userId}`);
-// const eventSource = new EventSource('http://localhost:3000/movies/updates', { withCredentials: true });
-
-// eventSource.onmessage = (event) => {
-// 	const data = JSON.parse(event.data);
-// 	console.log('🔸 [Frontend] Received SSE Update:', data);
-
-// 	if (data.querySenderID !== userId) {
-// 		console.warn(`⚠️ Ignoring update for user ${data.querySenderID}, current user is ${userId}`);
-// 		return;
-// 	}
-
-// 	updateUIWithNewRating(data);
-// };
-
-// eventSource.onerror = (err) => {
-// 	console.error('❌ SSE Error:', err);
-// };
   
 	console.log(userData.user);
 	const query = document.getElementById('searchQuery').value;
@@ -202,7 +181,7 @@ if (eventSource) {
 			if (Number(data.querySenderID) == userData.user.id) {
 				currentQuerry.type = data.queryType;
 				currentQuerry.text = data.queryText;
-				//currentQuerry.id = Number(data.querySenderID);
+				currentQuerry.id = Number(data.querySenderID);
 			}
 			console.log(currentQuerry);
 			moviesRanks.length = 0;
@@ -370,7 +349,7 @@ if (eventSource) {
 						post: document.getElementById('writePost').value,
 						queryType: currentQuerry.type,    // ✅ Include search query type
 						queryText: currentQuerry.text,    // ✅ Include search query text
-						querySenderID: userData.user.id,
+						querySenderID: currentQuerry.id,
 					}),
 				});
 

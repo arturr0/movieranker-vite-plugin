@@ -22,9 +22,10 @@ export class MoviesService {
         
         console.log(`📡 Current SSE clients:`, Array.from(this.clients.keys()));
 
-        this.clients.forEach((subject, userId) => {
-			console.log(`📡 Sending SSE update to user ${userId}:`, { queryType, queryText, querySenderID });
-			subject.next({ queryType, queryText, querySenderID });
-		});
+        if (this.clients.has(querySenderID)) {
+            this.clients.get(querySenderID)!.next({ queryType, queryText, querySenderID });
+        } else {
+            console.warn(`⚠️ No active SSE subscription for user ${querySenderID}`);
+        }
     }
 }

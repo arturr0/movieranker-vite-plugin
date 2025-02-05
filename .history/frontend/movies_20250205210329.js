@@ -1,7 +1,7 @@
 const currentQuerry =  {};
 
 document.addEventListener("userDataReady", () => {
-	const eventSource = new EventSource('/movies/updates', { withCredentials: true });
+	const eventSource = new EventSource('/movies/updates');
 
 eventSource.onopen = () => {
   console.log('Connection to server opened.');
@@ -67,28 +67,7 @@ eventSource.onmessage = async (event) => {
         }
     });
 };
-if (eventSource) {
-	eventSource.close();  // Close any existing connection
-}
 
-//console.log(`🔄 Starting SSE for user ${userId}`);
-// const eventSource = new EventSource('http://localhost:3000/movies/updates', { withCredentials: true });
-
-// eventSource.onmessage = (event) => {
-// 	const data = JSON.parse(event.data);
-// 	console.log('🔸 [Frontend] Received SSE Update:', data);
-
-// 	if (data.querySenderID !== userId) {
-// 		console.warn(`⚠️ Ignoring update for user ${data.querySenderID}, current user is ${userId}`);
-// 		return;
-// 	}
-
-// 	updateUIWithNewRating(data);
-// };
-
-// eventSource.onerror = (err) => {
-// 	console.error('❌ SSE Error:', err);
-// };
   
 	console.log(userData.user);
 	const query = document.getElementById('searchQuery').value;

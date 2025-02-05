@@ -165,16 +165,13 @@ async rateItem(@Req() req: RequestWithUser, @Body() body, @Res() res: Response) 
 
 @Get('updates')
 @Sse()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)  // Ensure only authenticated users subscribe
 sendUpdates(@Req() req: RequestWithUser) {
-    const userId = req.user.id;
-    console.log(`✅ User ${userId} subscribed to SSE`);
+    console.log(`User ${req.user.id} subscribed to SSE updates`);
 
-    return this.moviesService.subscribe(userId).pipe(
-        map((event) => {
-            console.log(`📡 Sending SSE update to user ${userId}:`, event);
-            return { data: event };
-        })
+    // Subscribe the user to their specific SSE stream
+    return this.moviesService.subscribe(req.user.id).pipe(
+        map((event) => ({ data: event }))
     );
 }
 

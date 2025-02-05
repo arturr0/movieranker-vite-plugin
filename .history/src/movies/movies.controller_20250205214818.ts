@@ -165,18 +165,15 @@ async rateItem(@Req() req: RequestWithUser, @Body() body, @Res() res: Response) 
 
 @Get('updates')
 @Sse()
-@UseGuards(JwtAuthGuard)
-sendUpdates(@Req() req: RequestWithUser) {
-    const userId = req.user.id;
-    console.log(`✅ User ${userId} subscribed to SSE`);
+sendUpdates(@Res() res: Response) {
+    console.log('SSE connection established');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Connection', 'keep-alive');
 
-    return this.moviesService.subscribe(userId).pipe(
-        map((event) => {
-            console.log(`📡 Sending SSE update to user ${userId}:`, event);
-            return { data: event };
-        })
+    return this.moviesService.getUpdates().pipe(
+        map((event) => ({ data: event }))
     );
 }
-
 
 }
