@@ -108,82 +108,56 @@ export class MoviesController {
   }
 
   @Post('rate')
-@UseGuards(JwtAuthGuard)
-async rateItem(
-  @Req() req: RequestWithUser,
-  @Body() body: { type: string; id: number; title: string; rating: number; post: string },
-  @Res() res: Response
-) {
-  const { type, id, title, rating, post } = body;
-
-  try {
-    let ratingRecord;
-
-    if (type === 'movie') {
-      // Check if the movie exists, if not create it
-      const movie = await this.prisma.movie.upsert({
-        where: { id },
-        update: {},
-        create: {
-          id,
-          title,
-          releaseDate: 'N/A', // You can adjust the default values
-          rating: null,
-          posterPath: '',
-        },
-      });
-
-      ratingRecord = await this.prisma.ratingMovie.upsert({
-        where: { userEmail_tmdbId: { userEmail: req.user.email, tmdbId: id } },
-        update: { rating, comment: post },
-        create: {
-          userId: req.user.id,
-          userEmail: req.user.email,
-          tmdbId: id,
-          title,
-          rating,
-          comment: post,
-        },
-      });
-    } else if (type === 'person') {
-      // Check if the person exists, if not create it
-      const person = await this.prisma.person.upsert({
-        where: { id },
-        update: {},
-        create: {
-          id,
-          name: title, // You can adjust the default values
-          biography: '',
-          profilePath: '',
-        },
-      });
-
-      ratingRecord = await this.prisma.ratingPerson.upsert({
-        where: { userEmail_tmdbId: { userEmail: req.user.email, tmdbId: id } },
-        update: { rating, comment: post },
-        create: {
-          userId: req.user.id,
-          userEmail: req.user.email,
-          tmdbId: id,
-          title,
-          rating,
-          comment: post,
-        },
-      });
-    } else {
-      return res.json({ success: false, error: 'Invalid type specified' });
+  @UseGuards(JwtAuthGuard)
+  async rateItem(
+    @Req() req: RequestWithUser,
+    @Body() body: { type: string; id: number; title: string; rating: number; post: string },
+    @Res() res: Response
+  ) {
+    const { type, id, title, rating, post } = body;
+  
+    try {
+      let ratingRecord;
+  
+      if (type === 'movie') {
+        ratingRecord = await this.prisma.ratingMovie.upsert({
+          where: { userEmail_tmdbId: { userEmail: req.user.email, tmdbId: id } },
+          update: { rating, comment: post },
+          create: {
+            userId: req.user.id,
+            userEmail: req.user.email,
+            tmdbId: id,
+            title,
+            rating,
+            comment: post,
+          },
+        });
+      } else if (type === 'person') {
+        ratingRecord = await this.prisma.ratingPerson.upsert({
+          where: { userEmail_tmdbId: { userEmail: req.user.email, tmdbId: id } },
+          update: { rating, comment: post },
+          create: {
+            userId: req.user.id,
+            userEmail: req.user.email,
+            tmdbId: id,
+            title,
+            rating,
+            comment: post,
+          },
+        });
+      } else {
+        return res.json({ success: false, error: 'Invalid type specified' });
+      }
+  
+      // ✅ Send `type` and `title` to SSE clients
+      this.moviesService.notifyUpdate(type, title);
+  
+      return res.json({ success: true, ratingRecord });
+    } catch (error) {
+      console.error('Error saving rating:', error);
+      return res.json({ success: false, error: error.message });
     }
-
-    // ✅ Send `type` and `title` to SSE clients
-    this.moviesService.notifyUpdate(type, title);
-
-    return res.json({ success: true, ratingRecord });
-  } catch (error) {
-    console.error('Error saving rating:', error);
-    return res.json({ success: false, error: error.message });
   }
-}
-
   
 
 
