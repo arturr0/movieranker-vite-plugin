@@ -387,7 +387,7 @@ eventSource.onerror = (error) => {
 eventSource.onmessage = (event) => {
   const data = JSON.parse(event.data);
   console.log('New update:', data); // Log the update data to the console
-  //updateUI(data); // Replace with your function to update the UI
+  updateUI(data); // Replace with your function to update the UI
 };
 
 	});
