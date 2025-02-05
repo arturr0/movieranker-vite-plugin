@@ -167,10 +167,9 @@ export class MoviesController {
     console.log('SSE connection established');
     return this.moviesService.getUpdates().pipe(
       map((event) => ({
-        data: event, // ✅ Properly formatted SSE JSON response
+        data: `data: ${JSON.stringify(event)}\n\n`,
       }))
     );
-    
   }
   
 

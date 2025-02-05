@@ -10,8 +10,6 @@ export class MoviesService {
   }
 
   notifyUpdate(type: string, title: string) {
-    console.log(`Sending SSE update: ${type} - ${title}`);
     this.updates.next({ type, title });
   }
-  
 }

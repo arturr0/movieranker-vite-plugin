@@ -161,18 +161,13 @@ export class MoviesController {
   
 
 
-  @Get('updates')
-  @Sse()
-  sendUpdates() {
-    console.log('SSE connection established');
-    return this.moviesService.getUpdates().pipe(
-      map((event) => ({
-        data: event, // ✅ Properly formatted SSE JSON response
-      }))
-    );
-    
-  }
-  
+@Get('updates')
+@Sse()
+sendUpdates() {
+  return this.moviesService.getUpdates().pipe(
+    map((event) => new MessageEvent('message', { data: JSON.stringify(event.data) }))
+  );
+}
 
 
 }
