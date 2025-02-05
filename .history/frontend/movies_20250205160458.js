@@ -279,9 +279,6 @@ document.addEventListener("userDataReady", () => {
 						title,     // Title or name of the movie/person
 						rating: selectedRating,  // Rating from user
 						post: document.getElementById('writePost').value,
-						queryType: currentQuerry.type,    // ✅ Include search query type
-						queryText: currentQuerry.text,    // ✅ Include search query text
-						querySenderID: currentQuerry.id,
 					}),
 				});
 

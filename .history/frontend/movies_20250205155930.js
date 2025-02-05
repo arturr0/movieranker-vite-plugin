@@ -279,9 +279,6 @@ document.addEventListener("userDataReady", () => {
 						title,     // Title or name of the movie/person
 						rating: selectedRating,  // Rating from user
 						post: document.getElementById('writePost').value,
-						queryType: currentQuerry.type,    // ✅ Include search query type
-						queryText: currentQuerry.text,    // ✅ Include search query text
-						querySenderID: currentQuerry.id,
 					}),
 				});
 
@@ -407,8 +404,7 @@ eventSource.onerror = (error) => {
 // };
 eventSource.onmessage = (event) => {
 	const data = JSON.parse(event.data);
-	//console.log(`New ${data.type} update: ${data.title}`);
-	console.log("update", data); 
+	console.log(`New ${data.type} update: ${data.title}`); 
 	// updateUI(data); // Modify this function to display the new update
   };
   
