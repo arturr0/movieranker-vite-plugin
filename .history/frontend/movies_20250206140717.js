@@ -398,11 +398,9 @@ document.addEventListener("userDataReady", () => {
 	eventSource.onmessage = async (event) => {
 		const data = JSON.parse(event.data);
 		//console.log(`New ${data.type} update: ${data.title}`);
-		console.log(`data.querySenderID ${data.querySenderID} = userData.user.id ${userData.user.id} || (currentQuerry.type ${currentQuerry.type} !data.queryType ${data.queryType}  &currentQuerry.text ${currentQuerry.text} ! data.queryText ${data.queryText}`)
-		if (data.querySenderID == userData.user.id || !(currentQuerry.type == data.queryType && currentQuerry.text == data.queryText)) return;
-		//if (currentQuerry.type == data.queryType && currentQuerry.text == data.queryText) {
-			//if (currentQuerry.type != data.queryType && currentQuerry.text != data.queryText)
-			console.log("update", data);
+		console.log("update", data);
+		if (data.querySenderID == userData.user.id) return;
+		if (currentQuerry.type == data.queryType && currentQuerry.text == data.queryText) {
 			await searchMovies();
 			//console.log(peopleRanks, type);
 			//const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
@@ -453,7 +451,8 @@ document.addEventListener("userDataReady", () => {
 				}
 				
 			});
-		
+		};
+		// updateUI(data); // Modify this function to display the new update
 	};
 	  
 	
