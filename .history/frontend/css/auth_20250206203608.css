@@ -20,9 +20,9 @@
 #auth-form {
     display: flex;
     flex-direction: column;
-    min-width: 200px; /* Ensure the form doesn’t become too narrow */
+    min-width: 250px; /* Ensure the form doesn’t become too narrow */
     width: 100%;
-    max-width: 300px; /* Optional: Prevent it from becoming too wide */
+    max-width: 400px; /* Optional: Prevent it from becoming too wide */
 }
 
 /* Input Styles */
@@ -37,13 +37,11 @@
 #buttons {
     display: flex;
     justify-content: space-between;
-    min-width: 200px;
+    min-width: 250px;
     width: 100%;
-    max-width: 300px;
+    max-width: 400px;
     gap: 10px; /* Adds spacing between buttons */
-    height: 70px;
 }
-
 
 button {
     font-size: 1em;

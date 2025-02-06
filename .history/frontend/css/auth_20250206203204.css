@@ -20,9 +20,7 @@
 #auth-form {
     display: flex;
     flex-direction: column;
-    min-width: 200px; /* Ensure the form doesn’t become too narrow */
-    width: 100%;
-    max-width: 300px; /* Optional: Prevent it from becoming too wide */
+    width: 20vw;
 }
 
 /* Input Styles */
@@ -36,25 +34,28 @@
 /* Buttons Container Styles */
 #buttons {
     display: flex;
+    /* width: 100%; Make the container take the full width of the parent */
     justify-content: space-between;
-    min-width: 200px;
-    width: 100%;
-    max-width: 300px;
-    gap: 10px; /* Adds spacing between buttons */
-    height: 70px;
+    width: 20vw;
+    height: 60px;
+    text-align: center;
 }
 
-
+/* Button Styles */
+/* Button Styles */
 button {
-    font-size: 1em;
+    .title {
+        font-size: clamp(1rem, 2vw, 3rem);
+    }
+    
     cursor: pointer;
-    flex: 1 1 auto; /* Allow buttons to shrink/grow properly */
-    min-width: 100px; /* Prevents buttons from becoming too small */
+    flex-grow: 1; /* Make buttons grow to take up equal space */
+    margin: 0 5px; /* Optional: Adds small space between buttons */
     height: 40px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 10px;
-    white-space: nowrap; /* Prevents text from wrapping */
+    justify-content: center; /* Centers text horizontally */
+    align-items: center; /* Centers text vertically */
+    text-align: center; /* Optional: Ensures text alignment */
 }
+
+

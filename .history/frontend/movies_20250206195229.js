@@ -155,8 +155,8 @@ document.addEventListener("userDataReady", () => {
 		const itemElement = document.createElement('div');
 		itemElement.classList.add('item');
 		itemElement.innerHTML = `
-			<p class="title" data-title="${type === 'movie' && item.year !== 'N/A' ? `${item.title} (${item.year})` : item.title}">
-   				${type === 'movie' && item.year !== 'N/A' ? `${item.title} (${item.year})` : item.title}
+			<p class="title" data-title="${type === 'movie' && item.year !== 'N/A' ? `${item.title} (${item.year})` : item.name}">
+    			${type === 'movie' && item.year !== 'N/A' ? `${item.title} (${item.year})` : item.name}
 			</p>
 			<div class="img" style="background-image: url(${type === 'movie' ? item.poster : item.profile});"></div>`;
 	

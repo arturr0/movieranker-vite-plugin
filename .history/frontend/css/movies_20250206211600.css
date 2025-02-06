@@ -182,7 +182,7 @@ input[type="radio"]#movie:checked::before {
 }
 input[type="radio"]#person:checked::before {
     content: "👤"; /* Single user icon */
-    font-size: 14px;
+    font-size: 16px;
     position: absolute;
     top: 50%;
     left: 50%;

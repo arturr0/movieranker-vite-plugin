@@ -148,49 +148,6 @@ body {
 	/* height: 60px; */
 	justify-content: center;
 }
-input[type="radio"] {
-    appearance: none;
-    width: 28px;
-    height: 28px;
-    border: 2px solid black;
-    border-radius: 50%;
-    background-color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-input[type="radio"]:checked::before {
-    content: "🎥"; /* Video camera emoji */
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black;
-}
-input[type="radio"]#movie:checked::before {
-    content: "🎥"; /* Video camera emoji */
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black;
-}
-input[type="radio"]#person:checked::before {
-    content: "👤"; /* Single user icon */
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-
-
 /* .title {
 max-width: 200px;
 white-space: nowrap;
@@ -271,7 +228,6 @@ background-color: #f0f0f0; Example background
 	align-items: center; /* Vertically center the title */
 	justify-content: center; /* Horizontally center the title */
 	margin-bottom: 10px; /* Space between title and bottom content */
-	z-index: 2;
 }
 
 

@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" href="css/movies.css">
     <link rel="stylesheet" href="css/auth.css">
-    <script>
+    <script> 
+		const info = document.getElementById('title');
         async function handleFormSubmit(event, endpoint) {
             event.preventDefault();
             const email = document.getElementById('email').value;
@@ -29,7 +30,8 @@
                 console.log('Server response:', data);
                 
                 if (!response.ok) {
-                    alert(data.error || 'Login failed!');
+                    //alert(data.error || 'Login failed!');
+					info.textContent = 'Login failed';
                     return;
                 }
                 
@@ -41,10 +43,11 @@
                         window.location.href = '/movies';
                     } else {
                         alert('Account created successfully! Please log in.');
-						document.getElementById('title').textContent = 'log'
+						info.textContent = 'Account created successfully! Please log in.';
                     }
                 } else {
                     alert('Unexpected response. No token received.');
+
                 }
             } catch (error) {
                 console.error('Error during authentication:', error);

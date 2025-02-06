@@ -25,11 +25,11 @@ h1 {
 	font-family: "Oswald", Sans-serif;
 	text-transform: uppercase;
 	font-weight: 400;
-	/* font-size: 70px; */
+	font-size: 70px;
 	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
 	width: 100%;
   	text-align: center;
-	/* margin: 0; */
+	margin: 0;
 	position: relative;
 }
 
@@ -76,7 +76,7 @@ html, body {
 	width: 100%;
 	background: #e6e6d8 url('https://dl.dropboxusercontent.com/s/t0gu051d08sei65/bg-retro-noise.png');
 	color: #121212;
-	/* scrollbar-gutter: stable; */
+	scrollbar-gutter: stable;
 	overflow-y: auto;
 	/* overflow-x: hidden; */
 	/* width: 100vw; */
@@ -102,7 +102,7 @@ body {
 #searchContainer {
 	display: inline-flex;
 	padding: 10px;
-	height: 30px;
+	height: 50px;
 	border-radius: 40px;
 	border: 2px solid black;
 	/* transition: all 0.3s ease; Smooth transition for visual changes */
@@ -117,7 +117,7 @@ body {
 }
 #searchQuery {
 	border: none;
-	width: 100%;
+	width: 18vw;
 	font-size: 1.3rem;
 }
 #searchQuery:focus {
@@ -140,57 +140,13 @@ body {
 }
 
 #searchTypes {
-	display: flex;
-	/* flex-direction: column; */
+	display: inline-flex;
+	flex-direction: column;
 	font-size: 1.2rem;
 	/* height: 100%; */
 	margin-right: 10px;
-	/* height: 60px; */
-	justify-content: center;
+	height: 60px;
 }
-input[type="radio"] {
-    appearance: none;
-    width: 28px;
-    height: 28px;
-    border: 2px solid black;
-    border-radius: 50%;
-    background-color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-input[type="radio"]:checked::before {
-    content: "🎥"; /* Video camera emoji */
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black;
-}
-input[type="radio"]#movie:checked::before {
-    content: "🎥"; /* Video camera emoji */
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black;
-}
-input[type="radio"]#person:checked::before {
-    content: "👤"; /* Single user icon */
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-
-
 /* .title {
 max-width: 200px;
 white-space: nowrap;
@@ -271,7 +227,6 @@ background-color: #f0f0f0; Example background
 	align-items: center; /* Vertically center the title */
 	justify-content: center; /* Horizontally center the title */
 	margin-bottom: 10px; /* Space between title and bottom content */
-	z-index: 2;
 }
 
 

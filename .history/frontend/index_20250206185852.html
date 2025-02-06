@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/movies.css">
     <link rel="stylesheet" href="css/auth.css">
     <script>
+		const info = document.getElementById('title');
         async function handleFormSubmit(event, endpoint) {
             event.preventDefault();
             const email = document.getElementById('email').value;
@@ -41,7 +42,6 @@
                         window.location.href = '/movies';
                     } else {
                         alert('Account created successfully! Please log in.');
-						document.getElementById('title').textContent = 'log'
                     }
                 } else {
                     alert('Unexpected response. No token received.');

@@ -1,7 +1,3 @@
-import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { Response } from 'express';
-
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
@@ -58,4 +54,3 @@ export class AuthController {
         }
     }
 }
-

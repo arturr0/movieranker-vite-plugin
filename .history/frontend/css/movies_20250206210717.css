@@ -149,47 +149,20 @@ body {
 	justify-content: center;
 }
 input[type="radio"] {
-    appearance: none;
-    width: 28px;
-    height: 28px;
-    border: 2px solid black;
-    border-radius: 50%;
-    background-color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+	appearance: none;
+	width: 20px;
+	height: 20px;
+	border: 2px solid black;
+	border-radius: 50%;
+	outline: none;
+	background-color: white;
+	cursor: pointer;
 }
-
-input[type="radio"]:checked::before {
-    content: "🎥"; /* Video camera emoji */
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black;
+input[type="radio"]:checked {
+	background-color: black;
+	width: 15px;
+	height: 15px;
 }
-input[type="radio"]#movie:checked::before {
-    content: "🎥"; /* Video camera emoji */
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black;
-}
-input[type="radio"]#person:checked::before {
-    content: "👤"; /* Single user icon */
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-
 
 /* .title {
 max-width: 200px;
