@@ -30,7 +30,6 @@ h1 {
 	width: 100%;
   	text-align: center;
 	margin: 0;
-	position: relative;
 }
 
 h1 span {
@@ -81,7 +80,6 @@ html, body {
 	/* overflow-x: hidden; */
 	/* width: 100vw; */
 	font-family: "Oswald", Sans-serif;
-	z-index: 0;
 	
 }
 
@@ -262,10 +260,6 @@ background-color: #f0f0f0; Example background
 	border: 2px solid transparent; /* Transparent border to reserve space */
 	border-radius: 50%;
 	font-size: 2rem;
-	position: absolute;
-	top: 20px;
-	right: 20px;
-	z-index: 9999;
 }
 
 .icon-cancel-outline:hover {
@@ -298,7 +292,6 @@ background-color: #f0f0f0; Example background
     font-weight: bold;
     text-align: center;
     white-space: nowrap; /* Prevents text from breaking */
-	margin-bottom: 15px;
 }
 
 #title:before,

@@ -78,7 +78,6 @@ document.addEventListener("userDataReady", () => {
 	});
 
 	document.getElementById("cancel").addEventListener("click", () => {
-		console.log("click");
 		searchContent.style.display = 'block';
 		ranksContainer.style.display = 'none';
 		rankPosts.innerHTML = '';
@@ -155,9 +154,9 @@ document.addEventListener("userDataReady", () => {
 		const itemElement = document.createElement('div');
 		itemElement.classList.add('item');
 		itemElement.innerHTML = `
-			<p class="title" data-title="${type === 'movie' ? `${item.title} (${item.year})` : item.name}">
+			<h3 class="title" data-title="${type === 'movie' ? `${item.title} (${item.year})` : item.name}">
 				${type === 'movie' ? `${item.title} (${item.year})` : item.name}
-			</p>
+			</h3>
 			<div class="img" style="background-image: url(${type === 'movie' ? item.poster : item.profile});"></div>`;
 	
 		if (item.ratings) {
