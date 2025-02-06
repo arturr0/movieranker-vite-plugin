@@ -6,80 +6,20 @@
 [class*="fontawesome-"]:before {
 	font-family: 'FontAwesome', sans-serif;
 }
-section.text {
-	position: absolute;
-	width: 100%;
-	min-width: 800px;
-	text-align: center;
-	top: 50%;
-	margin-top: -55px;
-}
 
-/* h1, h3 {
-transform: matrix(1, -0.20, 0, 1, 0, 0);
--ms-transform: matrix(1, -0.20, 0, 1, 0, 0);
--webkit-transform: matrix(1, -0.20, 0, 1, 0, 0);
-} */
-
-h1 {
-	font-family: "Oswald", Sans-serif;
-	text-transform: uppercase;
-	font-weight: 400;
-	font-size: 70px;
-	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
-	width: 100%;
-  	text-align: center;
-	margin: 0;
-}
-
-h1 span {
-	display: inline-block;
-	vertical-align: middle;
-	
-}
-
-span.star {
-	font-size: 20px;
-}
-
-h3 {
-	font-family: "Open Sans", Sans-serif;
-	text-transform: uppercase;
-	font-weight: 700;
-	font-size: 20px;
-	letter-spacing: 0.1em;
-	margin-bottom: 10px;  
-	position: relative;
-}
-
-h3:before, h3:after {
-	content: " ";
-	position: absolute;
-	width: 100px;
-	height: 4px;
-	border-top: 2px solid #121212;
-	border-bottom: 2px solid #121212;
-}
-
-h3:before {
-	margin: 5px 0 0 -110px;
-}
-
-h3:after {
-	margin: 5px 0 0 10px;
-}
-html, body {
+body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
 	width: 100%;
-	background: #e6e6d8 url('https://dl.dropboxusercontent.com/s/t0gu051d08sei65/bg-retro-noise.png');
-	color: #121212;
+	background: rgb(81,99,130);
+	/* background: radial-gradient(circle, rgba(81,99,130,1) 0%, rgba(78,88,106,1) 100%);
+	background-attachment: fixed; */
 	scrollbar-gutter: stable;
 	overflow-y: auto;
 	/* overflow-x: hidden; */
 	/* width: 100vw; */
-	font-family: "Oswald", Sans-serif;
+	
 	
 }
 
@@ -100,14 +40,13 @@ body {
 #searchContainer {
 	display: inline-flex;
 	padding: 10px;
-	height: 50px;
-	border-radius: 40px;
+	height: 30px;
+	border-radius: 30px;
 	border: 2px solid black;
 	/* transition: all 0.3s ease; Smooth transition for visual changes */
 	position: relative; /* Use relative positioning if you need to adjust it */
-	width: 30vw;
+	width: 20vw;
 	background: white;
-	align-items: center;
 }
 
 #searchDiv {
@@ -115,7 +54,7 @@ body {
 }
 #searchQuery {
 	border: none;
-	width: 18vw;
+	width: 17vw;
 	font-size: 1.3rem;
 }
 #searchQuery:focus {
@@ -124,8 +63,8 @@ body {
 	box-shadow: none;
 }
 .icon-search-1 {
-	font-size: 1.7rem;
-	/* margin-top: 5px; */
+	font-size: 1.3rem;
+	margin-top: 5px;
 	margin-left: auto;
 }
 .icon-search-1:hover {
@@ -138,12 +77,9 @@ body {
 }
 
 #searchTypes {
-	display: inline-flex;
+	display: flex;
 	flex-direction: column;
-	font-size: 1.2rem;
-	/* height: 100%; */
-	margin-right: 10px;
-	height: 60px;
+	font-size: 1.3rem;
 }
 /* .title {
 max-width: 200px;

@@ -27,15 +27,11 @@ h1 {
 	font-weight: 400;
 	font-size: 70px;
 	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
-	width: 100%;
-  	text-align: center;
-	margin: 0;
 }
 
 h1 span {
 	display: inline-block;
 	vertical-align: middle;
-	
 }
 
 span.star {
@@ -68,7 +64,7 @@ h3:before {
 h3:after {
 	margin: 5px 0 0 10px;
 }
-html, body {
+body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
@@ -79,7 +75,7 @@ html, body {
 	overflow-y: auto;
 	/* overflow-x: hidden; */
 	/* width: 100vw; */
-	font-family: "Oswald", Sans-serif;
+	
 	
 }
 
@@ -100,14 +96,13 @@ body {
 #searchContainer {
 	display: inline-flex;
 	padding: 10px;
-	height: 50px;
-	border-radius: 40px;
+	height: 30px;
+	border-radius: 30px;
 	border: 2px solid black;
 	/* transition: all 0.3s ease; Smooth transition for visual changes */
 	position: relative; /* Use relative positioning if you need to adjust it */
-	width: 30vw;
+	width: 20vw;
 	background: white;
-	align-items: center;
 }
 
 #searchDiv {
@@ -115,7 +110,7 @@ body {
 }
 #searchQuery {
 	border: none;
-	width: 18vw;
+	width: 17vw;
 	font-size: 1.3rem;
 }
 #searchQuery:focus {
@@ -124,8 +119,8 @@ body {
 	box-shadow: none;
 }
 .icon-search-1 {
-	font-size: 1.7rem;
-	/* margin-top: 5px; */
+	font-size: 1.3rem;
+	margin-top: 5px;
 	margin-left: auto;
 }
 .icon-search-1:hover {
@@ -138,12 +133,9 @@ body {
 }
 
 #searchTypes {
-	display: inline-flex;
+	display: flex;
 	flex-direction: column;
-	font-size: 1.2rem;
-	/* height: 100%; */
-	margin-right: 10px;
-	height: 60px;
+	font-size: 1.3rem;
 }
 /* .title {
 max-width: 200px;

@@ -115,7 +115,7 @@ body {
 }
 #searchQuery {
 	border: none;
-	width: 18vw;
+	width: 17vw;
 	font-size: 1.3rem;
 }
 #searchQuery:focus {

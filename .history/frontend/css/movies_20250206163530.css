@@ -115,7 +115,7 @@ body {
 }
 #searchQuery {
 	border: none;
-	width: 18vw;
+	width: 17vw;
 	font-size: 1.3rem;
 }
 #searchQuery:focus {
@@ -124,7 +124,7 @@ body {
 	box-shadow: none;
 }
 .icon-search-1 {
-	font-size: 1.7rem;
+	font-size: 1.5rem;
 	/* margin-top: 5px; */
 	margin-left: auto;
 }
@@ -142,7 +142,8 @@ body {
 	flex-direction: column;
 	font-size: 1.2rem;
 	/* height: 100%; */
-	margin-right: 10px;
+	margin-bottom: 5px;
+	margin: 0;
 	height: 60px;
 }
 /* .title {
