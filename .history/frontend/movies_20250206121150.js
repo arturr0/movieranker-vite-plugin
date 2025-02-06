@@ -282,7 +282,6 @@ document.addEventListener("userDataReady", () => {
 						queryType: currentQuerry.type,    // ✅ Include search query type
 						queryText: currentQuerry.text,    // ✅ Include search query text
 						querySenderID: currentQuerry.id,
-						userName: userData.user.email,
 					}),
 				});
 
@@ -394,13 +393,22 @@ document.addEventListener("userDataReady", () => {
 	  console.error('Error in EventSource connection:', error);
 	};
 	
-	
-	eventSource.onmessage = async (event) => {
+	// eventSource.onmessage = (event) => {
+	//   console.log("Raw SSE data:", event.data); // Log raw data
+	//   try {
+	//     const data = JSON.parse(event.data);
+	//     console.log('New update:', data);
+	//     // updateUI(data);
+	//   } catch (error) {
+	//     console.error('Failed to parse JSON:', error, 'Received:', event.data);
+	//   }
+	// };
+	eventSource.onmessage = (event) => {
 		const data = JSON.parse(event.data);
 		//console.log(`New ${data.type} update: ${data.title}`);
 		console.log("update", data);
 		if (data.querySenderID == userData.user.id) return;
-		await searchMovies();
+		searchMovies();
 		//console.log(peopleRanks, type);
 		//const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
 		const ranksArray = data.queryType === "title" ? moviesRanks : peopleRanks;

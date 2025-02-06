@@ -282,7 +282,6 @@ document.addEventListener("userDataReady", () => {
 						queryType: currentQuerry.type,    // ✅ Include search query type
 						queryText: currentQuerry.text,    // ✅ Include search query text
 						querySenderID: currentQuerry.id,
-						userName: userData.user.email,
 					}),
 				});
 
@@ -383,7 +382,7 @@ document.addEventListener("userDataReady", () => {
 			// }, 5000);
 		});
 	});
-	//document.addEventListener('DOMContentLoaded', () => {
+	document.addEventListener('DOMContentLoaded', () => {
 		const eventSource = new EventSource('/movies/updates');
 	
 	eventSource.onopen = () => {
@@ -394,7 +393,16 @@ document.addEventListener("userDataReady", () => {
 	  console.error('Error in EventSource connection:', error);
 	};
 	
-	
+	// eventSource.onmessage = (event) => {
+	//   console.log("Raw SSE data:", event.data); // Log raw data
+	//   try {
+	//     const data = JSON.parse(event.data);
+	//     console.log('New update:', data);
+	//     // updateUI(data);
+	//   } catch (error) {
+	//     console.error('Failed to parse JSON:', error, 'Received:', event.data);
+	//   }
+	// };
 	eventSource.onmessage = async (event) => {
 		const data = JSON.parse(event.data);
 		//console.log(`New ${data.type} update: ${data.title}`);
@@ -403,7 +411,7 @@ document.addEventListener("userDataReady", () => {
 		await searchMovies();
 		//console.log(peopleRanks, type);
 		//const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
-		const ranksArray = data.queryType === "title" ? moviesRanks : peopleRanks;
+		const ranksArray = type === "movie" ? moviesRanks : peopleRanks;
 		clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
 		console.log(clickedMovie);
 		const avgRating = Math.round(
@@ -455,5 +463,5 @@ document.addEventListener("userDataReady", () => {
 	  };
 	  
 	
-		
+		});
 });

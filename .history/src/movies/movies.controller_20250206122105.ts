@@ -122,12 +122,11 @@ async rateItem(
         post: string;
         queryType: string;  // ✅ Add queryType
         queryText: string;  // ✅ Add queryText
-        querySenderID: number;
-		userName: string;  // ✅ Add querySenderID
+        querySenderID: number;  // ✅ Add querySenderID
     },
     @Res() res: Response
 ) {
-    const { type, id, title, rating, post, queryType, queryText, querySenderID, userName } = body;
+    const { type, id, title, rating, post, queryType, queryText, querySenderID } = body;
 	console.log(body);
     try {
         let ratingRecord;
@@ -140,9 +139,9 @@ async rateItem(
             });
 
             ratingRecord = await this.prisma.ratingMovie.upsert({
-                where: { userEmail_tmdbId: { userEmail: userName, tmdbId: id } },
+                where: { userEmail_tmdbId: { userEmail: req.user.email, tmdbId: id } },
                 update: { rating, comment: post },
-                create: { userId: querySenderID, userEmail: userName, tmdbId: id, title, rating, comment: post },
+                create: { userId: req.user.id, userEmail: req.user.email, tmdbId: id, title, rating, comment: post },
             });
         } else if (type === 'person') {
             await this.prisma.person.upsert({

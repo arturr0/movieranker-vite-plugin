@@ -282,7 +282,6 @@ document.addEventListener("userDataReady", () => {
 						queryType: currentQuerry.type,    // ✅ Include search query type
 						queryText: currentQuerry.text,    // ✅ Include search query text
 						querySenderID: currentQuerry.id,
-						userName: userData.user.email,
 					}),
 				});
 
@@ -395,12 +394,12 @@ document.addEventListener("userDataReady", () => {
 	};
 	
 	
-	eventSource.onmessage = async (event) => {
+	eventSource.onmessage = (event) => {
 		const data = JSON.parse(event.data);
 		//console.log(`New ${data.type} update: ${data.title}`);
 		console.log("update", data);
 		if (data.querySenderID == userData.user.id) return;
-		await searchMovies();
+		searchMovies();
 		//console.log(peopleRanks, type);
 		//const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
 		const ranksArray = data.queryType === "title" ? moviesRanks : peopleRanks;
