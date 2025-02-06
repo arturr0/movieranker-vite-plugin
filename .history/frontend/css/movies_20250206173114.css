@@ -259,7 +259,6 @@ background-color: #f0f0f0; Example background
 	box-sizing: border-box; /* Ensures size remains the same */
 	border: 2px solid transparent; /* Transparent border to reserve space */
 	border-radius: 50%;
-	font-size: 2rem;
 }
 
 .icon-cancel-outline:hover {
