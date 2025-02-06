@@ -12,7 +12,7 @@ html, body {
 	/* width: 100vw; */
 	font-family: "Oswald", Sans-serif;
 	z-index: 0;
-	background-image: url('bg.WebP');
+	background-image: url('bg2.WebP');
     background-size: cover;  /* Ensures the image fits within the element */
     background-repeat: no-repeat;  /* Prevents repeating the image */
     background-position: center center;  /* Centers the image within the element */

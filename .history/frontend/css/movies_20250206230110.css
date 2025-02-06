@@ -73,9 +73,8 @@ html, body {
 	margin: 0;
 	padding: 0;
 	/* height: 100%; */
-	/* width: 100%; */
+	width: 100%;
 	/* background: #e6e6d8 url('https://dl.dropboxusercontent.com/s/t0gu051d08sei65/bg-retro-noise.png'); */
-	background: rgb(112, 172, 173);
 	color: #121212;
 	/* scrollbar-gutter: stable; */
 	overflow-y: auto;
@@ -83,7 +82,10 @@ html, body {
 	/* width: 100vw; */
 	font-family: "Oswald", Sans-serif;
 	z-index: 0;
-	
+	background-image: url('bg.WebP');
+    background-size: contain;  /* Ensures the image fits within the element */
+    background-repeat: no-repeat;  /* Prevents repeating the image */
+    background-position: center center;  /* Centers the image within the element */
     width: 100vw;  /* Adjust as needed */
     height: 100vh;  /* Adjust as needed */
 	
@@ -452,8 +454,7 @@ textarea::placeholder {
 } */
 button {
 	/* background-color: #fbeee0; */
-	/* background-color: transparent; */
-	background: rgb(242, 239, 194);
+	background-color: transparent;
 	border: 2px solid #422800;
 	border-radius: 30px;
 	box-shadow: #422800 4px 4px 0 0;

@@ -74,8 +74,7 @@ html, body {
 	padding: 0;
 	/* height: 100%; */
 	/* width: 100%; */
-	/* background: #e6e6d8 url('https://dl.dropboxusercontent.com/s/t0gu051d08sei65/bg-retro-noise.png'); */
-	background: rgb(112, 172, 173);
+	background: #e6e6d8 url('https://dl.dropboxusercontent.com/s/t0gu051d08sei65/bg-retro-noise.png');
 	color: #121212;
 	/* scrollbar-gutter: stable; */
 	overflow-y: auto;
@@ -452,8 +451,7 @@ textarea::placeholder {
 } */
 button {
 	/* background-color: #fbeee0; */
-	/* background-color: transparent; */
-	background: rgb(242, 239, 194);
+	background-color: transparent;
 	border: 2px solid #422800;
 	border-radius: 30px;
 	box-shadow: #422800 4px 4px 0 0;
