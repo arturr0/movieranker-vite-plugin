@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Injectable()
 export class MoviesService {

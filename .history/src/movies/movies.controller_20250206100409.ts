@@ -8,7 +8,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { MoviesService } from './movies.service';
 import { RequestWithUser } from '../auth/request-with-user'; // Adjust the import path accordingly
 import { map } from 'rxjs/operators';
-
+import { Request } from 'express';
 @Controller('movies')
 export class MoviesController {
 constructor(
@@ -112,20 +112,7 @@ async searchMovies(
 
 @Post('rate')
 @UseGuards(JwtAuthGuard)
-async rateItem(
-    @Req() req: RequestWithUser,
-    @Body() body: { 
-        type: string; 
-        id: number; 
-        title: string; 
-        rating: number; 
-        post: string;
-        queryType: string;  // ✅ Add queryType
-        queryText: string;  // ✅ Add queryText
-        querySenderID: number;  // ✅ Add querySenderID
-    },
-    @Res() res: Response
-) {
+async rateItem(@Req() req: RequestWithUser, @Body() body, @Res() res: Response) {
     const { type, id, title, rating, post, queryType, queryText, querySenderID } = body;
 
     try {
@@ -140,7 +127,7 @@ async rateItem(
 
             ratingRecord = await this.prisma.ratingMovie.upsert({
                 where: { userEmail_tmdbId: { userEmail: req.user.email, tmdbId: id } },
-                update: { rating, comment: post },
+                update: { rating, comment: post, userId: req.user.id },
                 create: { userId: req.user.id, userEmail: req.user.email, tmdbId: id, title, rating, comment: post },
             });
         } else if (type === 'person') {
@@ -152,15 +139,17 @@ async rateItem(
 
             ratingRecord = await this.prisma.ratingPerson.upsert({
                 where: { userEmail_tmdbId: { userEmail: req.user.email, tmdbId: id } },
-                update: { rating, comment: post },
+                update: { rating, comment: post, userId: req.user.id },
                 create: { userId: req.user.id, userEmail: req.user.email, tmdbId: id, title, rating, comment: post },
             });
         } else {
             return res.json({ success: false, error: 'Invalid type specified' });
         }
 
-        // ✅ Send correct queryType, queryText, and querySenderID
-        this.moviesService.notifyUpdate(queryType, queryText, querySenderID);
+        // ✅ Only notify SSE AFTER ensuring database update is successful
+        process.nextTick(() => {
+            this.moviesService.notifyUpdate(queryType, queryText, querySenderID);
+        });
 
         return res.json({ success: true, ratingRecord });
     } catch (error) {
@@ -173,14 +162,25 @@ async rateItem(
 
 
 
+
 @Get('updates')
-@Sse()
-sendUpdates() {
-	console.log('SSE connection established');
-	return this.moviesService.getUpdates().pipe(
-	map((event) => ({
-		data: event, // ✅ Properly formatted SSE JSON response
-	}))
-	);
+async sendUpdates(@Req() req: Request, @Res() res: Response) {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    res.flushHeaders(); // Ensure headers are sent immediately
+
+    const intervalId = setInterval(() => {
+        res.write(`data: ${JSON.stringify({ update: 'New movie added' })}\n\n`);
+    }, 5000);
+
+    req.on('close', () => {
+        clearInterval(intervalId);
+    });
 }
+
+
+
+
 }

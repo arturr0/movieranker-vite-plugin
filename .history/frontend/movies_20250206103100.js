@@ -1,6 +1,109 @@
 const currentQuerry =  {};
 
+
 document.addEventListener("userDataReady", () => {
+
+	const eventSource = new EventSource('/movies/updates', { withCredentials: true });
+
+	eventSource.onopen = () => {
+	  console.log('Connection to server opened.');
+	};
+	
+	eventSource.onerror = (error) => {
+	  console.error('Error in EventSource connection:', error);
+	};
+	
+	
+	eventSource.onmessage = async (event) => { console.log("update") }
+// 	const eventSource = new EventSource('/movies/updates', { withCredentials: true });
+
+// eventSource.onopen = () => {
+//   console.log('Connection to server opened.');
+// };
+
+// eventSource.onerror = (error) => {
+//   console.error('Error in EventSource connection:', error);
+// };
+
+
+// eventSource.onmessage = async (event) => {
+//     const updateData = JSON.parse(event.data);
+//     console.log("update", updateData);
+// 	console.log(currentQuerry);
+//     await searchMovies(); // Wait for searchMovies to complete
+// 	console.log(moviesRanks);
+//     const ranksArray = currentQuerry.type === "title" ? moviesRanks : peopleRanks;
+//     clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
+//     console.log(clickedMovie);
+
+//     const avgRating = Math.round(
+//         clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
+//     );
+
+//     starsInfo.innerHTML = '';
+//     for (let i = 0; i < 5; i++) {
+//         const star = document.createElement("span");
+//         star.style.color = i < avgRating ? "gold" : "gray";
+//         star.innerHTML = "&#9733;";
+//         starsInfo.appendChild(star);
+//     }
+
+//     const voteCount = clickedMovie.length;
+//     const voteText = voteCount === 1 ? '1 vote' : `${voteCount} votes`;
+//     votesInfo.textContent = voteText;
+    
+//     rankPosts.innerHTML = ''; // Clear previous posts
+//     clickedMovie.forEach(moviePost => {
+//         const postDiv = document.createElement("div");
+//         const user = document.createElement("p");
+//         user.classList.add("userName");
+//         console.log("user", userData.user.email, moviePost.rankerName);
+//         const userName = userData.user.email == moviePost.rankerName ? "Your post" : moviePost.rankerName;
+//         user.textContent = userName;
+//         rankPosts.appendChild(postDiv);
+//         const postRank = document.createElement("div");
+//         postRank.classList.add("userRank");
+//         postDiv.classList.add("post");
+//         postDiv.setAttribute("user", moviePost.rankerName);
+//         const post = document.createElement("p");
+//         post.classList.add("userPost");
+//         post.textContent = moviePost.post;
+//         postDiv.appendChild(user);
+//         postDiv.appendChild(post);
+//         postDiv.appendChild(postRank);
+//         if (userData.user.email == moviePost.rankerName) postDiv.style.border = "2px solid green";
+
+//         for (let i = 0; i < 5; i++) {
+//             const star = document.createElement("span");
+//             star.style.color = i < moviePost.rank ? "gold" : "gray";
+//             star.innerHTML = "&#9733;";
+//             postRank.appendChild(star);
+//         }
+//     });
+// };
+// if (eventSource) {
+// 	eventSource.close();  // Close any existing connection
+// }
+
+//console.log(`🔄 Starting SSE for user ${userId}`);
+// const eventSource = new EventSource('http://localhost:3000/movies/updates', { withCredentials: true });
+
+// eventSource.onmessage = (event) => {
+// 	const data = JSON.parse(event.data);
+// 	console.log('🔸 [Frontend] Received SSE Update:', data);
+
+// 	if (data.querySenderID !== userId) {
+// 		console.warn(`⚠️ Ignoring update for user ${data.querySenderID}, current user is ${userId}`);
+// 		return;
+// 	}
+
+// 	updateUIWithNewRating(data);
+// };
+
+// eventSource.onerror = (err) => {
+// 	console.error('❌ SSE Error:', err);
+// };
+  
 	console.log(userData.user);
 	const query = document.getElementById('searchQuery').value;
 	const searchContent = document.getElementById("searchContent");
@@ -113,7 +216,7 @@ document.addEventListener("userDataReady", () => {
 			if (Number(data.querySenderID) == userData.user.id) {
 				currentQuerry.type = data.queryType;
 				currentQuerry.text = data.queryText;
-				currentQuerry.id = Number(data.querySenderID);
+				//currentQuerry.id = Number(data.querySenderID);
 			}
 			console.log(currentQuerry);
 			moviesRanks.length = 0;
@@ -281,65 +384,11 @@ document.addEventListener("userDataReady", () => {
 						post: document.getElementById('writePost').value,
 						queryType: currentQuerry.type,    // ✅ Include search query type
 						queryText: currentQuerry.text,    // ✅ Include search query text
-						querySenderID: currentQuerry.id,
+						querySenderID: userData.user.id,
 					}),
 				});
 
-				const data = await response.json();
-				if (data.success) {
-					alert('Thank you for your rating!');
-					
-					await searchMovies();  // Wait until moviesRanks is updated
-					console.log(peopleRanks, type);
-					//const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
-					const ranksArray = type === "movie" ? moviesRanks : peopleRanks;
-					clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
-					console.log(clickedMovie);
-					const avgRating = Math.round(
-						clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
-					);
-					//rankAvg.textContent = avgRating;
-					starsInfo.innerHTML = '';
-					for (let i = 0; i < 5; i++) {""
-						const star = document.createElement("span");
-						star.style.color = i < avgRating ? "gold" : "gray";
-						star.innerHTML = "&#9733;";
-						starsInfo.appendChild(star);
-					}
-					const voteCount = clickedMovie.length;
-					const voteText = voteCount === 1 ? '1 vote' : `${voteCount} votes`;
-					votesInfo.textContent = voteText;
-					rankPosts.innerHTML = ''; // Clear previous posts
-					clickedMovie.forEach(moviePost => {
-						const postDiv = document.createElement("div");
-						const user = document.createElement("p");
-						user.classList.add("userName");
-						console.log("user", userData.user.email);
-						const userName = userData.user.email === moviePost.rankerName ? "Your post" : moviePost.rankerName
-						user.textContent = userName;
-						rankPosts.appendChild(postDiv);
-						const postRank = document.createElement("div");
-						postRank.classList.add("userRank")
-						// postRank.textContent = moviePost.rank;
-						postDiv.classList.add("post");
-						postDiv.setAttribute("user", moviePost.rankerName);
-						const post = document.createElement("p");
-						post.classList.add("userPost");
-						post.textContent = moviePost.post;
-						postDiv.appendChild(user);
-						postDiv.appendChild(post);
-						postDiv.appendChild(postRank);
-						if (userData.user.email == moviePost.rankerName) postDiv.style.border = "2px solid green"
-
-						for (let i = 0; i < 5; i++) {
-							const star = document.createElement("span");
-							star.style.color = i < moviePost.rank ? "gold" : "gray";
-							star.innerHTML = "&#9733;";
-							postRank.appendChild(star);
-						}
-						
-					});
-				}
+				
 
 			} catch (error) {
 				console.error('Error rating item:', error);
@@ -384,33 +433,3 @@ document.addEventListener("userDataReady", () => {
 	});
 	
 });
-document.addEventListener('DOMContentLoaded', () => {
-	const eventSource = new EventSource('/movies/updates');
-
-eventSource.onopen = () => {
-  console.log('Connection to server opened.');
-};
-
-eventSource.onerror = (error) => {
-  console.error('Error in EventSource connection:', error);
-};
-
-// eventSource.onmessage = (event) => {
-//   console.log("Raw SSE data:", event.data); // Log raw data
-//   try {
-//     const data = JSON.parse(event.data);
-//     console.log('New update:', data);
-//     // updateUI(data);
-//   } catch (error) {
-//     console.error('Failed to parse JSON:', error, 'Received:', event.data);
-//   }
-// };
-eventSource.onmessage = (event) => {
-	const data = JSON.parse(event.data);
-	//console.log(`New ${data.type} update: ${data.title}`);
-	console.log("update", data); 
-	// updateUI(data); // Modify this function to display the new update
-  };
-  
-
-	});
