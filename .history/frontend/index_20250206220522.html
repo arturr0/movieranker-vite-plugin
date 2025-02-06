@@ -15,7 +15,7 @@
             const password = document.getElementById('password').value;
             
             console.log(`Attempting to ${endpoint} with email:`, email); // Debugging
-            if (email.trim() === '' || password.trim() === '') return;
+            if (email.value.trim() || password.value.trim()) return;
             try {
                 const response = await fetch(`http://localhost:3000/auth/${endpoint}`, {
                     method: 'POST',

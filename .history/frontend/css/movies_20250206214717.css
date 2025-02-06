@@ -110,7 +110,6 @@ body {
 	width: 30vw;
 	background: white;
 	align-items: center;
-	margin-bottom: 5px;
 }
 
 #searchDiv {
@@ -496,9 +495,9 @@ button:active {
 .star:hover ~ .star {
 	color: gold;
 	} */
-input:focus,
+input[type="text"]:focus,
 textarea:focus {
 	outline: 2px solid black; /* Change outline color */
-	/* border-color: black; Optional: Change border color */
+	border-color: black; /* Optional: Change border color */
 }
 	

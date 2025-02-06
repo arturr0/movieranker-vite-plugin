@@ -110,7 +110,6 @@ body {
 	width: 30vw;
 	background: white;
 	align-items: center;
-	margin-bottom: 5px;
 }
 
 #searchDiv {
@@ -499,6 +498,6 @@ button:active {
 input:focus,
 textarea:focus {
 	outline: 2px solid black; /* Change outline color */
-	/* border-color: black; Optional: Change border color */
+	border-color: black; /* Optional: Change border color */
 }
 	

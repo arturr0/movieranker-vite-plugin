@@ -81,7 +81,6 @@ document.addEventListener("userDataReady", () => {
 		console.log("click");
 		searchContent.style.display = 'block';
 		ranksContainer.style.display = 'none';
-		document.getElementById('writePost').value = '';
 		rankPosts.innerHTML = '';
 		selectedRating = 0;
 		document.getElementById("cancel").style.display = 'none';
