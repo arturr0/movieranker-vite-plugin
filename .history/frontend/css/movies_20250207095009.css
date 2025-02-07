@@ -21,12 +21,12 @@ transform: matrix(1, -0.20, 0, 1, 0, 0);
 -webkit-transform: matrix(1, -0.20, 0, 1, 0, 0);
 } */
 
-h1 {
+#logo, .font-awsome-star {
 	font-family: "Oswald", Sans-serif;
 	text-transform: uppercase;
 	font-weight: 400;
 	/* font-size: 70px; */
-	
+	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
 	width: 100%;
   	text-align: center;
 	/* margin: 0; */
@@ -36,7 +36,6 @@ h1 {
 h1 span {
 	display: inline-block;
 	vertical-align: middle;
-	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
 	
 }
 
@@ -318,6 +317,7 @@ background-color: #f0f0f0; Example background
 	top: 50%; /* Move halfway down */
 	transform: translateY(-50%); /* Adjust for element's height */
 	z-index: 9999;
+	
 }
 
 .icon-cancel-outline:hover {

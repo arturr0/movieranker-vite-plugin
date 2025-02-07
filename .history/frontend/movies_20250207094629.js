@@ -205,7 +205,7 @@ document.addEventListener("userDataReady", () => {
 	}
 	
 	function handleItemClick(item, type, avgRating, voteText) {
-		document.getElementById("cancel").style.textShadow = 'none';
+		document.getElementById('cancel').style.textShadow = 'none';
 		const rankedItems = type === 'movie' ? moviesRanks : peopleRanks;
 		const clickedItem = rankedItems.filter(rank => rank.id === item.id);
 		console.log(`Clicked ${type} Data:`, clickedItem);

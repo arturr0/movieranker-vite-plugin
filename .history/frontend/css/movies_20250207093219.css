@@ -26,7 +26,7 @@ h1 {
 	text-transform: uppercase;
 	font-weight: 400;
 	/* font-size: 70px; */
-	
+	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
 	width: 100%;
   	text-align: center;
 	/* margin: 0; */
@@ -36,7 +36,6 @@ h1 {
 h1 span {
 	display: inline-block;
 	vertical-align: middle;
-	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
 	
 }
 
@@ -307,16 +306,16 @@ background-color: #f0f0f0; Example background
 }
 /* margin: top right bottom left; */
 .icon-cancel-outline {
-	/* margin: 10px 10px auto auto; */
+	margin: 10px 10px auto auto;
 	padding: 10px;
 	box-sizing: border-box; /* Ensures size remains the same */
 	border: 2px solid transparent; /* Transparent border to reserve space */
 	border-radius: 50%;
 	font-size: 2rem;
-	position: absolute;
-	right: 0; /* Align to the right */
-	top: 50%; /* Move halfway down */
-	transform: translateY(-50%); /* Adjust for element's height */
+	/* position: absolute;
+	top: 20px;
+	right: 20px; */
+	align-self: flex-end;
 	z-index: 9999;
 }
 
