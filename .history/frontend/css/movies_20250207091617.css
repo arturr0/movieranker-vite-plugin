@@ -447,9 +447,9 @@ textarea::placeholder {
 	text-align: center;
 } 
 
-#sendPost {
+/* #sendPost {
 	height: 100%;
-}
+} */
 button {
 	/* background-color: #fbeee0; */
 	/* background-color: transparent; */
@@ -463,7 +463,7 @@ button {
 	font-weight: 600;
 	font-size: 18px;
 	padding: 0 18px;
-	/* line-height: 50px; */
+	line-height: 50px;
 	text-align: center;
 	text-decoration: none;
 	user-select: none;

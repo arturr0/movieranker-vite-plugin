@@ -410,7 +410,7 @@ document.addEventListener("userDataReady", () => {
 			//console.log(peopleRanks, type);
 			//const clickedMovie = moviesRanks.filter(movieRank => movieRank.id === parseInt(sendPost.getAttribute("id")));
 			const ranksArray = data.queryType === "title" ? moviesRanks : peopleRanks;
-			const clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
+			clickedMovie = ranksArray.filter(rank => rank.id === parseInt(sendPost.getAttribute("itemID")));
 			console.log(clickedMovie);
 			const avgRating = Math.round(
 				clickedMovie.reduce((sum, movie) => sum + movie.rank, 0) / clickedMovie.length
