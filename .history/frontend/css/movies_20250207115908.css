@@ -3,16 +3,8 @@
 @import url(http://weloveiconfonts.com/api/?family=fontawesome);
 
 @media (max-device-width: 1200px) and (orientation: portrait) {
-	#searchDiv #searchContainer {
+	#searchContainer {
 		width: 65vw;
-	}
-	#rateContainer #ratedContainer {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-	#posts .post {
-		margin-top: 10px;
 	}	
 }
 

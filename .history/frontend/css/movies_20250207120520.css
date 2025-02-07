@@ -9,10 +9,6 @@
 	#rateContainer #ratedContainer {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-	}
-	#posts .post {
-		margin-top: 10px;
 	}	
 }
 
