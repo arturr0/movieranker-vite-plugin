@@ -11,17 +11,10 @@
 		flex-direction: column;
 		align-items: center;
 	}
-	#ratedContainer #myPost {
-		margin: 0;
-		width: 100%;
-	}
 	#posts .post {
 		margin-top: 10px;
 		margin-right: 0;
 	}	
-	#postInput #writePost {
-		width: auto;
-	}
 }
 @media only screen and (max-device-width: 1200px) and (orientation: landscape) {
 	
@@ -57,7 +50,6 @@
 	}
 	#postInput #writePost {
 		width: auto;
-		margin-left: 5px;
 	}
 	#posts .post {
 		margin-right: 0;

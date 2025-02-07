@@ -2,7 +2,7 @@
 		
 @import url(http://weloveiconfonts.com/api/?family=fontawesome);
 
-@media only screen and (max-device-width: 768px) and (orientation: portrait) {
+@media only screen and (max-width: 768px) and (orientation: portrait) {
 	#searchDiv #searchContainer {
 		width: 65vw;
 	}
@@ -11,68 +11,22 @@
 		flex-direction: column;
 		align-items: center;
 	}
-	#ratedContainer #myPost {
-		margin: 0;
-		width: 100%;
-	}
 	#posts .post {
 		margin-top: 10px;
-		margin-right: 0;
 	}	
-	#postInput #writePost {
-		width: auto;
-	}
 }
-@media only screen and (max-device-width: 1200px) and (orientation: landscape) {
-	
-	#ranks #rateContainer {
-		width: 100vw;
-	}
-	
+@media only screen and (max-width: 768px) and (orientation: landscape) {
 	#rateContainer #ratedContainer {
 		flex-wrap: wrap;
-		justify-content: center;
-		margin: 0;
-		width: 100%;
 	}
 	
-	
-	#ratedInfo #votesInfo ,#ratedInfo #starsInfo {
-		width: 200px;
-	}
-	#ratedContainer #myPost, #ratedContainer #ratedInfo {
-		margin: 0;
+	#ratedContainer #posts {
+		width: 100%; /* Last child takes full width */
 	}
 	
 	  /* First two children maintain equal width */
-	
-	#ratedContainer #myPost {
-		width: 60%; /* These two children take half each */
-	}
-	#ratedContainer #ratedInfo {
-		width: 30%; /* These two children take half each */
-	}
-	#ratedContainer #posts {
-		width: 90%; /* These two children take half each */
-	}
-	#postInput #writePost {
-		width: auto;
-		margin-left: 5px;
-	}
-	#posts .post {
-		margin-right: 0;
-		/* width: 90%; */
-	}
-	#postInput #writePost {
-		height: 300px;
-		box-sizing: border-box;
-	}
-	#postInput #sendPost {
-		height: 50px;
-		margin-bottom: 10px;
-	}
-	#myPost #postInput {
-		height: auto;
+	  #ratedContainer #ratedInfo, #ratedContainer #myPost {
+		width: 50%; /* These two children take half each */
 	}
 }
 /* fontawesome */

@@ -11,17 +11,9 @@
 		flex-direction: column;
 		align-items: center;
 	}
-	#ratedContainer #myPost {
-		margin: 0;
-		width: 100%;
-	}
 	#posts .post {
 		margin-top: 10px;
-		margin-right: 0;
 	}	
-	#postInput #writePost {
-		width: auto;
-	}
 }
 @media only screen and (max-device-width: 1200px) and (orientation: landscape) {
 	
@@ -45,36 +37,16 @@
 	}
 	
 	  /* First two children maintain equal width */
-	
+	}
 	#ratedContainer #myPost {
 		width: 60%; /* These two children take half each */
 	}
 	#ratedContainer #ratedInfo {
 		width: 30%; /* These two children take half each */
 	}
-	#ratedContainer #posts {
-		width: 90%; /* These two children take half each */
-	}
 	#postInput #writePost {
 		width: auto;
-		margin-left: 5px;
 	}
-	#posts .post {
-		margin-right: 0;
-		/* width: 90%; */
-	}
-	#postInput #writePost {
-		height: 300px;
-		box-sizing: border-box;
-	}
-	#postInput #sendPost {
-		height: 50px;
-		margin-bottom: 10px;
-	}
-	#myPost #postInput {
-		height: auto;
-	}
-}
 /* fontawesome */
 [class*="fontawesome-"]:before {
 	font-family: 'FontAwesome', sans-serif;
