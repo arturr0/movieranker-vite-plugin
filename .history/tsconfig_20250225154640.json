@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esnext", // or "es2022", "node16", "node18", etc.
-    "moduleResolution": "node",
+    "module": "commonjs",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,

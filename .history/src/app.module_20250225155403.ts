@@ -12,8 +12,6 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';  // Import JwtAuthGuard
 import { JwtService } from '@nestjs/jwt';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 @Module({
   imports: [
     JwtModule.register({

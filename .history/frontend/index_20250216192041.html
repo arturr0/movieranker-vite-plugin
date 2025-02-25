@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" href="css/movies.css">
     <link rel="stylesheet" href="css/auth.css">
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js"
+          }
+        }
+        </script>
+      
+        <!-- Include OrbitControls from a working CDN -->
+        <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js"></script>
+      
+        <!-- Include GLTFLoader from CDN -->
+        <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js"></script>
     <script>
         async function handleFormSubmit(event, endpoint) {
             event.preventDefault();
@@ -42,7 +55,7 @@
                         window.location.href = '/movies';
                     } else {
                         alert('Account created successfully! Please log in.');
-						document.getElementById('title').textContent = 'Log in'
+						document.getElementById('title').textContent = 'log'
                     }
                 } else {
                     alert('Unexpected response. No token received.');
@@ -53,19 +66,6 @@
             }
         }
     </script>
-    <script type="importmap">
-        {
-          "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js"
-          }
-        }
-    </script>
-      
-    <!-- Include OrbitControls from a working CDN -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js"></script>
-      
-    <!-- Include GLTFLoader from CDN -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js"></script>
 </head>
 <body>
     <div id="box">
@@ -83,6 +83,6 @@
             </div>
         </div>
     </div>
-    <script type="module" src="camera.js"></script>
+    <script type="module" src="camera.js"></script></body>
 </body>
 </html>

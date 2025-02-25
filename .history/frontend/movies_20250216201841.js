@@ -1,10 +1,20 @@
+const currentQuerry =  {};
+
 document.addEventListener('userDataReady', () => {
-
 	console.log(userData.user);
-	
-	const searchContainer = document.getElementById('searchContainer');
+	const searchContent = document.getElementById('searchContent');
+	const ranksContainer = document.getElementById('ranks');
+	const rankImg = document.getElementById('rankImg');
+	const rankTitle = document.getElementById('title');
+	const rankPosts = document.getElementById('posts');
+	const sendPost = document.getElementById('sendPost');
 	const searchQuery = document.getElementById('searchQuery');
-
+	const searchContainer = document.getElementById('searchContainer');
+	const starsInfo = document.getElementById('starsInfo');
+	const votesInfo = document.getElementById('votesInfo');
+	const magnifier = document.getElementById('magnifier');
+	
+	
 	// Detect if the input is focused
 	searchQuery.addEventListener('focus', () => {
 		console.log('Input is active (focused)');
@@ -17,10 +27,9 @@ document.addEventListener('userDataReady', () => {
 		console.log('Input is not active (blurred)');
 		searchContainer.style.border = '2px solid black'
 		searchContainer.style.padding = '10px';
+		
+		// Remove custom styles or classes here if needed
 	});
-	
-	const magnifier = document.getElementById('magnifier');
-
 	magnifier.addEventListener('click', function() {
 		const query = document.getElementById('searchQuery').value;
 		console.log('query', query);
@@ -28,7 +37,6 @@ document.addEventListener('userDataReady', () => {
 			searchMovies(document.getElementById('searchQuery').value, document.querySelector("input[name='searchType']:checked").value);
 		}
 	});
-	
 	document.addEventListener('keydown', function(event) {
 		console.log('Event listener registered');
 		const query = document.getElementById('searchQuery').value;
@@ -42,7 +50,6 @@ document.addEventListener('userDataReady', () => {
 	let lastQuery = {};
 	const moviesRanks = [];
 	const peopleRanks = [];
-	
 	class Item {
 		constructor(id, title, rank, rankerName, post, dbID) {
 			this.id = id;
@@ -57,17 +64,11 @@ document.addEventListener('userDataReady', () => {
 	class Movie extends Item {}
 	class Person extends Item {}
 	
-	const sendPost = document.getElementById('sendPost');
-
 	document.getElementById('sendPost').addEventListener('click', () => {
 		rateItem(sendPost.getAttribute('type'), parseInt(sendPost.getAttribute('itemID')), sendPost.getAttribute('title'));
 		
 	});
 	
-	const searchContent = document.getElementById('searchContent');
-	const ranksContainer = document.getElementById('ranks');
-	const rankPosts = document.getElementById('posts');
-
 	document.getElementById('cancel').addEventListener('click', () => {
 		console.log('click');
 		searchContent.style.display = 'block';
@@ -88,14 +89,14 @@ document.addEventListener('userDataReady', () => {
 	});
 	
 	let controller = new AbortController();
-	const currentQuerry =  {};
-
+	
 	async function searchMovies(query, type) {
 		controller.abort(); // Cancel previous request
 		controller = new AbortController(); // Create a new controller
 		
 		try {
-			
+			// const query = document.getElementById('searchQuery').value;
+			// const type = document.querySelector('input[name='searchType']:checked').value;
 			console.log('Search Type:', type);
 			
 			const response = await fetch(`/movies/search?query=${query}&type=${type}&id=${userData.user.id}`, {
@@ -103,9 +104,7 @@ document.addEventListener('userDataReady', () => {
 			});
 			
 			const data = await response.json();
-			
 			console.log('Movies Data:', data);
-			
 			if (Number(data.querySenderID) == userData.user.id) {
 				currentQuerry.type = data.queryType;
 				currentQuerry.text = data.queryText;
@@ -140,6 +139,10 @@ document.addEventListener('userDataReady', () => {
 			}
 		}
 	}
+	
+	// Run searchMovies every 5 seconds, aborting previous requests if new ones start
+	//setInterval(searchMovies, 5000);
+	
 	
 	function createItemElement(item, type) {
 		const itemElement = document.createElement('div');
@@ -193,9 +196,6 @@ document.addEventListener('userDataReady', () => {
 		return ratingElement;
 	}
 	
-	const rankTitle = document.getElementById('title');
-	const votesInfo = document.getElementById('votesInfo');
-
 	function handleItemClick(item, type, avgRating, voteText) {
 		document.getElementById('cancel').style.textShadow = 'none';
 		const rankedItems = type === 'movie' ? moviesRanks : peopleRanks;
@@ -203,6 +203,7 @@ document.addEventListener('userDataReady', () => {
 		console.log(`Clicked ${type} Data:`, clickedItem);
 		
 		rankTitle.textContent = type === 'movie' ? item.title : item.name;
+		//rankAvg.textContent = avgRating;
 		rankPosts.innerHTML = '';
 		votesInfo.textContent = voteText;
 		
@@ -219,6 +220,7 @@ document.addEventListener('userDataReady', () => {
 			
 			const postRank = document.createElement('div');
 			postRank.classList.add('userRank')
+			// postRank.textContent = post.rank;
 			
 			const postText = document.createElement('p');
 			postText.classList.add('userPost');
@@ -239,9 +241,6 @@ document.addEventListener('userDataReady', () => {
 			rankPosts.appendChild(postDiv);
 		});
 		
-		const rankImg = document.getElementById('rankImg');
-		const starsInfo = document.getElementById('starsInfo');
-
 		starsInfo.innerHTML = '';
 		starsInfo.appendChild(createRatingElement(avgRating));
 		searchContent.style.display = 'none';
@@ -253,6 +252,7 @@ document.addEventListener('userDataReady', () => {
 		sendPost.setAttribute('itemID', item.id);
 		sendPost.setAttribute('title', type === 'movie' ? item.title : item.name);
 	}
+	
 	
 	async function rateItem(type, id, title) {
 		const token = localStorage.getItem('jwt');
@@ -377,6 +377,7 @@ document.addEventListener('userDataReady', () => {
 				star.innerHTML = '&#9733;';
 				postRank.appendChild(star);
 			}
+			
 		});
 	};
 });

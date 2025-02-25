@@ -1,7 +1,6 @@
+console.log("jwt");
 async function fetchMovies() {
-	
 	const token = localStorage.getItem('jwt');
-	
 	if (!token) {
 		window.location.href = '/';
 		return;
