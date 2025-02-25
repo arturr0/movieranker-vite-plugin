@@ -8,7 +8,7 @@ async function fetchMovies() {
 	}
 	
 	try {
-		const response = await fetch('http://localhost:3000/movies/protected', {
+		const response = await fetch('https://vite-react-alpha.onrender.com/movies/protected', {
 			method: 'GET',
 			headers: {
 				'Authorization': `Bearer ${token}`,
