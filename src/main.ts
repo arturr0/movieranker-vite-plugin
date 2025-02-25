@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-if (process.env.NODE_ENV === 'production') {
+const PORT = process.env.NODE_ENV;
+if (PORT) {
   async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    await app.listen(3000);
+    await app.listen(PORT);
   }
   bootstrap();
 }
