@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",  // Ensure ESNext or Node 16/18
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true
+  },
+}

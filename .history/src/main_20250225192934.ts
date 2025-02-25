@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-const PORT = process.env.PORT || 3000; // Use Render's provided port
+const PORT = process.env.PORT || 3000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,3 +10,6 @@ async function bootstrap() {
 }
 
 bootstrap();
+
+// Export for Vite SSR (if needed)
+export const viteNodeApp = NestFactory.create(AppModule); // Properly place the export

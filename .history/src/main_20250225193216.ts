@@ -9,4 +9,6 @@ async function bootstrap() {
   console.log(`Server running on http://localhost:${PORT}`);
 }
 
+// Correct placement of export to avoid conflict with decorators
+export const viteNodeApp = NestFactory.create(AppModule); // Export for Vite SSR
 bootstrap();
