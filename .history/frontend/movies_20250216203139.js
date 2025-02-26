@@ -28,7 +28,6 @@ document.addEventListener('userDataReady', () => {
 			searchMovies(document.getElementById('searchQuery').value, document.querySelector("input[name='searchType']:checked").value);
 		}
 	});
-	
 	document.addEventListener('keydown', function(event) {
 		console.log('Event listener registered');
 		const query = document.getElementById('searchQuery').value;
@@ -42,7 +41,6 @@ document.addEventListener('userDataReady', () => {
 	let lastQuery = {};
 	const moviesRanks = [];
 	const peopleRanks = [];
-	
 	class Item {
 		constructor(id, title, rank, rankerName, post, dbID) {
 			this.id = id;
@@ -103,9 +101,7 @@ document.addEventListener('userDataReady', () => {
 			});
 			
 			const data = await response.json();
-			
 			console.log('Movies Data:', data);
-			
 			if (Number(data.querySenderID) == userData.user.id) {
 				currentQuerry.type = data.queryType;
 				currentQuerry.text = data.queryText;

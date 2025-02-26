@@ -8,9 +8,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["vite/client"],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "types": ["vite/client"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
