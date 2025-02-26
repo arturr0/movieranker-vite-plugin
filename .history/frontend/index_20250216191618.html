@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ranker</title>
+    <link rel="icon" href="camera.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/fontello.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/movies.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js"
+          }
+        }
+        </script>
+      
+        <!-- Include OrbitControls from a working CDN -->
+        <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js"></script>
+      
+        <!-- Include GLTFLoader from CDN -->
+        <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js"></script>
+    <script>
+        async function handleFormSubmit(event, endpoint) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            console.log(`Attempting to ${endpoint} with email:`, email); // Debugging
+            if (email.trim() === '' || password.trim() === '') return;
+            try {
+                const response = await fetch(`http://localhost:3000/auth/${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                });
+                
+                console.log(`Response status: ${response.status}`);
+                
+                const data = await response.json();
+                console.log('Server response:', data);
+                
+                if (!response.ok) {
+                    alert(data.error || 'Login failed!');
+                    return;
+                }
+                
+                if (data.token) {
+                    console.log('Token received:', data.token);
+                    localStorage.setItem('jwt', data.token);
+                    
+                    if (endpoint === 'login') {
+                        window.location.href = '/movies';
+                    } else {
+                        alert('Account created successfully! Please log in.');
+						document.getElementById('title').textContent = 'log'
+                    }
+                } else {
+                    alert('Unexpected response. No token received.');
+                }
+            } catch (error) {
+                console.error('Error during authentication:', error);
+                alert('An error occurred. Check the console.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="box">
+    <h1 style="margin: 0;"><span class="fontawesome-star"></span> <span>Movie Ranker</span> <span class="fontawesome-star"></span></h1>
+    <div id="title">Log in or sign up</div>
+    <div id="authDiv">
+        <form id="auth-form">
+            <input type="email" id="email" placeholder="Email" required />
+            <input type="password" id="password" placeholder="Password" required />
+        </form>
+        <div id="buttons">
+            <button type="button" onclick="handleFormSubmit(event, 'register')">Create Account</button>
+            <button id="loginButton" onclick="handleFormSubmit(event, 'login')">Login</button>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

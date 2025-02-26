@@ -1,0 +1,256 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background: rgb(81,99,130);
+    /* background: radial-gradient(circle, rgba(81,99,130,1) 0%, rgba(78,88,106,1) 100%);
+    background-attachment: fixed; */
+    scrollbar-gutter: stable;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100vw;
+
+    
+}
+
+/*  */
+
+body {
+    overflow-y: auto;  /* Allows vertical scrolling if content overflows */
+}
+
+#mainContent {
+    position: relative;
+}
+#logoDiv {
+    position: absolute;
+    /* top: 20px; */
+    left: 20px;
+}
+#searchContainer {
+    display: inline-flex;
+    padding: 10px;
+    height: 30px;
+    border-radius: 30px;
+    border: 2px solid black;
+    /* transition: all 0.3s ease; Smooth transition for visual changes */
+    position: relative; /* Use relative positioning if you need to adjust it */
+    width: 20vw;
+    background: white;
+}
+
+#searchDiv {
+    display: inline-flex;
+}
+#searchQuery {
+    border: none;
+    width: 17vw;
+    font-size: 1.3rem;
+}
+#searchQuery:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+.icon-search-1 {
+    font-size: 1.3rem;
+    margin-top: 5px;
+    margin-left: auto;
+}
+.icon-search-1:hover {
+   color: red;
+}
+#searchDiv {
+    margin: 30px auto 0 auto; /* Centers horizontally */
+    display: flex; /* Ensures it respects the margin */
+    width: fit-content; /* Adjusts width to its content */
+}
+
+#searchTypes {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.3rem;
+}
+/* .title {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: top;
+    
+    font-size: 1.5rem;
+    
+} */
+.votesNo {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+}
+span {
+    font-size: 2rem;
+}
+.tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    display: none;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none; /* Ensures it doesn't interfere with mouse events */
+}
+/* #ranks {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    width: 200px;
+    height: 100px; 
+    background-color: #f0f0f0; Example background
+} */
+
+#ranks {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+/*  */
+/* Ensuring grid items are adjusted properly */
+#results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-auto-rows: auto;
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 auto;
+    
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    text-align: center;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    justify-content: space-between; /* Space between title and bottom content */
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.title {
+    flex-grow: 1; /* Allow the title to take available space */
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center; /* Vertically center the title */
+    justify-content: center; /* Horizontally center the title */
+    margin-bottom: 10px; /* Space between title and bottom content */
+}
+
+
+
+
+/* Bottom content such as the votes number */
+
+
+.img:hover {
+    transform: scale(1.1);
+    
+}
+
+.img {
+    background-size: cover; /* or 'contain' depending on your desired result */
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 200px;
+    height: 300px;
+    transition: transform 0.3s ease;
+    transform-origin: center bottom; /* Keeps item within bounds */
+    margin: auto;
+}
+
+#results {
+    overflow: auto;
+}
+/* margin: top right bottom left; */
+.icon-cancel-outline {
+    margin: 10px 10px auto auto;
+    padding: 10px;
+    box-sizing: border-box; /* Ensures size remains the same */
+    border: 2px solid transparent; /* Transparent border to reserve space */
+    border-radius: 50%;
+}
+
+.icon-cancel-outline:hover {
+    border: 2px solid black; /* Border appears but doesn't affect size */
+}
+#rateContainer {
+    display: flex;
+    flex-direction: column;
+}
+#rateContainer {
+    display: flex;
+}
+#ratedContainer {
+    display: flex;
+    /* justify-content: center; */
+    margin-left: 20px;
+    margin-right: 20px;
+}
+#title {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+#stars {
+    display: flex;
+    justify-content: center;
+}
+#myPost {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+#postInput {
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+}
+#writePost {
+    min-height: 200px;
+    width: 300px;
+}
+#starsInfo, #votesInfo {
+    text-align: center;
+    font-size: 1.2rem;
+    /* height: 1rem; */
+    margin: 0;
+}
+textarea::placeholder {
+    text-align: center;
+    font-size: 1.5rem;
+}
+#posts {
+    width: 100%;
+    /* border: 2px solid black; */
+}
+.post {
+    border: 2px solid black;
+    margin-right: 20px;
+    margin-bottom: 5px;
+}
+
+.userName, .userRank, .userPost {
+    margin-top: 0;
+    text-align: center;
+}
+ 
+#sendPost {
+    height: 100%;
+}

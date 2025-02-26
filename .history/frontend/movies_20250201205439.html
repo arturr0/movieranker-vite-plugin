@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Search</title>
+  <script>
+    async function fetchMovies() {
+      const token = localStorage.getItem('jwt');
+      console.log('Fetched token:', token);
+  
+      if (!token) {
+        console.error('No JWT token found! Redirecting to login.');
+        window.location.href = '/';
+        return;
+      }
+  
+      try {
+        const response = await fetch('http://localhost:3000/movies/protected', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        if (!response.ok) {
+          console.error('Request failed with status:', response.status);
+          console.error('Response text:', await response.text());
+          return;
+        }
+  
+        const data = await response.json();
+        console.log('Movies:', data.message);  // Log the message from the server
+        console.log('User:', data.user);  // Log the user object from the server
+  
+        // Optionally, display user information on the page
+        const userDiv = document.createElement('div');
+        userDiv.innerHTML = `
+          <h2>Welcome, ${data.user.id}</h2>
+          <p>Email: ${data.user.email}</p>
+        `;
+        document.body.appendChild(userDiv);
+  
+      } catch (error) {
+        console.error('Error during fetch:', error);
+      }
+    }
+  
+    window.onload = function() {
+      console.log('Page loaded, fetching movies...');
+      fetchMovies();
+    };
+    async function searchMovies() {
+      const query = document.getElementById('searchQuery').value;
+      const type = document.querySelector('input[name="searchType"]:checked').value;
+      const response = await fetch(`/movies/search?query=${query}&type=${type}`);
+      const data = await response.json();
+      
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+      
+      if (data.movies) {
+        data.movies.forEach(movie => {
+          const movieElement = document.createElement('div');
+          movieElement.innerHTML = `
+            <h3>${movie.title} (${movie.year})</h3>
+            <img src="${movie.poster}" alt="${movie.title} Poster" width="200" />
+          `;
+          resultsDiv.appendChild(movieElement);
+        });
+      } else if (data.people) {
+        data.people.forEach(person => {
+          const personElement = document.createElement('div');
+          personElement.innerHTML = `
+            <h3>${person.name}</h3>
+            <img src="${person.profile}" alt="${person.name} Profile" width="200" />
+          `;
+          resultsDiv.appendChild(personElement);
+        });
+      } else {
+        alert('No results found.');
+      }
+    }
+  </script>
+  
+</head>
+<body>
+  <h1>Movie Search</h1>
+  <input type="text" id="searchQuery" placeholder="Enter search query" />
+  <br>
+  <label><input type="radio" name="searchType" value="title" checked> Title</label>
+  <label><input type="radio" name="searchType" value="actor"> Actor</label>
+  <label><input type="radio" name="searchType" value="director"> Director</label>
+  <br>
+  <button onclick="searchMovies()">Search</button>
+  <div id="results"></div>
+</body>
+</html>

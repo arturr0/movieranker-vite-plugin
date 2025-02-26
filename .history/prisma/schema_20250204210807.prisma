@@ -1,0 +1,63 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Make sure you define this in your .env file
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Movie {
+  id        Int            @id @default(autoincrement())
+  title     String
+  releaseDate String?
+  rating    Float?
+  posterPath String?
+  ratings   RatingMovie[]  @relation("RatingMovieToMovie")
+}
+
+model Person {
+  id        Int            @id @default(autoincrement())
+  name      String
+  biography String?
+  profilePath String?
+  ratings   RatingPerson[] @relation("RatingPersonToPerson")
+}
+
+model User {
+  id            Int           @id @default(autoincrement())
+  email         String        @unique
+  password      String
+  ratingMovies  RatingMovie[] @relation("RatingMovieToUser")
+  ratingPersons RatingPerson[] @relation("RatingPersonToUser")
+}
+
+model RatingMovie {
+  id        Int    @id @default(autoincrement())
+  userId    Int
+  userEmail String
+  tmdbId    Int
+  title     String
+  rating    Float
+  comment   String
+
+  user      User   @relation("RatingMovieToUser", fields: [userId], references: [id])
+  movie     Movie  @relation("RatingMovieToMovie", fields: [tmdbId], references: [id])
+
+  @@unique([userEmail, tmdbId]) 
+}
+
+model RatingPerson {
+  id        Int    @id @default(autoincrement())
+  userId    Int
+  userEmail String
+  tmdbId    Int
+  title     String
+  rating    Float
+  comment   String
+
+  user      User   @relation("RatingPersonToUser", fields: [userId], references: [id])
+  person    Person @relation("RatingPersonToPerson", fields: [tmdbId], references: [id])
+
+  @@unique([userEmail, tmdbId])
+}

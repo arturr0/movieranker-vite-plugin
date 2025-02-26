@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Register</title>
+  <script>
+    async function handleFormSubmit(event, endpoint) {
+  event.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  console.log(`Attempting to ${endpoint} with email:`, email); // Debugging
+
+  try {
+    const response = await fetch(`http://localhost:3000/auth/${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    console.log(`Response status: ${response.status}`);
+
+    const data = await response.json();
+    console.log('Server response:', data);
+
+    if (!response.ok) {
+      alert(data.error || 'Login failed!');
+      return;
+    }
+
+    if (data.token) {
+      console.log('Token received:', data.token);
+      localStorage.setItem('jwt', data.token);
+
+      if (endpoint === 'login') {
+        window.location.href = '/movies';
+      } else {
+        alert('Account created successfully! Please log in.');
+      }
+    } else {
+      alert('Unexpected response. No token received.');
+    }
+  } catch (error) {
+    console.error('Error during authentication:', error);
+    alert('An error occurred. Check the console.');
+  }
+}
+document.getElementById("loginButton").addEventListener("click", function (event) {
+  alert("Login button clicked!"); // Should show an alert
+  handleFormSubmit(event, "login");
+});
+
+  </script>
+  
+</head>
+<body>
+  <h1>Login & Register</h1>
+  <form id="auth-form" onsubmit="handleFormSubmit(event, 'login')">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit">Login</button>
+  </form>
+  <button type="button" onclick="handleFormSubmit(event, 'register')">Create Account</button>
+</body>
+</html>

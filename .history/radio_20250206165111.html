@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Radio with Video Icon</title>
+    <style>
+        /* Hide default radio */
+        .radio-container input {
+            display: none;
+        }
+
+        /* Custom radio button */
+        .radio-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .checkmark {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ff5733; /* Outline color */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* SVG inside checkmark */
+        .checkmark svg {
+            width: 14px;
+            height: 14px;
+            fill: transparent; /* Default: hidden */
+        }
+
+        /* Change color when selected */
+        .radio-container input:checked + .checkmark {
+            border-color: #007bff; /* New outline color */
+            background-color: #ff5733; /* Background when selected */
+        }
+
+        .radio-container input:checked + .checkmark svg {
+            fill: white; /* Show video icon when selected */
+        }
+    </style>
+</head>
+<body>
+    <label class="radio-container">
+        <input type="radio" name="option">
+        <span class="checkmark">
+          <svg viewBox="0 0 24 24">
+            <path d="M17 10.5V7c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-3.5l4 4v-11l-4 4z"/>
+          </svg>
+        </span> Video
+    </label>
+</body>
+</html>

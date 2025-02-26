@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Search</title>
+  <script>
+    async function fetchMovies() {
+      const token = localStorage.getItem('jwt');
+      console.log('Fetched token:', token);
+  
+      if (!token) {
+        console.error('No JWT token found! Redirecting to login.');
+        window.location.href = '/';
+        return;
+      }
+  
+      try {
+        const response = await fetch('http://localhost:3000/movies/protected', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        if (!response.ok) {
+          console.error('Request failed with status:', response.status);
+          console.error('Response text:', await response.text());
+          return;
+        }
+  
+        const data = await response.json();
+        console.log('Movies:', data.message);  // Log the message from the server
+        console.log('User:', data.user);  // Log the user object from the server
+  
+        // Optionally, display user information on the page
+        const userDiv = document.createElement('div');
+        userDiv.innerHTML = `
+          <h2>Welcome, ${data.user.id}</h2>
+          <p>Email: ${data.user.email}</p>
+        `;
+        document.body.appendChild(userDiv);
+  
+      } catch (error) {
+        console.error('Error during fetch:', error);
+      }
+    }
+  
+    window.onload = function() {
+      console.log('Page loaded, fetching movies...');
+      fetchMovies();
+    };
+    async function searchMovies() {
+  const query = document.getElementById('searchQuery').value;
+  const type = document.querySelector('input[name="searchType"]:checked').value;
+  const response = await fetch(`/movies/search?query=${query}&type=${type}`);
+  const data = await response.json();
+  console.log("type", type);
+  console.log('Movies Data:', data);  // Log the entire response from server
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
+  
+  if (data.movies) {
+    // Handle movie results
+    data.movies.forEach(movie => {
+      console.log('Movie:', movie);  // Log each movie object for debugging
+      const movieElement = document.createElement('div');
+      movieElement.innerHTML = `
+        <h3>${movie.title} (${movie.year})</h3>
+        <img src="${movie.poster}" alt="${movie.title} Poster" width="200" data-id="${movie.id}" data-title="${movie.title}" />
+        <p>Rating: ${movie.rating ? movie.rating : 'No rating yet'}</p>
+      `;
+      resultsDiv.appendChild(movieElement);
+      
+      // Add a click event listener to the movie image
+      const movieImg = movieElement.querySelector('img');
+      movieImg.addEventListener('click', () => rateItem('movie', movie.id, movie.title));
+    });
+  } else if (data.people) {
+    // Handle person results
+    data.people.forEach(person => {
+      const personElement = document.createElement('div');
+      personElement.innerHTML = `
+        <h3>${person.name}</h3>
+        <img src="${person.profile}" alt="${person.name} Profile" width="200" data-id="${person.id}" data-name="${person.name}" />
+        <p>Rating: ${person.rating ? person.rating : 'No rating yet'}</p>
+      `;
+      resultsDiv.appendChild(personElement);
+
+      // Add a click event listener to the person image
+      const personImg = personElement.querySelector('img');
+      personImg.addEventListener('click', () => rateItem('person', person.id, person.name));
+    });
+  } else {
+    alert('No results found.');
+  }
+}
+
+
+async function rateItem(type, id, title) {
+  const token = localStorage.getItem('jwt');
+  const rating = prompt(`Please rate this ${type}: ${title}`);
+  
+  if (rating && !isNaN(rating) && rating >= 1 && rating <= 5) {
+    try {
+      const response = await fetch(`http://localhost:3000/movies/rate`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type,      // "movie" or "person"
+          id,        // TMDB ID of the movie/person
+          title,     // Title or name of the movie/person
+          rating: parseInt(rating),  // Rating from user
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert('Thank you for your rating!');
+      } else {
+        alert('Failed to save your rating.');
+      }
+    } catch (error) {
+      console.error('Error rating item:', error);
+    }
+  } else {
+    alert('Invalid rating! Please provide a number between 1 and 5.');
+  }
+}
+
+  </script>
+  
+</head>
+<body>
+  <h1>Movie Search</h1>
+  <input type="text" id="searchQuery" placeholder="Enter search query" />
+  <br>
+  <label><input type="radio" name="searchType" value="title" checked> Title</label>
+  <label><input type="radio" name="searchType" value="actor"> Actor</label>
+  <label><input type="radio" name="searchType" value="director"> Director</label>
+  <br>
+  <button onclick="searchMovies()">Search</button>
+  <div id="results"></div>
+</body>
+</html>
