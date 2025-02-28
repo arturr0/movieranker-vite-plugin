@@ -24,7 +24,7 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'http://localhost:3000', // Proxy API requests to NestJS backend
+      '/api': 'https://movieranker-react.onrender.com', // Proxy API requests to NestJS backend
     },
   },
 });
