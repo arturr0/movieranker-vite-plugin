@@ -2,8 +2,6 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.m
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js';
 
-document.addEventListener('DOMContentLoaded', function () {
-
 // Container
 const container = document.getElementById('threejs-container');
 
@@ -37,7 +35,7 @@ scene.add(directionalLight);
 const loader = new GLTFLoader();
 let movieCamera, mixer;
 
-loader.load('cam2.glb', (gltf) => {
+loader.load('/assets/cam2.glb', (gltf) => {  // Correct path to model
     movieCamera = gltf.scene;
     movieCamera.scale.set(15, 15, 15); // 50% larger
     movieCamera.position.set(0, -0.5, 0); // Lower it slightly
@@ -53,7 +51,6 @@ loader.load('cam2.glb', (gltf) => {
     console.error('Error loading model:', error);
 });
 
-
 // Handle Resize
 function handleResize() {
     const width = container.clientWidth;
@@ -62,6 +59,7 @@ function handleResize() {
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
 }
+
 window.addEventListener('resize', handleResize);
 handleResize();
 
@@ -73,5 +71,5 @@ function animate() {
     controls.update();
     renderer.render(scene, camera);
 }
+
 animate();
-});

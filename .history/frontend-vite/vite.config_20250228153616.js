@@ -2,11 +2,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react'; // Use vue if it's Vue
 
 export default defineConfig({
-  plugins: [react(),
+  plugins: [
+    react(),
     {
       name: 'inject-importmap',
       transformIndexHtml(html) {
-        // Insert importmap for three.js
+        // The importmap script
         const importmap = `
         <script type="importmap">
           {
@@ -17,8 +18,8 @@ export default defineConfig({
         </script>
         `;
 
-        // Add importmap just before the closing head tag
-        return html.replace('</head>', `${importmap}</head>`);
+        // This ensures that we do not modify Vite's auto-injected scripts
+        return html.replace('<head>', `<head>${importmap}`);
       },
     },
   ],

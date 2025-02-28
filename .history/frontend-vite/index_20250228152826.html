@@ -5,14 +5,32 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
+
+    <!-- Import three.js from CDN -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js"
+        }
+      }
+    </script>
+
+    <!-- Main bundle script -->
+    <script type="module" crossorigin src="/assets/index-DEG3RDWi.js"></script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" crossorigin href="/assets/index-Dahw1CQS.css">
+    
     <!-- Include OrbitControls from a working CDN -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js"></script>
-      
+    
     <!-- Include GLTFLoader from CDN -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div id="threejs-container" style="width: 100%; height: 100vh;"></div>
+    
+    <!-- Your Three.js code -->
+    <script type="module" src="/src/camera.js"></script>
   </body>
 </html>

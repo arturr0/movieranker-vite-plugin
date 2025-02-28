@@ -43,7 +43,6 @@ const AuthForm = () => {
   return (
     <div id="box">
       <div id="threejs-container">
-        <Three />
       </div>
       <h1>
         <span className="fontawesome-star"></span> <span>Movie Ranker</span>{" "}

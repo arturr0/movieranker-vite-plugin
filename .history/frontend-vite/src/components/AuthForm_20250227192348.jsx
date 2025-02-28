@@ -1,7 +1,7 @@
 import React from "react";
 // import "../styles/movies.css";
-// import "../styles/fontello.css";
-import "../styles/auth.css"; // Other styles
+import "src/styles/fontello.css";
+import "src/styles/auth.css"; // Other styles
 import Three from "./Three";
 
 const AuthForm = () => {

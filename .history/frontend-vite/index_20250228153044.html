@@ -5,14 +5,31 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
+
+    <!-- Import three.js from CDN -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js"
+        }
+      }
+    </script>
+
+    <!-- The script and stylesheet for Vite app (these will be injected by Vite during build) -->
+    <!-- Use <script type="module" src="/src/main.js"></script> for Vite entry point -->
+
+    
+    
     <!-- Include OrbitControls from a working CDN -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js"></script>
-      
+    
     <!-- Include GLTFLoader from CDN -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+
+
+    <!-- Vite injects the main script (e.g., /src/main.js) here after build -->
+    <script type="module" src="/src/camera.js"></script> <!-- Use your actual entry file here -->
   </body>
 </html>
