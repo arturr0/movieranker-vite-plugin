@@ -1,24 +1,29 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Three from "./Three";
 
 const AuthForm = () => {
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-  const titleRef = useRef(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [styles, setStyles] = useState(null);
-
+  // Preload and dynamically import the CSS for authentication form
   useEffect(() => {
-    // Dynamically import the CSS specific to the auth page
-    import("../styles/auth.module.css").then((module) => {
-      setStyles(module.default); // Store styles once loaded
-    });
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.href = "../styles/auth.css"; // Ensure the path is correct for your project
+    link.as = "style";
+    document.head.appendChild(link);
+
+    // Dynamically import the CSS
+    import("../styles/auth.css");
+
+    // Cleanup
+    return () => {
+      document.head.removeChild(link);
+    };
   }, []);
 
   const handleFormSubmit = async (event, endpoint) => {
     event.preventDefault();
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
 
     if (email.trim() === "" || password.trim() === "") return;
 
@@ -41,9 +46,7 @@ const AuthForm = () => {
           window.location.href = "/movies";
         } else {
           alert("Account created successfully! Please log in.");
-          if (titleRef.current) {
-            titleRef.current.textContent = "Log in";
-          }
+          document.getElementById("title").textContent = "Log in";
         }
       }
     } catch (error) {
@@ -52,42 +55,40 @@ const AuthForm = () => {
     }
   };
 
-  if (!styles) return null; // Avoid rendering content before styles are loaded
-
   return (
-    <div className={styles.box}>
-      <div className={styles["threejs-container"]}>
+    <div id="box">
+      <div id="threejs-container">
         <Three />
       </div>
       <h1>
-        <span className={styles["fontawesome-star"]}></span> <span>Movie Ranker</span>{" "}
-        <span className={styles["fontawesome-star"]}></span>
+        <span className="fontawesome-star"></span> <span>Movie Ranker</span>{" "}
+        <span className="fontawesome-star"></span>
       </h1>
-      <div ref={titleRef} className={styles.title}>
-        Log in or sign up
-      </div>
-      <div className={styles.authDiv}>
-        <form className={styles.authForm}>
+      <div id="title">Log in or sign up</div>
+      <div id="authDiv">
+        <form id="auth-form">
           <input
-            ref={emailRef}
             type="email"
-            className={styles.email}
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             required
           />
           <input
-            ref={passwordRef}
             type="password"
-            className={styles.password}
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             required
           />
         </form>
-        <div className={styles.buttons}>
+        <div id="buttons">
           <button type="button" onClick={(e) => handleFormSubmit(e, "register")}>
             Create Account
           </button>
-          <button className={styles.loginButton} onClick={(e) => handleFormSubmit(e, "login")}>
+          <button id="loginButton" onClick={(e) => handleFormSubmit(e, "login")}>
             Login
           </button>
         </div>

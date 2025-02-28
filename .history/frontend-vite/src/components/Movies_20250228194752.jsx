@@ -1,24 +1,12 @@
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
+import styles from "../styles/auth.module.css"; // ✅ Correct Import
 import Three from "./Three";
 
 const AuthForm = () => {
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-  const titleRef = useRef(null);
-
-  const [styles, setStyles] = useState(null);
-
-  useEffect(() => {
-    // Dynamically import the CSS specific to the auth page
-    import("../styles/auth.module.css").then((module) => {
-      setStyles(module.default); // Store styles once loaded
-    });
-  }, []);
-
   const handleFormSubmit = async (event, endpoint) => {
     event.preventDefault();
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
     if (email.trim() === "" || password.trim() === "") return;
 
@@ -41,9 +29,7 @@ const AuthForm = () => {
           window.location.href = "/movies";
         } else {
           alert("Account created successfully! Please log in.");
-          if (titleRef.current) {
-            titleRef.current.textContent = "Log in";
-          }
+          document.getElementById("title").textContent = "Log in";
         }
       }
     } catch (error) {
@@ -51,8 +37,6 @@ const AuthForm = () => {
       alert("An error occurred. Check the console.");
     }
   };
-
-  if (!styles) return null; // Avoid rendering content before styles are loaded
 
   return (
     <div className={styles.box}>
@@ -63,25 +47,11 @@ const AuthForm = () => {
         <span className={styles["fontawesome-star"]}></span> <span>Movie Ranker</span>{" "}
         <span className={styles["fontawesome-star"]}></span>
       </h1>
-      <div ref={titleRef} className={styles.title}>
-        Log in or sign up
-      </div>
+      <div className={styles.title}>Log in or sign up</div>
       <div className={styles.authDiv}>
         <form className={styles.authForm}>
-          <input
-            ref={emailRef}
-            type="email"
-            className={styles.email}
-            placeholder="Email"
-            required
-          />
-          <input
-            ref={passwordRef}
-            type="password"
-            className={styles.password}
-            placeholder="Password"
-            required
-          />
+          <input type="email" className={styles.email} placeholder="Email" required />
+          <input type="password" className={styles.password} placeholder="Password" required />
         </form>
         <div className={styles.buttons}>
           <button type="button" onClick={(e) => handleFormSubmit(e, "register")}>

@@ -1,19 +1,18 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+//import styles from "../styles/auth.module.css"; // ✅ Correct Import
 import Three from "./Three";
 
 const AuthForm = () => {
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-  const titleRef = useRef(null);
-
   const [styles, setStyles] = useState(null);
 
   useEffect(() => {
-    // Dynamically import the CSS specific to the auth page
-    import("../styles/auth.module.css").then((module) => {
-      setStyles(module.default); // Store styles once loaded
-    });
+    import("../styles/test.module.css").then((module) => setStyles(module.default));
   }, []);
+
+  if (!styles) return null; // Avoid flickering before styles load
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const titleRef = useRef(null);
 
   const handleFormSubmit = async (event, endpoint) => {
     event.preventDefault();
@@ -52,8 +51,6 @@ const AuthForm = () => {
     }
   };
 
-  if (!styles) return null; // Avoid rendering content before styles are loaded
-
   return (
     <div className={styles.box}>
       <div className={styles["threejs-container"]}>
@@ -68,20 +65,8 @@ const AuthForm = () => {
       </div>
       <div className={styles.authDiv}>
         <form className={styles.authForm}>
-          <input
-            ref={emailRef}
-            type="email"
-            className={styles.email}
-            placeholder="Email"
-            required
-          />
-          <input
-            ref={passwordRef}
-            type="password"
-            className={styles.password}
-            placeholder="Password"
-            required
-          />
+          <input ref={emailRef} type="email" className={styles.email} placeholder="Email" required />
+          <input ref={passwordRef} type="password" className={styles.password} placeholder="Password" required />
         </form>
         <div className={styles.buttons}>
           <button type="button" onClick={(e) => handleFormSubmit(e, "register")}>
