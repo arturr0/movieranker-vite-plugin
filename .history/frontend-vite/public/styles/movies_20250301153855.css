@@ -46,8 +46,8 @@ h3:before, h3:after {
 	position: absolute;
 	width: 100px;
 	height: 4px;
-	border-top: 2px solid #121212;
-	border-bottom: 2px solid #121212;
+	border-top: 2px solid .121212;
+	border-bottom: 2px solid .121212;
 }
 h3:before {
 	margin: 5px 0 0 -110px;
@@ -62,7 +62,7 @@ html, body {
 	padding: 0;
 	background: rgb(112,172,173);
 	background: radial-gradient(circle, rgba(112,172,173,1) 16%, rgba(78,88,106,1) 100%);
-	color: #121212;
+	color: .121212;
 	overflow-y: auto;
 	font-family: "Oswald", Sans-serif;
 	z-index: 0;
@@ -334,8 +334,8 @@ textarea::placeholder {
     content: "";
     width: 80px; 
     height: 4px;
-    border-top: 2px solid #121212;
-    border-bottom: 2px solid #121212;
+    border-top: 2px solid .121212;
+    border-bottom: 2px solid .121212;
 }
 .userName:before {
     margin-right: 10px; 
@@ -362,10 +362,10 @@ textarea::placeholder {
 }
 button {
 	background: rgb(242, 239, 194);
-	border: 2px solid #422800;
+	border: 2px solid .422800;
 	border-radius: 30px;
-	box-shadow: #422800 4px 4px 0 0;
-	color: #422800;
+	box-shadow: .422800 4px 4px 0 0;
+	color: .422800;
 	cursor: pointer;
 	display: inline-block;
 	font-weight: 600;

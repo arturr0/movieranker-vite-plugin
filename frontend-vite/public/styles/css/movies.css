@@ -14,14 +14,12 @@ section.text {
 	margin-top: -55px;
 }
 h1 {
-	min-height: 50px;
 	font-family: "Oswald", Sans-serif;
 	text-transform: uppercase;
 	font-weight: 400;
 	width: 100%;
   	text-align: center;
 	position: relative;
-	margin: 0;
 }
 h1 span {
 	display: inline-block;
@@ -33,8 +31,8 @@ span.star {
 	font-size: 2rem;
 }
 h3 {
-	font-family: "Oswald", Sans-serif;
-	/* text-transform: uppercase; */
+	font-family: "Open Sans", Sans-serif;
+	text-transform: uppercase;
 	font-weight: 700;
 	font-size: 20px;
 	letter-spacing: 0.1em;
@@ -46,8 +44,8 @@ h3:before, h3:after {
 	position: absolute;
 	width: 100px;
 	height: 4px;
-	border-top: 2px solid #121212;
-	border-bottom: 2px solid #121212;
+	border-top: 2px solid .121212;
+	border-bottom: 2px solid .121212;
 }
 h3:before {
 	margin: 5px 0 0 -110px;
@@ -62,7 +60,7 @@ html, body {
 	padding: 0;
 	background: rgb(112,172,173);
 	background: radial-gradient(circle, rgba(112,172,173,1) 16%, rgba(78,88,106,1) 100%);
-	color: #121212;
+	color: .121212;
 	overflow-y: auto;
 	font-family: "Oswald", Sans-serif;
 	z-index: 0;
@@ -334,8 +332,8 @@ textarea::placeholder {
     content: "";
     width: 80px; 
     height: 4px;
-    border-top: 2px solid #121212;
-    border-bottom: 2px solid #121212;
+    border-top: 2px solid .121212;
+    border-bottom: 2px solid .121212;
 }
 .userName:before {
     margin-right: 10px; 
@@ -362,10 +360,10 @@ textarea::placeholder {
 }
 button {
 	background: rgb(242, 239, 194);
-	border: 2px solid #422800;
+	border: 2px solid .422800;
 	border-radius: 30px;
-	box-shadow: #422800 4px 4px 0 0;
-	color: #422800;
+	box-shadow: .422800 4px 4px 0 0;
+	color: .422800;
 	cursor: pointer;
 	display: inline-block;
 	font-weight: 600;
@@ -382,7 +380,7 @@ button:hover {
 	background-color: #fff;
 }
 button:active {
-	box-shadow: #422800 2px 2px 0 0;
+	box-shadow: .422800 2px 2px 0 0;
 	transform: translate(2px, 2px);
 }
 .star {

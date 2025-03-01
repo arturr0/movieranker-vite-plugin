@@ -42,7 +42,8 @@ const Movies = () => {
         <span className="fontawesome-star"></span> <span>Movie Ranker</span>{" "}
         <span className="fontawesome-star"></span>
       </h1>
-      <div className="mainContent">
+      {message && <p className="movieText">{message}</p>}
+      <div id="mainContent">
         <SearchContent />
         <RateContainer />
       </div>

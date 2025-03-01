@@ -1,8 +1,8 @@
-// src/components/Movies.js
+// src/pages/Movies.js
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SearchContent from "./SearchContent";
-import RateContainer from "./RateContainer";
+import SearchContent from "../components/SearchContent";
+import RateContainer from "../components/RateContainer";
 
 const Movies = () => {
   const [message, setMessage] = useState(null);
@@ -42,7 +42,8 @@ const Movies = () => {
         <span className="fontawesome-star"></span> <span>Movie Ranker</span>{" "}
         <span className="fontawesome-star"></span>
       </h1>
-      <div className="mainContent">
+      {message && <p className="movieText">{message}</p>}
+      <div id="mainContent">
         <SearchContent />
         <RateContainer />
       </div>
