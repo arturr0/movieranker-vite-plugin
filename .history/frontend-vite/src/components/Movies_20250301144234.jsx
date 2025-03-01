@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Movies = () => {
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const Movies = () => {
       return;
     }
 
-    fetch("http://localhost:3000/movies/protected", {
+    fetch("http://localhost:5000/movies/protected", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -39,7 +39,7 @@ const Movies = () => {
         <span className="fontawesome-star"></span> <span>Movie Ranker</span>{" "}
         <span className="fontawesome-star"></span>
       </h1>
-      {message && <p className="movieText">{message}</p>}
+      <p className="movieText">{message || "Loading..."}</p>
     </div>
   );
 };

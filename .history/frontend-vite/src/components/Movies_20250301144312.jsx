@@ -13,7 +13,7 @@ const Movies = () => {
       return;
     }
 
-    fetch("http://localhost:3000/movies/protected", {
+    fetch("http://localhost:5000/movies/protected", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
