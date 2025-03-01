@@ -22,7 +22,7 @@ html, body {
     width: 100%;
     min-height: 100%;
 }
-.title {
+.titleStripes {
     font-size: 2em;
     font-weight: bold;
     text-align: center;
@@ -35,14 +35,14 @@ html, body {
     width: 100%;
     align-items: center;
 }
-.auth-form {
+.authForm {
     display: flex;
     flex-direction: column;
     min-width: 200px; 
     width: 100%;
     max-width: 300px; 
 }
-.auth-form input {
+.authForm input {
     margin: 10px 0;
     padding: 10px;
     font-size: 1em;
@@ -77,5 +77,65 @@ button {
     left: 0;
     overflow: visible; /* Ensure no cropping */
 }
-
+h1 span {
+	display: inline-block;
+	vertical-align: middle;
+	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
+	
+}
+span.star {
+	font-size: 2rem;
+}
+.titleStripes {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	white-space: nowrap;
+	margin-bottom: 15px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	text-align: center;
+	white-space: normal;
+	max-width: 100%;
+}
+.titleStripes:before,
+.titleStripes:after {
+    content: "";
+    width: 140px; 
+    height: 4px;
+    border-top: 2px solid #121212;
+    border-bottom: 2px solid #121212;
+}
+.titleStripes:before {
+    margin-right: 10px; 
+}
+.titleStripes:after {
+    margin-left: 10px; 
+}
+h3 {
+	font-family: "Open Sans", Sans-serif;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 20px;
+	letter-spacing: 0.1em;
+	margin-bottom: 10px;  
+	position: relative;
+}
+h3:before, h3:after {
+	content: " ";
+	position: absolute;
+	width: 100px;
+	height: 4px;
+	border-top: 2px solid #121212;
+	border-bottom: 2px solid #121212;
+}
+h3:before {
+	margin: 5px 0 0 -110px;
+}
+h3:after {
+	margin: 5px 0 0 10px;
+}
 

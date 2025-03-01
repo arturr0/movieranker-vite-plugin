@@ -52,7 +52,7 @@ const AuthForm = () => {
         <span className="fontawesome-star"></span> <span>Movie Ranker</span>{" "}
         <span className="fontawesome-star"></span>
       </h1>
-      <div ref={titleRef} className="titleStripes">
+      <div ref={titleRef} className="title">
         Log in or sign up
       </div>
       <div className="authDiv">

@@ -1,10 +1,19 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Three from "./Three";
 
 const AuthForm = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const titleRef = useRef(null);
+
+  const [styles, setStyles] = useState(null);
+
+  useEffect(() => {
+    // Dynamically import the CSS specific to the auth page
+    import("../styles/auth.module.css").then((module) => {
+      setStyles(module.default); // Store styles once loaded
+    });
+  }, []);
 
   const handleFormSubmit = async (event, endpoint) => {
     event.preventDefault();
@@ -43,28 +52,39 @@ const AuthForm = () => {
     }
   };
 
+  if (!styles) return null; // Avoid rendering content before styles are loaded
+
   return (
-    <div className="box">
-      <div className="threejs-container">
+    <div className={styles.box}>
+      <div className={styles["threejs-container"]}>
         <Three />
       </div>
-      <h1>
-        <span className="fontawesome-star"></span> <span>Movie Ranker</span>{" "}
-        <span className="fontawesome-star"></span>
-      </h1>
-      <div ref={titleRef} className="titleStripes">
+      
+      <div ref={titleRef} className={styles.title}>
         Log in or sign up
       </div>
-      <div className="authDiv">
-        <form className="authForm">
-          <input ref={emailRef} type="email" className="email" placeholder="Email" required />
-          <input ref={passwordRef} type="password" className="password" placeholder="Password" required />
+      <div className={styles.authDiv}>
+        <form className={styles.authForm}>
+          <input
+            ref={emailRef}
+            type="email"
+            className={styles.email}
+            placeholder="Email"
+            required
+          />
+          <input
+            ref={passwordRef}
+            type="password"
+            className={styles.password}
+            placeholder="Password"
+            required
+          />
         </form>
-        <div className="buttons">
+        <div className={styles.buttons}>
           <button type="button" onClick={(e) => handleFormSubmit(e, "register")}>
             Create Account
           </button>
-          <button className="loginButton" onClick={(e) => handleFormSubmit(e, "login")}>
+          <button className={styles.loginButton} onClick={(e) => handleFormSubmit(e, "login")}>
             Login
           </button>
         </div>

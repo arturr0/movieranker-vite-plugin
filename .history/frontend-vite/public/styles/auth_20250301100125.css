@@ -12,9 +12,6 @@ html, body {
     width: 100vw;  
     min-height: 100vh; 
 }
-#root {
-    height: 100vh;
-}
 .box {
     position: relative;
     background: rgb(0,0,0);
@@ -35,14 +32,14 @@ html, body {
     width: 100%;
     align-items: center;
 }
-.auth-form {
+.authForm {
     display: flex;
     flex-direction: column;
     min-width: 200px; 
     width: 100%;
     max-width: 300px; 
 }
-.auth-form input {
+.authForm input {
     margin: 10px 0;
     padding: 10px;
     font-size: 1em;

@@ -12,9 +12,6 @@ html, body {
     width: 100vw;  
     min-height: 100vh; 
 }
-#root {
-    height: 100vh;
-}
 .box {
     position: relative;
     background: rgb(0,0,0);

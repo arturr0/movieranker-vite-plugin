@@ -1,3 +1,4 @@
+// AuthForm.jsx
 import React, { useRef } from "react";
 import Three from "./Three";
 
@@ -44,29 +45,22 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="box">
+    <div className="auth-box">
       <div className="threejs-container">
         <Three />
       </div>
-      <h1>
-        <span className="fontawesome-star"></span> <span>Movie Ranker</span>{" "}
-        <span className="fontawesome-star"></span>
-      </h1>
-      <div ref={titleRef} className="titleStripes">
+      <h1>Movie Ranker</h1>
+      <div ref={titleRef} className="title">
         Log in or sign up
       </div>
-      <div className="authDiv">
-        <form className="authForm">
-          <input ref={emailRef} type="email" className="email" placeholder="Email" required />
-          <input ref={passwordRef} type="password" className="password" placeholder="Password" required />
+      <div className="authForm">
+        <form>
+          <input ref={emailRef} type="email" placeholder="Email" required />
+          <input ref={passwordRef} type="password" placeholder="Password" required />
         </form>
         <div className="buttons">
-          <button type="button" onClick={(e) => handleFormSubmit(e, "register")}>
-            Create Account
-          </button>
-          <button className="loginButton" onClick={(e) => handleFormSubmit(e, "login")}>
-            Login
-          </button>
+          <button onClick={(e) => handleFormSubmit(e, "register")}>Create Account</button>
+          <button onClick={(e) => handleFormSubmit(e, "login")}>Login</button>
         </div>
       </div>
     </div>
