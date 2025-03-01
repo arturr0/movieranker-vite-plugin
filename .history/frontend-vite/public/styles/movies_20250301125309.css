@@ -2,9 +2,9 @@
 		
 @import url(https://weloveiconfonts.com/api/?family=fontawesome);
 
-[class*="fontawesome-"]:before {
+/* [class*="fontawesome-"]:before {
 	font-family: 'FontAwesome', sans-serif;
-}
+} */
 section.text {
 	position: absolute;
 	width: 100%;

@@ -1,11 +1,7 @@
-@import url(https://fonts.googleapis.com/css?family=Oswald:400|Open+Sans:700);
-		
-@import url(https://weloveiconfonts.com/api/?family=fontawesome);
-
 html, body {
 	margin: 0;
 	padding: 0;
-	color: #121212;
+	color: .121212;
 	overflow-y: auto;
 	font-family: "Oswald", Sans-serif;
 	z-index: 0;
@@ -18,7 +14,7 @@ html, body {
 }
 /* Default background for the Auth page */
 .auth-bg {
-    background-image: url('bg.WebP'); /* Replace with your actual image path */
+    background-image: url('/bg.WebP'); /* Replace with your actual image path */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -117,7 +113,7 @@ span.star {
 	overflow-wrap: break-word;
 	text-align: center;
 	white-space: normal;
-	width: 100%;
+	max-width: 100%;
 }
 .titleStripes:before,
 .titleStripes:after {
@@ -134,8 +130,8 @@ span.star {
     margin-left: 10px; 
 }
 h3 {
-	font-family: "Oswald", Sans-serif;
-	/* text-transform: uppercase; */
+	font-family: "Open Sans", Sans-serif;
+	text-transform: uppercase;
 	font-weight: 700;
 	font-size: 20px;
 	letter-spacing: 0.1em;

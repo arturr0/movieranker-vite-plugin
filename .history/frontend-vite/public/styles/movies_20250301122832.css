@@ -34,7 +34,7 @@ span.star {
 }
 h3 {
 	font-family: "Oswald", Sans-serif;
-	/* text-transform: uppercase; */
+	text-transform: uppercase;
 	font-weight: 700;
 	font-size: 20px;
 	letter-spacing: 0.1em;

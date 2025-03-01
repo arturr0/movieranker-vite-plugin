@@ -1,34 +1,17 @@
-@import url(https://fonts.googleapis.com/css?family=Oswald:400|Open+Sans:700);
-		
-@import url(https://weloveiconfonts.com/api/?family=fontawesome);
-
 html, body {
 	margin: 0;
 	padding: 0;
-	color: #121212;
+	color: .121212;
 	overflow-y: auto;
 	font-family: "Oswald", Sans-serif;
 	z-index: 0;
-	/* background-image: url('bg.WebP');
+	background-image: url('bg.WebP');
     background-size: cover;  
     background-repeat: no-repeat;  
-    background-position: center center;   */
+    background-position: center center;  
     width: 100vw;  
     min-height: 100vh; 
 }
-/* Default background for the Auth page */
-.auth-bg {
-    background-image: url('bg.WebP'); /* Replace with your actual image path */
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-  }
-  
-  /* No background for the Movies page */
-  .no-bg {
-    background: none;
-  }
-  
 #root {
     height: 100vh;
 }
@@ -95,6 +78,7 @@ button {
     overflow: visible; /* Ensure no cropping */
 }
 h1 span {
+    min-height: 100px;
 	display: inline-block;
 	vertical-align: middle;
 	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
@@ -117,7 +101,7 @@ span.star {
 	overflow-wrap: break-word;
 	text-align: center;
 	white-space: normal;
-	width: 100%;
+	max-width: 100%;
 }
 .titleStripes:before,
 .titleStripes:after {
@@ -134,8 +118,8 @@ span.star {
     margin-left: 10px; 
 }
 h3 {
-	font-family: "Oswald", Sans-serif;
-	/* text-transform: uppercase; */
+	font-family: "Open Sans", Sans-serif;
+	text-transform: uppercase;
 	font-weight: 700;
 	font-size: 20px;
 	letter-spacing: 0.1em;
