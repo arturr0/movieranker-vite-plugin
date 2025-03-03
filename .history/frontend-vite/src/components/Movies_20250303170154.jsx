@@ -7,7 +7,7 @@ import RateContainer from "./RateContainer";
 const Movies = () => {
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
-  const test = 'test';
+
   useEffect(() => {
     const token = localStorage.getItem("jwt");
 
@@ -26,16 +26,15 @@ const Movies = () => {
         return res.json();
       })
       .then((data) => {
-        if (data.user) {
-          setMessage(data.user);
-          console.log("data: ", message);
+        if (data.message) {
+          setMessage(data.message);
+          // console.log("data: ", data);
         }
       })
       .catch((err) => {
         console.error("Error:", err);
         navigate("/"); // Redirect on error
       });
-      console.log("mess: ", message)
   }, [navigate]);
 
   return (

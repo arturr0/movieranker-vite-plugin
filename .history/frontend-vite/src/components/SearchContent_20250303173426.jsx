@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 
 let lastQuery = {};
 const moviesRanks = [];
@@ -19,18 +19,12 @@ class Movie extends Item {}
 class Person extends Item {}
 
 const SearchContent = ({ message }) => {
-  console.log("test ", message);
-
+  console.log("test ", message)
   const [query, setQuery] = useState(""); // The search query
   const [type, setSearchType] = useState("title"); // "title" (movies) or "actor" (people)
   const [results, setResults] = useState([]); // Stores fetched data
   const [queryType, setQueryType] = useState(""); // Tracks the response type
   const [error, setError] = useState(null); // Handles errors
-
-  // Log message only when it changes
-  useEffect(() => {
-    console.log("Message changed: ", message);
-  }, [message]); // Logs when 'message' is updated
 
   // Cancel previous request and create a new one
   const controller = new AbortController();
@@ -116,42 +110,72 @@ const SearchContent = ({ message }) => {
     searchMovies();
   };
 
-  // Create the item element for movies or people using JSX instead of document.createElement
+  // Create the item element for movies or people
   const createItemElement = (item, type, ranksArray) => {
+    const itemElement = document.createElement("div");
+    itemElement.classList.add("item");
+
     const title = type === "movie"
       ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
       : item.name;
 
+    itemElement.innerHTML = `
+      <p class="title" data-title="${title}">${title}</p>
+      <div class="img" style="background-image: url(${type === 'movie' ? item.poster : item.profile});"></div>
+    `;
+
+    // Handling ratings
+    if (item.ratings) {
+      item.ratings.forEach((rank) => {
+        const rankedItem = type === "movie"
+          ? new Movie(item.id, item.title, rank.rating, rank.userEmail, rank.comment, rank.id)
+          : new Person(item.id, item.name, rank.rating, rank.userEmail, rank.comment, rank.id);
+
+        ranksArray.push(rankedItem);
+      });
+    }
+
+    const voteCount = item.ratings ? item.ratings.length : 0;
+    const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
     const avgRating =
       item.ratings && item.ratings.length
         ? Math.round(item.ratings.reduce((sum, r) => sum + r.rating, 0) / item.ratings.length)
         : "No rating yet";
 
-    const voteCount = item.ratings ? item.ratings.length : 0;
-    const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
+    const votesElement = document.createElement("p");
+    votesElement.classList.add("votesNo");
+    votesElement.textContent = voteText;
 
-    return (
-      <div key={item.id} className="item">
-        <p className="title" data-title={title}>{title}</p>
-        <div className="img" style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }}></div>
-        <p className="votesNo">{voteText}</p>
-        {createRatingElement(avgRating)}
-      </div>
+    const ratingElement = createRatingElement(avgRating);
+
+    itemElement.appendChild(votesElement);
+    itemElement.appendChild(ratingElement);
+
+    itemElement.querySelector(".img").addEventListener("click", () =>
+      handleItemClick(item, type, avgRating, voteText)
     );
+
+    return itemElement;
   };
 
   // Create rating stars based on average rating
   const createRatingElement = (avgRating) => {
-    const ratingElement = [];
+    const ratingElement = document.createElement("div");
+    ratingElement.classList.add("ratedStars");
+
     for (let i = 0; i < 5; i++) {
-      const starStyle = { color: i < avgRating ? "gold" : "gray" };
-      ratingElement.push(<span key={i} style={starStyle}>&#9733;</span>);
+      const star = document.createElement("span");
+      star.style.color = i < avgRating ? "gold" : "gray";
+      star.innerHTML = "&#9733;";
+      ratingElement.appendChild(star);
     }
-    return <div className="ratedStars">{ratingElement}</div>;
+
+    return ratingElement;
   };
 
   // Handle item click (for showing detailed information or additional actions)
   const handleItemClick = (item, type, avgRating, voteText) => {
+    // You can expand this to show more detailed information
     console.log(item, type, avgRating, voteText);
   };
 

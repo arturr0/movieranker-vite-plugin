@@ -26,9 +26,9 @@ const Movies = () => {
         return res.json();
       })
       .then((data) => {
-        if (data.user) {
+        if (data.message) {
           setMessage(data.user);
-          console.log("data: ", message);
+          console.log("data: ", data);
         }
       })
       .catch((err) => {
