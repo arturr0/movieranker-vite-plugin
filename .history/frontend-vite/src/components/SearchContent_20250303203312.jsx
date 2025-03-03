@@ -107,7 +107,7 @@ const SearchContent = ({ message }) => {
 
     return (
       <div key={item.id} className="item">
-        <p className="titles" data-title={title}>{title}</p>
+        <p className="title" data-title={title}>{title}</p>
         <div className="img" style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }}></div>
         <p className="votesNo">{voteText}</p>
         {createRatingElement(avgRating)}
