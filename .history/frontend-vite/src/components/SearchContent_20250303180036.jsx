@@ -35,7 +35,7 @@ const SearchContent = ({ message }) => {
   // Cancel previous request and create a new one
   const controller = new AbortController();
 
-  // Handle search function
+  // Handle search function with debounce
   const searchMovies = useCallback(async () => {
     if (!query.trim()) return;
 
@@ -65,27 +65,31 @@ const SearchContent = ({ message }) => {
       console.log(lastQuery);
 
       // Rank movies and people and store them in respective arrays
+      const newMoviesRanks = [];
+      const newPeopleRanks = [];
       const resultItems = [];
 
       if (data.movies) {
         data.movies.forEach((movie) => {
           if (!movie.poster) return;
-          resultItems.push(createItemElement(movie, "movie"));
-          // Append new ranks to the moviesRanks array
-          moviesRanks.push(new Movie(movie.id, movie.title, movie.rank, movie.rankerName, movie.post, movie.dbID));
+          resultItems.push(createItemElement(movie, "movie", newMoviesRanks));
         });
       } else if (data.people) {
         data.people.forEach((person) => {
           if (!person.profile) return;
-          resultItems.push(createItemElement(person, "person"));
-          // Append new ranks to the peopleRanks array
-          peopleRanks.push(new Person(person.id, person.name, person.rank, person.rankerName, person.post, person.dbID));
+          resultItems.push(createItemElement(person, "person", newPeopleRanks));
         });
       } else {
         setError("No results found.");
       }
 
       setResults(resultItems);
+      moviesRanks.length = 0;
+      peopleRanks.length = 0;
+
+      // Store the ranked items
+      newMoviesRanks.forEach((rankedItem) => moviesRanks.push(rankedItem));
+      newPeopleRanks.forEach((rankedItem) => peopleRanks.push(rankedItem));
 
     } catch (error) {
       if (error.name === "AbortError") {
@@ -97,23 +101,20 @@ const SearchContent = ({ message }) => {
     }
   }, [query, type]);
 
-  // Handle input change
+  // Handle input change (with debounce)
   const handleSearchChange = (event) => {
     setQuery(event.target.value);
   };
 
-  // Change search type (Movie or Actor)
   const handleRadioChange = (event) => {
     setSearchType(event.target.value);
   };
 
-  // Trigger search on click
   const handleSearchClick = () => {
     searchMovies();
   };
 
-  // Create the item element for movies or people using JSX instead of document.createElement
-  const createItemElement = (item, type) => {
+  const createItemElement = (item, type, ranksArray) => {
     const title = type === "movie"
       ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
       : item.name;
@@ -136,7 +137,6 @@ const SearchContent = ({ message }) => {
     );
   };
 
-  // Create rating stars based on average rating
   const createRatingElement = (avgRating) => {
     const ratingElement = [];
     for (let i = 0; i < 5; i++) {
@@ -144,11 +144,6 @@ const SearchContent = ({ message }) => {
       ratingElement.push(<span key={i} style={starStyle}>&#9733;</span>);
     }
     return <div className="ratedStars">{ratingElement}</div>;
-  };
-
-  // Handle item click (for showing detailed information or additional actions)
-  const handleItemClick = (item, type, avgRating, voteText) => {
-    console.log(item, type, avgRating, voteText);
   };
 
   return (
@@ -208,4 +203,4 @@ const SearchContent = ({ message }) => {
   );
 };
 
-export default SearchContent;
+export default React.memo(SearchContent); // Memoizing component to prevent unnecessary re-renders

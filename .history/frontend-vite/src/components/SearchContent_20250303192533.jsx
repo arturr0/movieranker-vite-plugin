@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 
+// Define lastQuery as a simple object to store the last search parameters
 let lastQuery = {};
 const moviesRanks = [];
 const peopleRanks = [];
 
+// Define Item class as a base for both movies and people
 class Item {
   constructor(id, title, rank, rankerName, post, dbID) {
     this.id = id;
@@ -18,43 +20,39 @@ class Item {
 class Movie extends Item {}
 class Person extends Item {}
 
+// Create a new AbortController to manage the fetch cancellation
+const controller = new AbortController();
+
 const SearchContent = ({ message }) => {
-  console.log("test ", message);
+  console.log("Message:", message);
 
+  // State hooks for query, type, results, error, etc.
   const [query, setQuery] = useState(""); // The search query
-  const [type, setSearchType] = useState("title"); // "title" (movies) or "actor" (people)
-  const [results, setResults] = useState([]); // Stores fetched data
-  const [queryType, setQueryType] = useState(""); // Tracks the response type
-  const [error, setError] = useState(null); // Handles errors
+  const [type, setSearchType] = useState("title"); // Search type: "title" or "actor"
+  const [results, setResults] = useState([]); // Array to store search results
+  const [error, setError] = useState(null); // Handle any search errors
 
-  // Log message only when it changes
-  useEffect(() => {
-    console.log("Message changed: ", message);
-  }, [message]); // Logs when 'message' is updated
-
-  // Cancel previous request and create a new one
-  const controller = new AbortController();
-
-  // Handle search function
+  // Define searchMovies as a callback to be called on search action
   const searchMovies = useCallback(async () => {
     if (!query.trim()) return;
 
-    setError(null); // Clear previous errors
+    setError(null); // Clear any previous errors
 
     try {
       console.log("Search Type:", type);
 
+      // Fetch data based on search query and type
       const response = await fetch(
         `/movies/search?query=${encodeURIComponent(query)}&type=${type}`,
         {
-          signal: controller.signal,
+          signal: controller.signal, // Use the controller for aborting
         }
       );
 
       const data = await response.json();
       console.log("Movies Data:", data);
 
-      // Update lastQuery state
+      // Update lastQuery with the received data
       if (Number(data.querySenderID) === message.id) {
         lastQuery = {
           type: data.queryType,
@@ -64,56 +62,68 @@ const SearchContent = ({ message }) => {
       }
       console.log(lastQuery);
 
-      // Rank movies and people and store them in respective arrays
+      // Rank movies and people and store them in their respective arrays
+      const newMoviesRanks = [];
+      const newPeopleRanks = [];
       const resultItems = [];
 
+      // Process movie data
       if (data.movies) {
         data.movies.forEach((movie) => {
           if (!movie.poster) return;
-          resultItems.push(createItemElement(movie, "movie"));
-          // Append new ranks to the moviesRanks array
-          moviesRanks.push(new Movie(movie.id, movie.title, movie.rank, movie.rankerName, movie.post, movie.dbID));
+          resultItems.push(createItemElement(movie, "movie", newMoviesRanks));
         });
-      } else if (data.people) {
+      }
+
+      // Process people data
+      if (data.people) {
         data.people.forEach((person) => {
           if (!person.profile) return;
-          resultItems.push(createItemElement(person, "person"));
-          // Append new ranks to the peopleRanks array
-          peopleRanks.push(new Person(person.id, person.name, person.rank, person.rankerName, person.post, person.dbID));
+          resultItems.push(createItemElement(person, "person", newPeopleRanks));
         });
-      } else {
+      }
+
+      // If no results, set error message
+      if (resultItems.length === 0) {
         setError("No results found.");
       }
 
+      // Update state with the new results
       setResults(resultItems);
+
+      // Clear old rankings and store the new ones
+      moviesRanks.length = 0;
+      peopleRanks.length = 0;
+      newMoviesRanks.forEach((rankedItem) => moviesRanks.push(rankedItem));
+      newPeopleRanks.forEach((rankedItem) => peopleRanks.push(rankedItem));
 
     } catch (error) {
       if (error.name === "AbortError") {
         console.log("Previous request aborted");
       } else {
-        console.error("Error fetching movies:", error);
+        console.error("Error fetching data:", error);
         setError("Failed to load results. Please try again.");
       }
     }
-  }, [query, type]);
+  }, [query, type, message.id]); // Dependencies for useCallback
 
-  // Handle input change
+  // Handle input change for search query
   const handleSearchChange = (event) => {
     setQuery(event.target.value);
   };
 
-  // Change search type (Movie or Actor)
+  // Handle radio change for search type (movie or actor)
   const handleRadioChange = (event) => {
     setSearchType(event.target.value);
   };
 
-  // Trigger search on click
+  // Trigger search on click (button press)
   const handleSearchClick = () => {
     searchMovies();
   };
 
-  // Create the item element for movies or people using JSX instead of document.createElement
-  const createItemElement = (item, type) => {
+  // Create JSX for individual movie or person item
+  const createItemElement = (item, type, ranksArray) => {
     const title = type === "movie"
       ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
       : item.name;
@@ -136,7 +146,7 @@ const SearchContent = ({ message }) => {
     );
   };
 
-  // Create rating stars based on average rating
+  // Create JSX for rating stars based on average rating
   const createRatingElement = (avgRating) => {
     const ratingElement = [];
     for (let i = 0; i < 5; i++) {
@@ -146,7 +156,7 @@ const SearchContent = ({ message }) => {
     return <div className="ratedStars">{ratingElement}</div>;
   };
 
-  // Handle item click (for showing detailed information or additional actions)
+  // Handle item click for showing more details or actions
   const handleItemClick = (item, type, avgRating, voteText) => {
     console.log(item, type, avgRating, voteText);
   };

@@ -65,27 +65,31 @@ const SearchContent = ({ message }) => {
       console.log(lastQuery);
 
       // Rank movies and people and store them in respective arrays
+      const newMoviesRanks = [];
+      const newPeopleRanks = [];
       const resultItems = [];
 
       if (data.movies) {
         data.movies.forEach((movie) => {
           if (!movie.poster) return;
-          resultItems.push(createItemElement(movie, "movie"));
-          // Append new ranks to the moviesRanks array
-          moviesRanks.push(new Movie(movie.id, movie.title, movie.rank, movie.rankerName, movie.post, movie.dbID));
+          resultItems.push(createItemElement(movie, "movie", newMoviesRanks));
         });
       } else if (data.people) {
         data.people.forEach((person) => {
           if (!person.profile) return;
-          resultItems.push(createItemElement(person, "person"));
-          // Append new ranks to the peopleRanks array
-          peopleRanks.push(new Person(person.id, person.name, person.rank, person.rankerName, person.post, person.dbID));
+          resultItems.push(createItemElement(person, "person", newPeopleRanks));
         });
       } else {
         setError("No results found.");
       }
 
       setResults(resultItems);
+      moviesRanks.length = 0;
+      peopleRanks.length = 0;
+
+      // Store the ranked items
+      newMoviesRanks.forEach((rankedItem) => moviesRanks.push(rankedItem));
+      newPeopleRanks.forEach((rankedItem) => peopleRanks.push(rankedItem));
 
     } catch (error) {
       if (error.name === "AbortError") {
@@ -113,7 +117,7 @@ const SearchContent = ({ message }) => {
   };
 
   // Create the item element for movies or people using JSX instead of document.createElement
-  const createItemElement = (item, type) => {
+  const createItemElement = (item, type, ranksArray) => {
     const title = type === "movie"
       ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
       : item.name;

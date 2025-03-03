@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-let lastQuery = {};
-const moviesRanks = [];
-const peopleRanks = [];
-
+// Define the Item class
 class Item {
   constructor(id, title, rank, rankerName, post, dbID) {
     this.id = id;
@@ -15,6 +12,7 @@ class Item {
   }
 }
 
+// Define the Movie and Person classes that extend Item
 class Movie extends Item {}
 class Person extends Item {}
 
@@ -27,10 +25,8 @@ const SearchContent = ({ message }) => {
   const [queryType, setQueryType] = useState(""); // Tracks the response type
   const [error, setError] = useState(null); // Handles errors
 
-  // Log message only when it changes
-  useEffect(() => {
-    console.log("Message changed: ", message);
-  }, [message]); // Logs when 'message' is updated
+  const moviesRanks = [];
+	const peopleRanks = [];
 
   // Cancel previous request and create a new one
   const controller = new AbortController();
@@ -54,39 +50,54 @@ const SearchContent = ({ message }) => {
       const data = await response.json();
       console.log("Movies Data:", data);
 
-      // Update lastQuery state
-      if (Number(data.querySenderID) === message.id) {
-        lastQuery = {
-          type: data.queryType,
-          text: data.queryText,
-          id: Number(data.querySenderID),
-        };
-      }
-      console.log(lastQuery);
-
-      // Rank movies and people and store them in respective arrays
-      const resultItems = [];
-
+      // Use the existing arrays to store the ranks directly
       if (data.movies) {
         data.movies.forEach((movie) => {
           if (!movie.poster) return;
-          resultItems.push(createItemElement(movie, "movie"));
-          // Append new ranks to the moviesRanks array
-          moviesRanks.push(new Movie(movie.id, movie.title, movie.rank, movie.rankerName, movie.post, movie.dbID));
+
+          // Use new to create instances of Movie
+          const movieItem = new Movie(
+            movie.id,
+            movie.title,
+            movie.rank,
+            movie.rankerName,
+            movie.poster,
+            movie.dbID
+          );
+
+          // Push the movie item directly into the moviesRanks array
+          moviesRanks.push(movieItem);
+
+          setResults((prevResults) => [
+            ...prevResults,
+            createItemElement(movieItem, "movie"),
+          ]);
         });
       } else if (data.people) {
         data.people.forEach((person) => {
           if (!person.profile) return;
-          resultItems.push(createItemElement(person, "person"));
-          // Append new ranks to the peopleRanks array
-          peopleRanks.push(new Person(person.id, person.name, person.rank, person.rankerName, person.post, person.dbID));
+
+          // Use new to create instances of Person
+          const personItem = new Person(
+            person.id,
+            person.name,
+            person.rank,
+            person.rankerName,
+            person.profile,
+            person.dbID
+          );
+
+          // Push the person item directly into the peopleRanks array
+          peopleRanks.push(personItem);
+
+          setResults((prevResults) => [
+            ...prevResults,
+            createItemElement(personItem, "person"),
+          ]);
         });
       } else {
         setError("No results found.");
       }
-
-      setResults(resultItems);
-
     } catch (error) {
       if (error.name === "AbortError") {
         console.log("Previous request aborted");

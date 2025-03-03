@@ -26,6 +26,7 @@ const SearchContent = ({ message }) => {
   const [results, setResults] = useState([]); // Stores fetched data
   const [queryType, setQueryType] = useState(""); // Tracks the response type
   const [error, setError] = useState(null); // Handles errors
+  const [isLoading, setIsLoading] = useState(false); // Tracks loading state
 
   // Log message only when it changes
   useEffect(() => {
@@ -40,6 +41,7 @@ const SearchContent = ({ message }) => {
     if (!query.trim()) return;
 
     setError(null); // Clear previous errors
+    setIsLoading(true); // Set loading state to true
 
     try {
       console.log("Search Type:", type);
@@ -65,28 +67,31 @@ const SearchContent = ({ message }) => {
       console.log(lastQuery);
 
       // Rank movies and people and store them in respective arrays
+      const newMoviesRanks = [];
+      const newPeopleRanks = [];
       const resultItems = [];
 
       if (data.movies) {
         data.movies.forEach((movie) => {
           if (!movie.poster) return;
-          resultItems.push(createItemElement(movie, "movie"));
-          // Append new ranks to the moviesRanks array
-          moviesRanks.push(new Movie(movie.id, movie.title, movie.rank, movie.rankerName, movie.post, movie.dbID));
+          resultItems.push(createItemElement(movie, "movie", newMoviesRanks));
         });
       } else if (data.people) {
         data.people.forEach((person) => {
           if (!person.profile) return;
-          resultItems.push(createItemElement(person, "person"));
-          // Append new ranks to the peopleRanks array
-          peopleRanks.push(new Person(person.id, person.name, person.rank, person.rankerName, person.post, person.dbID));
+          resultItems.push(createItemElement(person, "person", newPeopleRanks));
         });
       } else {
         setError("No results found.");
       }
 
       setResults(resultItems);
+      moviesRanks.length = 0;
+      peopleRanks.length = 0;
 
+      // Store the ranked items
+      newMoviesRanks.forEach((rankedItem) => moviesRanks.push(rankedItem));
+      newPeopleRanks.forEach((rankedItem) => peopleRanks.push(rankedItem));
     } catch (error) {
       if (error.name === "AbortError") {
         console.log("Previous request aborted");
@@ -94,8 +99,10 @@ const SearchContent = ({ message }) => {
         console.error("Error fetching movies:", error);
         setError("Failed to load results. Please try again.");
       }
+    } finally {
+      setIsLoading(false); // Set loading state to false after request completion
     }
-  }, [query, type]);
+  }, [query, type, message.id]); // useCallback to memoize the searchMovies function
 
   // Handle input change
   const handleSearchChange = (event) => {
@@ -113,7 +120,7 @@ const SearchContent = ({ message }) => {
   };
 
   // Create the item element for movies or people using JSX instead of document.createElement
-  const createItemElement = (item, type) => {
+  const createItemElement = (item, type, ranksArray) => {
     const title = type === "movie"
       ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
       : item.name;
@@ -193,6 +200,7 @@ const SearchContent = ({ message }) => {
       </div>
 
       <div className="resultContainer">
+        {isLoading && <p>Loading...</p>} {/* Show loading indicator while fetching */}
         {error && <p className="error">{error}</p>}
         <div className="results">
           {results.length > 0 ? (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 
 let lastQuery = {};
 const moviesRanks = [];
@@ -19,35 +19,45 @@ class Movie extends Item {}
 class Person extends Item {}
 
 const SearchContent = ({ message }) => {
-  console.log("test ", message);
-
   const [query, setQuery] = useState(""); // The search query
   const [type, setSearchType] = useState("title"); // "title" (movies) or "actor" (people)
   const [results, setResults] = useState([]); // Stores fetched data
   const [queryType, setQueryType] = useState(""); // Tracks the response type
   const [error, setError] = useState(null); // Handles errors
 
+  const controller = useRef(new AbortController()); // Refs to avoid re-renders
+  const isSearchInProgress = useRef(false); // Prevents concurrent searches
+
   // Log message only when it changes
   useEffect(() => {
     console.log("Message changed: ", message);
-  }, [message]); // Logs when 'message' is updated
+  }, [message]);
 
-  // Cancel previous request and create a new one
-  const controller = new AbortController();
+  // Prevents multiple ongoing searches by cancelling the previous one
+  const cancelPreviousSearch = useCallback(() => {
+    if (isSearchInProgress.current) {
+      controller.current.abort();
+      controller.current = new AbortController(); // Reset the controller
+      isSearchInProgress.current = false; // Reset the flag
+    }
+  }, []);
 
-  // Handle search function
+  // Fetch search results from the server
   const searchMovies = useCallback(async () => {
-    if (!query.trim()) return;
+    if (!query.trim() || isSearchInProgress.current) return; // Don't search if the query is empty or search is in progress
 
+    cancelPreviousSearch();
     setError(null); // Clear previous errors
 
     try {
-      console.log("Search Type:", type);
+      console.log("Searching for: ", query);
+
+      isSearchInProgress.current = true; // Set the flag to true to block further searches
 
       const response = await fetch(
         `/movies/search?query=${encodeURIComponent(query)}&type=${type}`,
         {
-          signal: controller.signal,
+          signal: controller.current.signal,
         }
       );
 
@@ -62,30 +72,33 @@ const SearchContent = ({ message }) => {
           id: Number(data.querySenderID),
         };
       }
-      console.log(lastQuery);
 
       // Rank movies and people and store them in respective arrays
+      const newMoviesRanks = [];
+      const newPeopleRanks = [];
       const resultItems = [];
 
       if (data.movies) {
         data.movies.forEach((movie) => {
           if (!movie.poster) return;
-          resultItems.push(createItemElement(movie, "movie"));
-          // Append new ranks to the moviesRanks array
-          moviesRanks.push(new Movie(movie.id, movie.title, movie.rank, movie.rankerName, movie.post, movie.dbID));
+          resultItems.push(createItemElement(movie, "movie", newMoviesRanks));
         });
       } else if (data.people) {
         data.people.forEach((person) => {
           if (!person.profile) return;
-          resultItems.push(createItemElement(person, "person"));
-          // Append new ranks to the peopleRanks array
-          peopleRanks.push(new Person(person.id, person.name, person.rank, person.rankerName, person.post, person.dbID));
+          resultItems.push(createItemElement(person, "person", newPeopleRanks));
         });
       } else {
         setError("No results found.");
       }
 
       setResults(resultItems);
+      moviesRanks.length = 0;
+      peopleRanks.length = 0;
+
+      // Store the ranked items
+      newMoviesRanks.forEach((rankedItem) => moviesRanks.push(rankedItem));
+      newPeopleRanks.forEach((rankedItem) => peopleRanks.push(rankedItem));
 
     } catch (error) {
       if (error.name === "AbortError") {
@@ -94,26 +107,25 @@ const SearchContent = ({ message }) => {
         console.error("Error fetching movies:", error);
         setError("Failed to load results. Please try again.");
       }
+    } finally {
+      isSearchInProgress.current = false; // Reset the flag after the search is finished
     }
-  }, [query, type]);
+  }, [query, type, cancelPreviousSearch, message.id]);
 
   // Handle input change
   const handleSearchChange = (event) => {
     setQuery(event.target.value);
   };
 
-  // Change search type (Movie or Actor)
   const handleRadioChange = (event) => {
     setSearchType(event.target.value);
   };
 
-  // Trigger search on click
   const handleSearchClick = () => {
     searchMovies();
   };
 
-  // Create the item element for movies or people using JSX instead of document.createElement
-  const createItemElement = (item, type) => {
+  const createItemElement = (item, type, ranksArray) => {
     const title = type === "movie"
       ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
       : item.name;
@@ -136,7 +148,6 @@ const SearchContent = ({ message }) => {
     );
   };
 
-  // Create rating stars based on average rating
   const createRatingElement = (avgRating) => {
     const ratingElement = [];
     for (let i = 0; i < 5; i++) {
@@ -146,10 +157,8 @@ const SearchContent = ({ message }) => {
     return <div className="ratedStars">{ratingElement}</div>;
   };
 
-  // Handle item click (for showing detailed information or additional actions)
-  const handleItemClick = (item, type, avgRating, voteText) => {
-    console.log(item, type, avgRating, voteText);
-  };
+  // Memoize search results to avoid unnecessary re-renders
+  const memoizedResults = useMemo(() => results, [results]);
 
   return (
     <div className="searchContent">
@@ -195,8 +204,8 @@ const SearchContent = ({ message }) => {
       <div className="resultContainer">
         {error && <p className="error">{error}</p>}
         <div className="results">
-          {results.length > 0 ? (
-            results.map((item, index) => (
+          {memoizedResults.length > 0 ? (
+            memoizedResults.map((item, index) => (
               <div key={index}>{item}</div>
             ))
           ) : (
@@ -208,4 +217,4 @@ const SearchContent = ({ message }) => {
   );
 };
 
-export default SearchContent;
+export default React.memo(SearchContent); // Memoizing component to prevent unnecessary re-renders

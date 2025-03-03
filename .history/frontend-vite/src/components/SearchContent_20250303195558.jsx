@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-let lastQuery = {};
-const moviesRanks = [];
-const peopleRanks = [];
-
 class Item {
   constructor(id, title, rank, rankerName, post, dbID) {
     this.id = id;
@@ -17,14 +13,13 @@ class Item {
 
 class Movie extends Item {}
 class Person extends Item {}
+const moviesRanks = [];
+const peopleRanks = [];
 
 const SearchContent = ({ message }) => {
-  console.log("test ", message);
-
   const [query, setQuery] = useState(""); // The search query
   const [type, setSearchType] = useState("title"); // "title" (movies) or "actor" (people)
   const [results, setResults] = useState([]); // Stores fetched data
-  const [queryType, setQueryType] = useState(""); // Tracks the response type
   const [error, setError] = useState(null); // Handles errors
 
   // Log message only when it changes
@@ -54,32 +49,38 @@ const SearchContent = ({ message }) => {
       const data = await response.json();
       console.log("Movies Data:", data);
 
-      // Update lastQuery state
-      if (Number(data.querySenderID) === message.id) {
-        lastQuery = {
-          type: data.queryType,
-          text: data.queryText,
-          id: Number(data.querySenderID),
-        };
-      }
-      console.log(lastQuery);
-
-      // Rank movies and people and store them in respective arrays
       const resultItems = [];
 
+      // Rank movies and people and store them in respective arrays
       if (data.movies) {
         data.movies.forEach((movie) => {
           if (!movie.poster) return;
-          resultItems.push(createItemElement(movie, "movie"));
-          // Append new ranks to the moviesRanks array
-          moviesRanks.push(new Movie(movie.id, movie.title, movie.rank, movie.rankerName, movie.post, movie.dbID));
+          const movieItem = new Movie(
+            movie.id,
+            movie.title,
+            movie.rank,
+            movie.rankerName,
+            movie.poster,
+            movie.dbID
+          );
+          // Directly push movie item into moviesRanks
+          moviesRanks.push(movieItem);
+          resultItems.push(createItemElement(movieItem, "movie"));
         });
       } else if (data.people) {
         data.people.forEach((person) => {
           if (!person.profile) return;
-          resultItems.push(createItemElement(person, "person"));
-          // Append new ranks to the peopleRanks array
-          peopleRanks.push(new Person(person.id, person.name, person.rank, person.rankerName, person.post, person.dbID));
+          const personItem = new Person(
+            person.id,
+            person.name,
+            person.rank,
+            person.rankerName,
+            person.profile,
+            person.dbID
+          );
+          // Directly push person item into peopleRanks
+          peopleRanks.push(personItem);
+          resultItems.push(createItemElement(personItem, "person"));
         });
       } else {
         setError("No results found.");
@@ -146,11 +147,6 @@ const SearchContent = ({ message }) => {
     return <div className="ratedStars">{ratingElement}</div>;
   };
 
-  // Handle item click (for showing detailed information or additional actions)
-  const handleItemClick = (item, type, avgRating, voteText) => {
-    console.log(item, type, avgRating, voteText);
-  };
-
   return (
     <div className="searchContent">
       <div className="searchDiv">
@@ -207,5 +203,6 @@ const SearchContent = ({ message }) => {
     </div>
   );
 };
+
 
 export default SearchContent;
