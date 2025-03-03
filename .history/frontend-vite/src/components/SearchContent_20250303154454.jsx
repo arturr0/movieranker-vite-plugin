@@ -2,16 +2,16 @@ import React, { useState, useCallback } from "react";
 
 const SearchContent = () => {
   const [query, setQuery] = useState(""); // The search query
-  const [type, setSearchType] = useState("title"); // "title" (movies) or "actor" (people)
-  const [results, setResults] = useState([]); // Stores fetched data
-  const [queryType, setQueryType] = useState(""); // Tracks the response type
-  const [error, setError] = useState(null); // Handles errors
+  const [type, setSearchType] = useState("title"); // The type of search (title or actor)
+  const [results, setResults] = useState([]); // Store results
+  const [queryType, setQueryType] = useState(""); // Store query type
+  const [error, setError] = useState(null); // Store errors if any
 
-  // Fetch data from API based on search type
+  // Function to search movies or people
   const searchMovies = useCallback(async () => {
-    if (!query.trim()) return; // Prevent empty searches
+    if (!query.trim()) return; // Don't search if query is empty
 
-    setError(null); // Clear previous errors
+    setError(null); // Reset error state
 
     try {
       console.log("Searching:", query, type);
@@ -26,68 +26,57 @@ const SearchContent = () => {
       const data = await response.json();
       console.log("Fetched Data:", data);
 
-      setQueryType(data.queryType); // Store the search type from response
-      setResults(data.movies || data.people || []); // Set results dynamically
+      setQueryType(data.queryType); // Store the search type
+      setResults(data.movies || data.people || []); // Store results
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("Failed to load results. Please try again.");
     }
   }, [query, type]);
 
-  // Handle Enter key press for search
+  // Trigger search when Enter key is pressed
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       searchMovies();
     }
   };
 
-  // Update search input
+  // Update the query value when the user types
   const handleSearchChange = (event) => {
     setQuery(event.target.value);
   };
 
-  // Change search type (Movie or Actor)
+  // Update the search type when the user changes the radio button
   const handleRadioChange = (event) => {
     setSearchType(event.target.value);
   };
 
-  // Trigger search on click
+  // Trigger search when the magnifier icon is clicked
   const handleSearchClick = () => {
     searchMovies();
   };
 
-  // Function to render a movie or actor item
-  const createItemElement = (item) => {
-    if (queryType === "title") {
-      // Movie results
-      return (
-        <div className="item" key={item.id}>
-          <p className="title">
-            {item.title} {item.year !== "N/A" ? `(${item.year})` : ""}
-          </p>
-          <div
-            className="img"
-            style={{ backgroundImage: `url(${item.poster})` }}
-          ></div>
-          {item.ratings && <div className="rating">{createRatingElement(item.ratings)}</div>}
-        </div>
-      );
-    } else if (queryType === "actor") {
-      // People results (Actors, Directors, etc.)
-      return (
-        <div className="item" key={item.id}>
-          <p className="title">{item.name}</p>
-          <div
-            className="img"
-            style={{ backgroundImage: `url(${item.profile})` }}
-          ></div>
-        </div>
-      );
-    }
-    return null;
+  // Function to create an item element (movie or person)
+  const createItemElement = (item, type) => {
+    return (
+      <div className="item" key={item.id}>
+        <p className="title">
+          {type === "movie"
+            ? `${item.title} ${item.year !== "N/A" ? `(${item.year})` : ""}`
+            : item.name}
+        </p>
+        <div
+          className="img"
+          style={{
+            backgroundImage: `url(${type === "movie" ? item.poster : item.profile})`,
+          }}
+        ></div>
+        {item.ratings && <div className="rating">{createRatingElement(item.ratings)}</div>}
+      </div>
+    );
   };
 
-  // Create rating stars
+  // Function to create a rating element
   const createRatingElement = (ratings) => {
     const avgRating =
       ratings.length > 0
@@ -148,7 +137,7 @@ const SearchContent = () => {
         {error && <p className="error">{error}</p>}
         <div className="results">
           {results.length > 0 ? (
-            results.map((item) => createItemElement(item))
+            results.map((item) => createItemElement(item, queryType))
           ) : (
             <p>No results found</p>
           )}
