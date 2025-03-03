@@ -1,13 +1,13 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 
 const SearchContent = () => {
   const [query, setQuery] = useState(""); // The search query
   const [type, setSearchType] = useState("title"); // The type of search (title or actor)
-  const [results, setResults] = useState([]); // Store results for the current search type
+  const [results, setResults] = useState({ title: [], actor: [] }); // Store results for each search type
   const [error, setError] = useState(null); // Store errors if any
 
-  // This function will fetch data only when the user clicks the magnifier or presses Enter
-  const searchMovies = useCallback(async () => {
+  // This function will fetch data when either magnifier clicked or Enter key pressed
+  const searchMovies = async () => {
     if (!query.trim()) return; // Don't search if query is empty
 
     setError(null); // Reset error state
@@ -19,23 +19,22 @@ const SearchContent = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Failed to fetch movies");
       }
 
       const data = await response.json();
-      console.log("Fetched Data:", data);
+      console.log("Movies Data:", data);
 
-      // Update the results based on the query type (`movies` for title search, `people` for actor search)
-      if (type === "title") {
-        setResults(data.movies || []); // Assuming the response contains 'movies' key for titles
-      } else if (type === "actor") {
-        setResults(data.people || []); // Assuming the response contains 'people' key for actors
-      }
+      // Store results based on the selected search type (title or actor)
+      setResults((prevResults) => ({
+        ...prevResults,
+        [type]: data.movies || data.people || [], // Update results only for the current type
+      }));
     } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Failed to load results. Please try again.");
+      console.error("Error fetching movies:", error);
+      setError("Failed to load movies. Please try again.");
     }
-  }, [query, type]); // Re-fetch when query or type changes
+  };
 
   // Trigger search when Enter key is pressed
   const handleKeyDown = (event) => {
@@ -49,14 +48,9 @@ const SearchContent = () => {
     setQuery(event.target.value); // Update query when user types
   };
 
-  // Update the search type when the user changes the radio button, but don't trigger fetch
+  // Update the search type when the user changes the radio button
   const handleRadioChange = (event) => {
-    setSearchType(event.target.value); // Change search type (movie or actor) without triggering a fetch
-  };
-
-  // Trigger search when the magnifier icon is clicked
-  const handleSearchClick = () => {
-    searchMovies();
+    setSearchType(event.target.value); // Change search type without affecting results
   };
 
   return (
@@ -68,10 +62,10 @@ const SearchContent = () => {
             className="searchQuery"
             placeholder="Enter search query"
             value={query}
-            onChange={handleSearchChange} // Update query when the user types
+            onChange={handleSearchChange} // Update query on input change
             onKeyDown={handleKeyDown} // Trigger search when Enter key is pressed
           />
-          <i className="icon-search-1 magnifier" onClick={handleSearchClick}></i> {/* Trigger search when clicked */}
+          <i className="icon-search-1 magnifier" onClick={searchMovies}></i> {/* Trigger search when clicked */}
         </div>
       </div>
       <div className="searchTypes" style={{ display: "flex" }}>
@@ -101,9 +95,10 @@ const SearchContent = () => {
       <div className="resultContainer">
         {error && <p className="error">{error}</p>}
         <div className="results">
-          {results.length > 0 ? (
-            results.map((item, index) => (
-              <p key={index}>{item.title || item.name}</p> // Display based on type (title or name)
+          {/* Display results based on the current search type */}
+          {results[type]?.length > 0 ? (
+            results[type].map((item, index) => (
+              <p key={index}>{item.title || item.name}</p>
             ))
           ) : (
             <p>No results found</p>

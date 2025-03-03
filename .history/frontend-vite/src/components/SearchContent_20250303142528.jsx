@@ -25,12 +25,8 @@ const SearchContent = () => {
       const data = await response.json();
       console.log("Fetched Data:", data);
 
-      // Update the results based on the query type (`movies` for title search, `people` for actor search)
-      if (type === "title") {
-        setResults(data.movies || []); // Assuming the response contains 'movies' key for titles
-      } else if (type === "actor") {
-        setResults(data.people || []); // Assuming the response contains 'people' key for actors
-      }
+      // Store the result based on the current query type (title or actor)
+      setResults(data.results || []); // Assuming the API returns a 'results' key
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("Failed to load results. Please try again.");
@@ -101,9 +97,10 @@ const SearchContent = () => {
       <div className="resultContainer">
         {error && <p className="error">{error}</p>}
         <div className="results">
+          {/* Display results based on the current search type */}
           {results.length > 0 ? (
             results.map((item, index) => (
-              <p key={index}>{item.title || item.name}</p> // Display based on type (title or name)
+              <p key={index}>{item.title || item.name}</p>
             ))
           ) : (
             <p>No results found</p>
