@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const SearchContent = ({ userData }) => {
   const [query, setQuery] = useState("");
   const [type, setSearchType] = useState("title");
   const [results, setResults] = useState([]); // Store fetched results
-  const [error, setError] = useState(null); // Store error messages
 
   const handleSearchChange = (event) => {
     setQuery(event.target.value);
@@ -14,17 +13,15 @@ const SearchContent = ({ userData }) => {
     setSearchType(event.target.value);
   };
 
-  const searchMovies = async () => {
-    if (!query.trim()) return; // Prevent empty searches
-
-    const controller = new AbortController();
-    setError(null); // Clear previous errors
+  const searchMovies = async (controller) => {
+    if (!query) return; // Prevent empty searches
 
     try {
       console.log("Searching:", query, type);
 
-      const response = await fetch(`/movies/search?query=${encodeURIComponent(query)}&type=${type}`);
-
+      const response = await fetch(`/movies/search?query=${query}&type=${type}&id=${userData.user.id}`, {
+        signal: controller.signal,
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch movies");
@@ -36,16 +33,19 @@ const SearchContent = ({ userData }) => {
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Error fetching movies:", error);
-        setError("Failed to load movies. Please try again.");
       }
     }
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      searchMovies();
+  useEffect(() => {
+    const controller = new AbortController();
+
+    if (query.trim() !== "") {
+      searchMovies(controller);
     }
-  };
+
+    return () => controller.abort(); // Cleanup on re-render
+  }, [query, type]);
 
   return (
     <div className="searchContent">
@@ -57,9 +57,8 @@ const SearchContent = ({ userData }) => {
             placeholder="Enter search query"
             value={query}
             onChange={handleSearchChange}
-            onKeyDown={handleKeyDown} // Hit Enter to search
           />
-          <i className="icon-search-1 magnifier" onClick={searchMovies}></i>
+          <i className="icon-search-1 magnifier" onClick={() => searchMovies(new AbortController())}></i>
         </div>
       </div>
       <div className="searchTypes" style={{ display: "flex" }}>
@@ -87,7 +86,6 @@ const SearchContent = ({ userData }) => {
         </label>
       </div>
       <div className="resultContainer">
-        {error && <p className="error">{error}</p>}
         <div className="results">
           {results.length > 0 ? (
             results.map((movie, index) => <p key={index}>{movie.title || movie.name}</p>)

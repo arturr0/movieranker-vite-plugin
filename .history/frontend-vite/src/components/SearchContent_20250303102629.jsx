@@ -23,8 +23,9 @@ const SearchContent = ({ userData }) => {
     try {
       console.log("Searching:", query, type);
 
-      const response = await fetch(`/movies/search?query=${encodeURIComponent(query)}&type=${type}`);
-
+      const response = await fetch(`/movies/search?query=${query}&type=${type}&id=${userData.user.id}`, {
+        signal: controller.signal,
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch movies");
