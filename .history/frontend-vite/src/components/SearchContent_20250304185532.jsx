@@ -18,7 +18,7 @@ class Item {
 class Movie extends Item { }
 class Person extends Item { }
 
-const SearchContent = ({ message, setMoviesRanks, setPeopleRanks, onSearchMovies }) => {
+const SearchContent = ({ message, setMoviesRanks, setPeopleRanks }) => {
   console.log("test ", message);
 
   const [query, setQuery] = useState("");

@@ -2,7 +2,7 @@
 import React from "react";
 
 const RateContainer = ({ moviesRanks, peopleRanks }) => {
-  console.log(moviesRanks, peopleRanks)
+  console.log("rate", moviesRanks, peopleRanks)
   return (
     <div className="ranks">
       <div className="rateContainer">

@@ -18,7 +18,7 @@ class Item {
 class Movie extends Item { }
 class Person extends Item { }
 
-const SearchContent = ({ message, setMoviesRanks, setPeopleRanks, onSearchMovies }) => {
+const SearchContent = ({ message, setMoviesRanks, setPeopleRanks }) => {
   console.log("test ", message);
 
   const [query, setQuery] = useState("");
@@ -123,7 +123,7 @@ const SearchContent = ({ message, setMoviesRanks, setPeopleRanks, onSearchMovies
     return (
       <div key={item.id} className="item">
         <p className="titles" data-title={title}>{title}</p>
-        <div className="img" style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }} id={item.id}></div>
+        <div className="img" style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }}></div>
         <p className="votesNo">{voteText}</p>
         {createRatingElement(avgRating)}
       </div>

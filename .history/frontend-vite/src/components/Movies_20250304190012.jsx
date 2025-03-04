@@ -39,11 +39,11 @@ const Movies = () => {
   }, [navigate]);
 
   return (
-    <>
+    <div>
       <h1>
         <span className="fontawesome-star"></span> <span>Movie Ranker</span>{" "}
         <span className="fontawesome-star"></span>
-        <i className="icon-cancel-outline" style={{ display: "none", textShadow: "none" }}></i>
+        <i className="icon-cancel-outline" style="display: none; text-shadow: none;"></i>
       </h1>
       <div className="mainContent">
         <SearchContent
@@ -53,7 +53,7 @@ const Movies = () => {
         />
         <RateContainer moviesRanks={moviesRanks} peopleRanks={peopleRanks} />
       </div>
-    </>
+    </div>
   );
 };
 

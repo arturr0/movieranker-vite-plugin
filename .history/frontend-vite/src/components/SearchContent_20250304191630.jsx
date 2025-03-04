@@ -35,63 +35,44 @@ const SearchContent = ({ message, setMoviesRanks, setPeopleRanks, onSearchMovies
 
   const searchMovies = useCallback(async () => {
     if (!queryRef.current.trim()) return;
-
+    
     setError(null);
-
+    
     try {
       console.log("Search Type:", typeRef.current);
-
       const response = await fetch(
         `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}`
       );
-
       const data = await response.json();
       console.log("Movies Data:", data);
-
-      if (Number(data.querySenderID) === message.id) {
-        lastQuery = {
-          type: data.queryType,
-          text: data.queryText,
-          id: Number(data.querySenderID),
-        };
-      }
-
+      
+      // Updating rankings
       moviesRanks.length = 0;
       peopleRanks.length = 0;
-
-      const resultItems = [];
-
-      const processItems = (items, type, resultArray, rankArray, RankClass) => {
-        items?.forEach((item) => {
-          if (!(type === "movie" ? item.poster : item.profile)) return;
       
-          resultArray.push(createItemElement(item, type));
-      
-          item.ratings?.forEach(({ rating, userEmail, comment, id }) => {
-            rankArray.push(new RankClass(item.id, item[type === "movie" ? "title" : "name"], rating, userEmail, comment, id));
-          });
-        });
-      };
-
       if (data.movies) {
-        processItems(data.movies, "movie", resultItems, moviesRanks, Movie);
-      } else if (data.people) {
-        processItems(data.people, "person", resultItems, peopleRanks, Person);
-      } else {
-        setError("No results found.");
+        data.movies.forEach(({ id, title, ratings }) => {
+          moviesRanks.push(new Movie(id, title, ...ratings));
+        });
       }
 
-      console.log("Updated MoviesRanks:", moviesRanks);
-      console.log("Updated PeopleRanks:", peopleRanks);
+      if (data.people) {
+        data.people.forEach(({ id, name, ratings }) => {
+          peopleRanks.push(new Person(id, name, ...ratings));
+        });
+      }
 
-      // Pass updated rankings to parent
       setMoviesRanks([...moviesRanks]);
       setPeopleRanks([...peopleRanks]);
 
-      setResults(resultItems);
+      // Pass searchMovies function to the parent
+      if (onSearchMovies) {
+        onSearchMovies(searchMovies);
+      }
+
     } catch (error) {
       console.error("Error fetching movies:", error);
-      setError("Failed to load results. Please try again.");
+      setError("Failed to load results.");
     }
   }, [message]);
 
