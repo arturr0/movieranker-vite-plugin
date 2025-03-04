@@ -32,7 +32,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, r
   }, [message]);
 
   const searchMovies = useCallback(async () => {
-    if (!queryRef.current.trim()) return;
+    //if (!queryRef.current.trim()) return;
 
     setError(null);
 
@@ -40,7 +40,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, r
       console.log("Search Type:", typeRef.current);
 
       const response = await fetch(
-        `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}`
+        `/movies/search?query=${encodeURIComponent("titanic")}&type=${"title"}&id=${message.id}`
       );
 
       const data = await response.json();

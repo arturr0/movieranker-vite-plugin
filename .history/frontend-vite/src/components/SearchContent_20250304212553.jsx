@@ -40,7 +40,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, r
       console.log("Search Type:", typeRef.current);
 
       const response = await fetch(
-        `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}`
+        `/movies/search?query=${encodeURIComponent("titanic")}&type=${"title"}`
       );
 
       const data = await response.json();

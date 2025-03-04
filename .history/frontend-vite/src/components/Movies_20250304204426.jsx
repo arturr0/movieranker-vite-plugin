@@ -59,8 +59,7 @@ const Movies = () => {
           setMoviesRanks={setMoviesRanks}
           setPeopleRanks={setPeopleRanks}
         />
-        <RateContainer
-          message={message}
+        <RateContainer 
           moviesRanks={moviesRanks} 
           peopleRanks={peopleRanks} 
           searchMovies={handleSearchMovies} // Pass function to RateContainer

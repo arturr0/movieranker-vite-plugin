@@ -39,7 +39,7 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies }) => {
                   </span>
                 ))}
               </div>
-              <button className="sendPost">SEND POST</button> {/* Trigger handleSearch */}
+              <button className="sendPost" onClick={handleSearch}>SEND POST</button> {/* Trigger handleSearch */}
             </div>
           </div>
           <div className="posts"></div>

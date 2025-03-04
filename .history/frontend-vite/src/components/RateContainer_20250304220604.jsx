@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies }) => {
   useEffect(() => {
       console.log("Message changed: ", message);
-  }, [message]);
+    }, [message]);
   // Function inside RateContainer that calls searchMovies
   const handleSearch = () => {
     console.log("Calling searchMovies from handleSearch...");
@@ -12,9 +12,9 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies }) => {
     }
   };
 
-  // useEffect(() => {
-  //   handleSearch(); // Call handleSearch when RateContainer mounts
-  // }, []);
+  useEffect(() => {
+    handleSearch(); // Call handleSearch when RateContainer mounts
+  }, []);
 
   console.log("rate", moviesRanks, peopleRanks);
 
@@ -39,7 +39,7 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies }) => {
                   </span>
                 ))}
               </div>
-              <button className="sendPost">SEND POST</button> {/* Trigger handleSearch */}
+              <button className="sendPost" onClick={handleSearch}>SEND POST</button> {/* Trigger handleSearch */}
             </div>
           </div>
           <div className="posts"></div>

@@ -32,7 +32,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, r
   }, [message]);
 
   const searchMovies = useCallback(async () => {
-    if (!queryRef.current.trim()) return;
+    // if (!queryRef.current.trim()) return;
 
     setError(null);
 
@@ -40,7 +40,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, r
       console.log("Search Type:", typeRef.current);
 
       const response = await fetch(
-        `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}`
+        `/movies/search?query=${encodeURIComponent("titanic")}&type=${"title"}`
       );
 
       const data = await response.json();
@@ -53,10 +53,11 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, r
           id: Number(data.querySenderID),
         };
       }
-
+      console.log("1");
       moviesRanks.length = 0;
       peopleRanks.length = 0;
       const resultItems = [];
+      console.log("2");
 
       const processItems = (items, type, resultArray, rankArray, RankClass) => {
         items?.forEach((item) => {
@@ -69,6 +70,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, r
           });
         });
       };
+      console.log("3");
 
       if (data.movies) {
         processItems(data.movies, "movie", resultItems, moviesRanks, Movie);
@@ -77,10 +79,15 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, r
       } else {
         setError("No results found.");
       }
+      console.log("4");
 
       setMoviesRanks([...moviesRanks]);
       setPeopleRanks([...peopleRanks]);
+      console.log("5");
+
       setResults(resultItems);
+      console.log("6");
+
     } catch (error) {
       console.error("Error fetching movies:", error);
       setError("Failed to load results. Please try again.");

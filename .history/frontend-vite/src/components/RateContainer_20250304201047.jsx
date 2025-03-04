@@ -1,23 +1,8 @@
-import React, { useEffect } from "react";
+// src/components/RateContainer.js
+import React from "react";
 
-const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies }) => {
-  useEffect(() => {
-      console.log("Message changed: ", message);
-  }, [message]);
-  // Function inside RateContainer that calls searchMovies
-  const handleSearch = () => {
-    console.log("Calling searchMovies from handleSearch...");
-    if (searchMovies) {
-      searchMovies();
-    }
-  };
-
-  // useEffect(() => {
-  //   handleSearch(); // Call handleSearch when RateContainer mounts
-  // }, []);
-
-  console.log("rate", moviesRanks, peopleRanks);
-
+const RateContainer = ({ moviesRanks, peopleRanks }) => {
+  console.log("rate", moviesRanks, peopleRanks)
   return (
     <div className="ranks">
       <div className="rateContainer">
@@ -39,7 +24,7 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies }) => {
                   </span>
                 ))}
               </div>
-              <button className="sendPost">SEND POST</button> {/* Trigger handleSearch */}
+              <button className="sendPost">SEND POST</button>
             </div>
           </div>
           <div className="posts"></div>

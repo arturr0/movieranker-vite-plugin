@@ -92,48 +92,9 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, r
   const handleSearchChange = (event) => {
     queryRef.current = event.target.value;
   };
-  
+
   const handleRadioChange = (event) => {
     typeRef.current = event.target.value;
-  };
-  
-  const handleSearchClick = () => {
-    searchMovies();
-  };
-  
-  const createItemElement = (item, type) => {
-    const title = type === "movie"
-      ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
-      : item.name;
-  
-    const avgRating =
-      item.ratings && item.ratings.length
-        ? Math.round(item.ratings.reduce((sum, r) => sum + r.rating, 0) / item.ratings.length)
-        : "No rating yet";
-  
-    const voteCount = item.ratings ? item.ratings.length : 0;
-    const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
-  
-    return (
-      <div key={item.id} className="item">
-        <p className="titles" data-title={title}>{title}</p>
-        <div className="img" style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }} id={item.id}></div>
-        <p className="votesNo">{voteText}</p>
-        {createRatingElement(avgRating)}
-      </div>
-    );
-  };
-  
-  const createRatingElement = (avgRating) => {
-    return (
-      <div className="ratedStars">
-        {[...Array(5)].map((_, i) => (
-          <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>
-            &#9733;
-          </span>
-        ))}
-      </div>
-    );
   };
 
   return (
@@ -185,5 +146,3 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, r
 });
 
 export default SearchContent;
-
-

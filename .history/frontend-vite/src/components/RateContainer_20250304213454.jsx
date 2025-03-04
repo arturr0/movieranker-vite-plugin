@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 
 const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies }) => {
-  useEffect(() => {
-      console.log("Message changed: ", message);
-  }, [message]);
+  
   // Function inside RateContainer that calls searchMovies
   const handleSearch = () => {
     console.log("Calling searchMovies from handleSearch...");
@@ -17,7 +15,7 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies }) => {
   // }, []);
 
   console.log("rate", moviesRanks, peopleRanks);
-
+  handleSearch();
   return (
     <div className="ranks">
       <div className="rateContainer">
@@ -39,7 +37,6 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies }) => {
                   </span>
                 ))}
               </div>
-              <button className="sendPost">SEND POST</button> {/* Trigger handleSearch */}
             </div>
           </div>
           <div className="posts"></div>

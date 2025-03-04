@@ -38,13 +38,6 @@ const Movies = () => {
       });
   }, [navigate]);
 
-  // Function to call searchMovies from SearchContent
-  const handleSearchMovies = () => {
-    if (searchContentRef.current) {
-      searchContentRef.current.searchMovies();
-    }
-  };
-
   return (
     <>
       <h1>
@@ -59,12 +52,7 @@ const Movies = () => {
           setMoviesRanks={setMoviesRanks}
           setPeopleRanks={setPeopleRanks}
         />
-        <RateContainer
-          message={message}
-          moviesRanks={moviesRanks} 
-          peopleRanks={peopleRanks} 
-          searchMovies={handleSearchMovies} // Pass function to RateContainer
-        />
+        <RateContainer moviesRanks={moviesRanks} peopleRanks={peopleRanks} />
       </div>
     </>
   );
