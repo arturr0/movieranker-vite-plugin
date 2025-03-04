@@ -6,8 +6,10 @@ import RateContainer from "./RateContainer";
 
 const Movies = () => {
   const [message, setMessage] = useState(null);
+  const [moviesRanks, setMoviesRanks] = useState([]);  // State to store movie ranks
+  const [peopleRanks, setPeopleRanks] = useState([]);  // State to store people ranks
   const navigate = useNavigate();
-  const test = 'test';
+
   useEffect(() => {
     const token = localStorage.getItem("jwt");
 
@@ -28,14 +30,12 @@ const Movies = () => {
       .then((data) => {
         if (data.user) {
           setMessage(data.user);
-          console.log("data: ", message);
         }
       })
       .catch((err) => {
         console.error("Error:", err);
         navigate("/"); // Redirect on error
       });
-      console.log("mess: ", message)
   }, [navigate]);
 
   return (
@@ -45,8 +45,15 @@ const Movies = () => {
         <span className="fontawesome-star"></span>
       </h1>
       <div className="mainContent">
-        <SearchContent message={message} />
-        <RateContainer />
+        <SearchContent 
+          message={message} 
+          setMoviesRanks={setMoviesRanks} 
+          setPeopleRanks={setPeopleRanks} 
+        />
+        <RateContainer 
+          moviesRanks={moviesRanks} 
+          peopleRanks={peopleRanks} 
+        />
       </div>
     </div>
   );

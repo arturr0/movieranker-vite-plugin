@@ -1,8 +1,6 @@
+// src/components/SearchContent.js
 import React, { useState, useEffect, useCallback, useRef } from "react";
-
 let lastQuery = {};
-const moviesRanks = [];
-const peopleRanks = [];
 
 class Item {
   constructor(id, title, rank, rankerName, post, dbID) {
@@ -15,12 +13,11 @@ class Item {
   }
 }
 
-class Movie extends Item { }
-class Person extends Item { }
-
-const SearchContent = ({ message }) => {
-  console.log("test ", message);
-
+class Movie extends Item {}
+class Person extends Item {}
+const moviesRanks = [];
+const peopleRanks = [];
+const SearchContent = ({ message, setMoviesRanks, setPeopleRanks }) => {
   const [query, setQuery] = useState("");
   const [type, setSearchType] = useState("title");
   const [results, setResults] = useState([]);
@@ -33,58 +30,50 @@ const SearchContent = ({ message }) => {
     console.log("Message changed: ", message);
   }, [message]);
 
-  const searchMovies = useCallback(async () => {
-    if (!queryRef.current.trim()) return;
+const [ratings, setRatings] = useState([]);
+const searchMovies = useCallback(async () => {
+  if (!queryRef.current.trim()) return;
 
-    setError(null);
+  setError(null);
 
-    try {
-      console.log("Search Type:", typeRef.current);
+  try {
+    const response = await fetch(
+      `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}`
+    );
 
-      const response = await fetch(
-        `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}`
-      );
+    const data = await response.json();
+    console.log(data);
 
-      const data = await response.json();
-      console.log("Movies Data:", data);
-
-      if (Number(data.querySenderID) === message.id) {
-        lastQuery = {
-          type: data.queryType,
-          text: data.queryText,
-          id: Number(data.querySenderID),
-        };
-      }
-      moviesRanks.length = 0;
-      peopleRanks.length = 0;
-      const resultItems = [];
-      const processItems = (items, type, resultArray, rankArray, RankClass) => {
-        items?.forEach((item) => {
-          if (!(type === "movie" ? item.poster : item.profile)) return;
-      
-          resultArray.push(createItemElement(item, type));
-      
-          item.ratings?.forEach(({ rating, userEmail, comment, id }) => {
-            rankArray.push(new RankClass(item.id, item[type === "movie" ? "title" : "name"], rating, userEmail, comment, id));
-          });
-        });
+    if (Number(data.querySenderID) === message.id) {
+      lastQuery = {
+        type: data.queryType,
+        text: data.queryText,
+        id: Number(data.querySenderID),
       };
-      
-      if (data.movies) {
-        processItems(data.movies, "movie", resultItems, moviesRanks, Movie);
-      } else if (data.people) {
-        processItems(data.people, "person", resultItems, peopleRanks, Person);
-      }
-       else {
-        setError("No results found.");
-      }
-      console.log(moviesRanks, peopleRanks);
-      setResults(resultItems);
-    } catch (error) {
-      console.error("Error fetching movies:", error);
-      setError("Failed to load results. Please try again.");
     }
-  }, [message]);
+
+    if (item.ratings) {
+			item.ratings.forEach(rank => {
+				const rankedItem = type === 'movie' 
+				? new Movie(item.id, item.title, rank.rating, rank.userEmail, rank.comment, rank.id) 
+				: new Person(item.id, item.name, rank.rating, rank.userEmail, rank.comment, rank.id);
+				
+				type === 'movie' ? moviesRanks.push(rankedItem) : peopleRanks.push(rankedItem);
+			});
+		} else {
+      setError("No results found.");
+    }
+
+    setResults(resultItems);
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    setError("Failed to load results. Please try again.");
+  }
+}, [message, setMoviesRanks, setPeopleRanks]);
+
+
+
+  
 
   const handleSearchChange = (event) => {
     queryRef.current = event.target.value;
@@ -125,9 +114,7 @@ const SearchContent = ({ message }) => {
     return (
       <div className="ratedStars">
         {[...Array(5)].map((_, i) => (
-          <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>
-            &#9733;
-          </span>
+          <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>&#9733;</span>
         ))}
       </div>
     );

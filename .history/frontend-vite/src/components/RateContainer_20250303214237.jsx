@@ -1,7 +1,7 @@
 // src/components/RateContainer.js
 import React from "react";
 
-const RateContainer = () => {
+const RateContainer = ({ moviesRanks, peopleRanks }) => {
   return (
     <div className="ranks">
       <div className="rateContainer">

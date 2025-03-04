@@ -1,8 +1,6 @@
+// src/components/SearchContent.js
 import React, { useState, useEffect, useCallback, useRef } from "react";
-
 let lastQuery = {};
-const moviesRanks = [];
-const peopleRanks = [];
 
 class Item {
   constructor(id, title, rank, rankerName, post, dbID) {
@@ -15,12 +13,10 @@ class Item {
   }
 }
 
-class Movie extends Item { }
-class Person extends Item { }
+class Movie extends Item {}
+class Person extends Item {}
 
-const SearchContent = ({ message }) => {
-  console.log("test ", message);
-
+const SearchContent = ({ message, setMoviesRanks, setPeopleRanks }) => {
   const [query, setQuery] = useState("");
   const [type, setSearchType] = useState("title");
   const [results, setResults] = useState([]);
@@ -35,19 +31,17 @@ const SearchContent = ({ message }) => {
 
   const searchMovies = useCallback(async () => {
     if (!queryRef.current.trim()) return;
-
+  
     setError(null);
-
+  
     try {
-      console.log("Search Type:", typeRef.current);
-
       const response = await fetch(
         `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}`
       );
-
+  
       const data = await response.json();
-      console.log("Movies Data:", data);
-
+      console.log(data);
+  
       if (Number(data.querySenderID) === message.id) {
         lastQuery = {
           type: data.queryType,
@@ -55,36 +49,72 @@ const SearchContent = ({ message }) => {
           id: Number(data.querySenderID),
         };
       }
-      moviesRanks.length = 0;
-      peopleRanks.length = 0;
+  
       const resultItems = [];
-      const processItems = (items, type, resultArray, rankArray, RankClass) => {
-        items?.forEach((item) => {
-          if (!(type === "movie" ? item.poster : item.profile)) return;
-      
-          resultArray.push(createItemElement(item, type));
-      
-          item.ratings?.forEach(({ rating, userEmail, comment, id }) => {
-            rankArray.push(new RankClass(item.id, item[type === "movie" ? "title" : "name"], rating, userEmail, comment, id));
+      if (data.movies) {
+        data.movies.forEach((movie) => {
+          if (!movie.poster) return;
+          
+          resultItems.push(createItemElement(movie, "movie"));
+          
+          // Push the movie along with its ratings to moviesRanks
+          setMoviesRanks((prevRanks) => [
+            ...prevRanks,
+            new Movie(
+              movie.id, 
+              movie.title, 
+              movie.rank, 
+              movie.rankerName, 
+              movie.post, 
+              movie.dbID,
+              movie.ratings // Add the ratings here
+            )
+          ]);
+  
+          // Example: Pushing ratings to another state (optional)
+          movie.ratings.forEach((rating) => {
+            setRatings((prevRatings) => [
+              ...prevRatings,
+              {
+                movieId: movie.id,
+                ratingId: rating.id,
+                userId: rating.userId,
+                rating: rating.rating
+              }
+            ]);
           });
         });
-      };
-      
-      if (data.movies) {
-        processItems(data.movies, "movie", resultItems, moviesRanks, Movie);
       } else if (data.people) {
-        processItems(data.people, "person", resultItems, peopleRanks, Person);
-      }
-       else {
+        data.people.forEach((person) => {
+          if (!person.profile) return;
+          
+          resultItems.push(createItemElement(person, "person"));
+          
+          // Push the person along with their ratings to peopleRanks
+          setPeopleRanks((prevRanks) => [
+            ...prevRanks,
+            new Person(
+              person.id, 
+              person.name, 
+              person.rank, 
+              person.rankerName, 
+              person.post, 
+              person.dbID,
+              person.ratings // Add the ratings here
+            )
+          ]);
+        });
+      } else {
         setError("No results found.");
       }
-      console.log(moviesRanks, peopleRanks);
+  
       setResults(resultItems);
     } catch (error) {
       console.error("Error fetching movies:", error);
       setError("Failed to load results. Please try again.");
     }
-  }, [message]);
+  }, [message, setMoviesRanks, setPeopleRanks]);
+  
 
   const handleSearchChange = (event) => {
     queryRef.current = event.target.value;
@@ -125,9 +155,7 @@ const SearchContent = ({ message }) => {
     return (
       <div className="ratedStars">
         {[...Array(5)].map((_, i) => (
-          <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>
-            &#9733;
-          </span>
+          <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>&#9733;</span>
         ))}
       </div>
     );

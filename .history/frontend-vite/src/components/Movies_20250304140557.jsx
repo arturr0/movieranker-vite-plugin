@@ -46,7 +46,7 @@ const Movies = () => {
       </h1>
       <div className="mainContent">
         <SearchContent message={message} />
-        <RateContainer />
+        <RateContainer moviesRanks={moviesRanks} peopleRanks={peopleRanks} />
       </div>
     </div>
   );

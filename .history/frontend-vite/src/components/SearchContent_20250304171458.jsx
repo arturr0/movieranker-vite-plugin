@@ -58,24 +58,23 @@ const SearchContent = ({ message }) => {
       moviesRanks.length = 0;
       peopleRanks.length = 0;
       const resultItems = [];
-      const processItems = (items, type, resultArray, rankArray, RankClass) => {
-        items?.forEach((item) => {
-          if (!(type === "movie" ? item.poster : item.profile)) return;
-      
-          resultArray.push(createItemElement(item, type));
-      
-          item.ratings?.forEach(({ rating, userEmail, comment, id }) => {
-            rankArray.push(new RankClass(item.id, item[type === "movie" ? "title" : "name"], rating, userEmail, comment, id));
+      if (data.movies) {
+        data.movies.forEach((movie) => {
+          if (!movie.poster) return;
+          resultItems.push(createItemElement(movie, "movie"));
+          movie.ratings.forEach((item) => {
+            moviesRanks.push(new Movie(movie.id, movie.title, item.rank, item.rankerName, item.post, item.dbID));
           });
         });
-      };
-      
-      if (data.movies) {
-        processItems(data.movies, "movie", resultItems, moviesRanks, Movie);
       } else if (data.people) {
-        processItems(data.people, "person", resultItems, peopleRanks, Person);
-      }
-       else {
+        data.people.forEach((person) => {
+          if (!person.profile) return;
+          resultItems.push(createItemElement(person, "person"));
+          person.ratings.forEach((item) => {
+            peopleRanks.push(new Person(person.id, person.name, item.rank, item.rankerName, item.post, item.dbID));
+          });
+        });
+      } else {
         setError("No results found.");
       }
       console.log(moviesRanks, peopleRanks);
