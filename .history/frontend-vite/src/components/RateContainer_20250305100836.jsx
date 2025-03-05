@@ -1,12 +1,9 @@
 import React, { useEffect } from "react";
 
-const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieId }) => {
+const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies }) => {
   useEffect(() => {
       console.log("Message changed: ", message);
   }, [message]);
-  useEffect(() => {
-    console.log("Selected movie ID:", movieId);
-  }, [movieId]);
   // Function inside RateContainer that calls searchMovies
   const handleSearch = () => {
     console.log("Calling searchMovies from handleSearch...");

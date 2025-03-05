@@ -67,12 +67,12 @@ html, body {
 	overflow-y: auto;
 	font-family: "Oswald", Sans-serif;
 	z-index: 0;
-	overflow-y: auto;
-	
+	scrollbar-gutter: stable;
 
 }
-
-  
+/* body {
+	overflow-y: auto;  
+} */
 .mainContent {
 	position: relative;
 }

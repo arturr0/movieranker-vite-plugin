@@ -137,7 +137,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
   };
 
   return (
-    <div className="searchContent" style={{ display: isVisible ? "block" : "none" }}>
+    <div className="searchContent">
       <div className="searchDiv">
         <div className="searchContainer">
           <input

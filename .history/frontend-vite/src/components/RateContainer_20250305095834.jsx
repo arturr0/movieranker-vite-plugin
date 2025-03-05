@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 
-const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieId }) => {
+const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieId  }) => {
+  console.log("img", movieId)
   useEffect(() => {
-      console.log("Message changed: ", message);
+    console.log("Message changed: ", message);
   }, [message]);
-  useEffect(() => {
-    console.log("Selected movie ID:", movieId);
-  }, [movieId]);
-  // Function inside RateContainer that calls searchMovies
+
   const handleSearch = () => {
     console.log("Calling searchMovies from handleSearch...");
     if (searchMovies) {
@@ -15,14 +13,10 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
     }
   };
 
-  // useEffect(() => {
-  //   handleSearch(); // Call handleSearch when RateContainer mounts
-  // }, []);
-
   console.log("rate", moviesRanks, peopleRanks);
 
   return (
-    <div className="ranks">
+    <div className="ranks" style={{ display: "none" }}> {/* Initially hidden */}
       <div className="rateContainer">
         <div className="title"></div>
         <div className="ratedContainer">
@@ -34,7 +28,11 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
           <div className="myPost">
             <div className="myRank"></div>
             <div className="postInput">
-              <textarea className="writePost" type="text" placeholder="Leave a comment..."></textarea>
+              <textarea
+                className="writePost"
+                type="text"
+                placeholder="Leave a comment..."
+              ></textarea>
               <div className="stars">
                 {[1, 2, 3, 4, 5].map((value) => (
                   <span key={value} className="star" data-value={value}>
@@ -42,7 +40,7 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
                   </span>
                 ))}
               </div>
-              <button className="sendPost">SEND POST</button> {/* Trigger handleSearch */}
+              <button className="sendPost" onClick={handleSearch}>SEND POST</button> {/* Trigger handleSearch */}
             </div>
           </div>
           <div className="posts"></div>

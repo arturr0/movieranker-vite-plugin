@@ -18,7 +18,7 @@ class Item {
 class Movie extends Item {}
 class Person extends Item {}
 
-const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onSelectMovie, isVisible }, ref) => {
+const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onImageClick, toggleVisibility  }, ref) => {
   const [query, setQuery] = useState("");
   const [type, setSearchType] = useState("title");
   const [results, setResults] = useState([]);
@@ -37,8 +37,6 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
     setError(null);
 
     try {
-      console.log("Search Type:", typeRef.current);
-
       const response = await fetch(
         `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}`
       );
@@ -92,38 +90,38 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
   const handleSearchChange = (event) => {
     queryRef.current = event.target.value;
   };
-  
+
   const handleRadioChange = (event) => {
     typeRef.current = event.target.value;
   };
-  
+
   const handleSearchClick = () => {
     searchMovies();
   };
-  
+
   const createItemElement = (item, type) => {
     const title = type === "movie"
       ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
       : item.name;
-  
+
     const avgRating =
       item.ratings && item.ratings.length
         ? Math.round(item.ratings.reduce((sum, r) => sum + r.rating, 0) / item.ratings.length)
         : "No rating yet";
-  
+
     const voteCount = item.ratings ? item.ratings.length : 0;
     const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
-  
+
     return (
-      <div key={item.id} className="item">
+      <div key={item.id} className="item" onClick={() => toggleVisibility(item.id)}>
         <p className="titles" data-title={title}>{title}</p>
-        <div className="img" style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }} id={item.id} onClick={() => onSelectMovie(item.id)}></div>
+        <div className="img" style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }} id={item.id}> onClick={() => onImageClick(item.id)}</div>
         <p className="votesNo">{voteText}</p>
         {createRatingElement(avgRating)}
       </div>
     );
   };
-  
+
   const createRatingElement = (avgRating) => {
     return (
       <div className="ratedStars">
@@ -137,7 +135,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
   };
 
   return (
-    <div className="searchContent" style={{ display: isVisible ? "block" : "none" }}>
+    <div className="searchContent">
       <div className="searchDiv">
         <div className="searchContainer">
           <input
@@ -170,19 +168,21 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
             defaultChecked={type === "actor"}
             onChange={handleRadioChange}
           />
-          Cast & Crew
+          Person
         </label>
       </div>
 
-      <div className="resultContainer">
-        {error && <p className="error">{error}</p>}
-        <div className="results">
-          {results.length > 0 ? results.map((item, index) => <div key={index}>{item}</div>) : <p>No results found</p>}
-        </div>
+      <div className="results">
+        {error ? (
+          <p className="error">{error}</p>
+        ) : (
+          <div className="itemContainer">
+            {results}
+          </div>
+        )}
       </div>
     </div>
   );
 });
 
 export default SearchContent;
-

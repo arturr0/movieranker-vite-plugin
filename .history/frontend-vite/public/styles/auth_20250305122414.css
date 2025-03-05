@@ -13,12 +13,8 @@ html, body {
     background-size: cover;  
     background-repeat: no-repeat;  
     background-position: center center;   */
-    max-width: 100%;
-	width: 100%;
+    width: 100vw;  
     min-height: 100vh; 
-}
-body {
-    scrollbar-gutter: stable;
 }
 /* Default background for the Auth page */
 .auth-bg {
@@ -26,7 +22,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-
+    scrollbar-gutter: auto;
   }
   
   /* No background for the Movies page */

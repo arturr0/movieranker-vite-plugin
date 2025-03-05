@@ -18,7 +18,7 @@ class Item {
 class Movie extends Item {}
 class Person extends Item {}
 
-const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onSelectMovie, isVisible }, ref) => {
+const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks }, ref) => {
   const [query, setQuery] = useState("");
   const [type, setSearchType] = useState("title");
   const [results, setResults] = useState([]);
@@ -117,7 +117,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
     return (
       <div key={item.id} className="item">
         <p className="titles" data-title={title}>{title}</p>
-        <div className="img" style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }} id={item.id} onClick={() => onSelectMovie(item.id)}></div>
+        <div className="img" style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }} id={item.id}></div>
         <p className="votesNo">{voteText}</p>
         {createRatingElement(avgRating)}
       </div>
@@ -137,7 +137,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
   };
 
   return (
-    <div className="searchContent" style={{ display: isVisible ? "block" : "none" }}>
+    <div className="searchContent">
       <div className="searchDiv">
         <div className="searchContainer">
           <input
