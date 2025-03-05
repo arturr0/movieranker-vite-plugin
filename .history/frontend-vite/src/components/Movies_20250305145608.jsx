@@ -75,10 +75,7 @@ const Movies = () => {
           moviesRanks={moviesRanks}
           peopleRanks={peopleRanks}
           searchMovies={handleSearchMovies}
-          movieId={selectedMovie?.id}
-          movieType={selectedMovie?.type}   // ✅ Pass type
-          movieTitle={selectedMovie?.title}
-          moviePoster={selectedMovie?.poster}
+          movieId={selectedMovieId}
         />
       )}
       </div>

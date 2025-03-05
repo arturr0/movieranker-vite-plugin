@@ -123,8 +123,8 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
           id={item.id} 
           onClick={() => onSelectMovie(item.id, type, title, type === 'movie' ? item.poster : item.profile)}
         ></div>
-        <p className="votesNo">{voteText}</p>
-        {createRatingElement(avgRating)}
+      <p className="votesNo">{voteText}</p>
+      {createRatingElement(avgRating)}
       </div>
     );
   };

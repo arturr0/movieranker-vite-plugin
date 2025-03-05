@@ -61,26 +61,23 @@ const Movies = () => {
         ></i>
       </h1>
       <div className="mainContent">
-      <SearchContent
-        ref={searchContentRef}
-        message={message}
-        setMoviesRanks={setMoviesRanks}
-        setPeopleRanks={setPeopleRanks}
-        onSelectMovie={handleSelectMovie} // Pass the updated function
-        isVisible={!showRateContainer}
-      />
-      {showRateContainer && (
-        <RateContainer
+        <SearchContent
+          ref={searchContentRef}
           message={message}
-          moviesRanks={moviesRanks}
-          peopleRanks={peopleRanks}
-          searchMovies={handleSearchMovies}
-          movieId={selectedMovie?.id}
-          movieType={selectedMovie?.type}   // ✅ Pass type
-          movieTitle={selectedMovie?.title}
-          moviePoster={selectedMovie?.poster}
+          setMoviesRanks={setMoviesRanks}
+          setPeopleRanks={setPeopleRanks}
+          onSelectMovie={handleSelectMovie}
+          isVisible={!showRateContainer}
         />
-      )}
+        {showRateContainer && (
+          <RateContainer
+            message={message}
+            moviesRanks={moviesRanks}
+            peopleRanks={peopleRanks}
+            searchMovies={handleSearchMovies}
+            movieId={selectedMovieId}
+          />
+        )}
       </div>
     </>
   );

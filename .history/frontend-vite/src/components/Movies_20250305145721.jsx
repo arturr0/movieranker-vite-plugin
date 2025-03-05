@@ -70,16 +70,15 @@ const Movies = () => {
         isVisible={!showRateContainer}
       />
       {showRateContainer && (
-        <RateContainer
-          message={message}
-          moviesRanks={moviesRanks}
-          peopleRanks={peopleRanks}
-          searchMovies={handleSearchMovies}
-          movieId={selectedMovie?.id}
-          movieType={selectedMovie?.type}   // ✅ Pass type
-          movieTitle={selectedMovie?.title}
-          moviePoster={selectedMovie?.poster}
-        />
+  <RateContainer
+    message={message}
+    moviesRanks={moviesRanks}
+    peopleRanks={peopleRanks}
+    searchMovies={handleSearchMovies}
+    movieId={selectedMovie?.id}
+    movieTitle={selectedMovie?.title}
+    moviePoster={selectedMovie?.poster}
+  />
       )}
       </div>
     </>
