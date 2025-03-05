@@ -38,8 +38,8 @@ const Movies = () => {
 
   const [selectedMovie, setSelectedMovie] = useState(null); // Store full movie details
 
-  const handleSelectMovie = (id, type, title, poster, avg, votes ) => {
-    setSelectedMovie({ id, type, title, poster, avg, votes }); // Store all necessary details
+  const handleSelectMovie = (id, type, title, poster, votes, avg) => {
+    setSelectedMovie({ id, type, title, poster, votes, avg }); // Store all necessary details
     setShowRateContainer(true);
   };
 

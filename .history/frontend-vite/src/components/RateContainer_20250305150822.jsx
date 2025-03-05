@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieId, movieType, movieTitle, moviePoster, movieAvg, movieVotes }) => {
+const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieId, movieType, movieTitle, moviePoster }) => {
   useEffect(() => {
       console.log("Message changed: ", message);
   }, [message]);
@@ -9,9 +9,7 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
     console.log("Selected movie type:", movieType); // ✅ Log movie type
     console.log("Selected movie title:", movieTitle);
     console.log("Selected movie poster:", moviePoster);
-    console.log("Selected movie poster:", movieVotes);
-    console.log("Selected movie poster:", movieAvg);
-  }, [movieId, movieType, movieTitle, moviePoster, movieVotes, movieAvg]);
+  }, [movieId, movieType, movieTitle, moviePoster]);
   // Function inside RateContainer that calls searchMovies
   const handleSearch = () => {
     console.log("Calling searchMovies from handleSearch...");
@@ -29,7 +27,7 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
   return (
     <div className="ranks">
       <div className="rateContainer">
-        <div className="title"> { movieTitle } </div>
+        <div className="title">{ movieTitle }</div>
         <div className="ratedContainer">
           <div className="ratedInfo">
             <img className="rankImg" src={ moviePoster } alt="" />

@@ -121,7 +121,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
           className="img" 
           style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }} 
           id={item.id} 
-          onClick={() => onSelectMovie(item.id, type, title, type === 'movie' ? item.poster : item.profile, avgRating, voteText)}
+          onClick={() => onSelectMovie(item.id, type, title, type === 'movie' ? item.poster : item.profile, voteCount, voteText)}
         ></div>
         <p className="votesNo">{voteText}</p>
         {createRatingElement(avgRating)}

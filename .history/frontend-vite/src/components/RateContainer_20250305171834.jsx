@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieId, movieType, movieTitle, moviePoster, movieAvg, movieVotes }) => {
+const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieId, movieType, movieTitle, moviePoster, movieVotes, movieAvg }) => {
   useEffect(() => {
       console.log("Message changed: ", message);
   }, [message]);
