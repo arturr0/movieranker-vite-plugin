@@ -58,8 +58,8 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
           </div>
           <div className="posts">
             {(movieType === 'movie' 
-              ? moviesRanks.filter(movie => movie.id === movieId).map(post => (<p>{post.rank}</p>))
-              : peopleRanks.filter(person => person.id === movieId).map(post => (<p>{post.rank}</p>))
+              ? moviesRanks.filter(movie => movie.id === movieId).map(post => (<p>{post.rating}</p>))
+              : peopleRanks.filter(person => person.id === movieId).map(post => (<p>{post.rating}</p>))
             )}
           </div>
         </div>
