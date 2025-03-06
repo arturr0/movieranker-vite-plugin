@@ -276,8 +276,8 @@ span {
     content: "";
     width: 140px; 
     height: 4px;
-    border-top: 2px solid #121212;
-    border-bottom: 2px solid #121212;
+    border-top: 2px solid .121212;
+    border-bottom: 2px solid .121212;
 }
 .ratedTitle:before {
     margin-right: 10px; 
@@ -420,7 +420,7 @@ textarea:focus {
 		margin: 0;
 		width: 100%;
 	}
-	.ratedContainer .posts {
+	.myPost .posts {
 		width: 100%;
 	}
 	.posts .post {

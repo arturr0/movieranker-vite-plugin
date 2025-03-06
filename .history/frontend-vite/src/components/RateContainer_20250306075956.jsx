@@ -29,7 +29,7 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
   return (
     <div className="ranks">
       <div className="rateContainer">
-        <div className="ratedTitle"> { movieTitle } </div>
+        <div className="title"> { movieTitle } </div>
         <div className="ratedContainer">
           <div className="ratedInfo">
             <img className="rankImg" src={ moviePoster } alt="" />
