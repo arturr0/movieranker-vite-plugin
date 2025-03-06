@@ -45,28 +45,20 @@ const Movies = () => {
     setShowRateContainer(false);
     setSelectedMovie(null);
   };
-  useEffect(() => {
-    const eventSource = new EventSource("/movies/updates");
-  
-    eventSource.onopen = () => {
-      console.log("Connection to server opened.");
-    };
-  
-    eventSource.onerror = (error) => {
-      console.error("Error in EventSource connection:", error);
-    };
-  
-    eventSource.onmessage = async (event) => {
-      const data = JSON.parse(event.data);
-      console.log("sse", data);
-    };
-  
-    // Cleanup function to close EventSource on unmount
-    return () => {
-      console.log("Closing SSE connection");
-      eventSource.close();
-    };
-  }, []); // Run only once on mount
+  const eventSource = new EventSource('/movies/updates');
+	
+	eventSource.onopen = () => {
+		console.log('Connection to server opened.');
+	};
+	
+	eventSource.onerror = (error) => {
+		console.error('Error in EventSource connection:', error);
+	};
+	
+	eventSource.onmessage = async (event) => {
+    const data = JSON.parse(event.data);
+    console.log("sse", data);
+  }
   return (
     <>
       <h1>
