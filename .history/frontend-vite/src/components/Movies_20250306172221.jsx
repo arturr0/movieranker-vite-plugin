@@ -89,7 +89,6 @@ const Movies = () => {
         isVisible={!showRateContainer}
         setLastQuery={setLastQuery}
         lastQuery={lastQuery}  // Pass lastQuery as a prop
-        sseData={sseData}  // Pass SSE data as a prop
       />
       {showRateContainer && selectedMovie && (
         <RateContainer
@@ -104,7 +103,6 @@ const Movies = () => {
           movieID={selectedMovie.id}
           movieType={selectedMovie.type}
           lastQuery={lastQuery} // <-- Pass lastQuery to RateContainer
-          sseData={sseData}  // Pass SSE data as a prop
         />
       )}
     </>
