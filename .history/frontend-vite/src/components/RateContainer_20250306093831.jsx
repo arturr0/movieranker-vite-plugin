@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieId, movieType, movieTitle, moviePoster, movieAvg, movieVotes }) => {
-  
+  const [selectedRating, setSelectedRating] = useState(0);
 
   useEffect(() => {
     console.log("Message changed: ", message);
@@ -16,12 +16,7 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
     console.log("Selected movie avg:", movieAvg);
     setSelectedRating(0); // Reset rating every time movie changes
   }, [movieId, movieType, movieTitle, moviePoster, movieVotes, movieAvg]);
-  const [selectedRating, setSelectedRating] = useState(0);
-  const [hoverRating, setHoverRating] = useState(0);
-  useEffect(() => {
-    setSelectedRating(0);
-    setHoverRating(0);
-  }, [movieTitle]);
+
   const handleMouseOver = (index) => {
     setSelectedRating(index + 1);
   };
@@ -38,17 +33,14 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
   return (
     <div className="ranks">
       <div className="rateContainer">
-        <div className="ratedTitle">{movieTitle}</div>
+        <div className="ratedTitle"> {movieTitle} </div>
         <div className="ratedContainer">
           <div className="ratedInfo">
             <img className="rankImg" src={moviePoster} alt="" />
             <p className="votesInfo">{movieVotes}</p>
             <div className="starsInfo">
               {[...Array(5)].map((_, i) => (
-                <span
-                  key={i}
-                  className={i < movieAvg ? "filled" : ""}
-                >
+                <span key={i} style={{ color: i < movieAvg ? "gold" : "gray" }}>
                   &#9733;
                 </span>
               ))}
@@ -57,19 +49,15 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
           <div className="myPost">
             <div className="myRank"></div>
             <div className="postInput">
-              <textarea
-                className="writePost"
-                type="text"
-                placeholder="Leave a comment..."
-              ></textarea>
+              <textarea className="writePost" type="text" placeholder="Leave a comment..."></textarea>
               <div className="stars">
-                {[1, 2, 3, 4, 5].map((value) => (
+                {[...Array(5)].map((_, index) => (
                   <span
-                    key={value}
-                    className={`star ${value <= (hoverRating || selectedRating) ? "filled" : ""}`}
-                    onMouseEnter={() => setHoverRating(value)}
-                    onMouseLeave={() => setHoverRating(0)}
-                    onClick={() => setSelectedRating(value)}
+                    key={index}
+                    className={`star ${index < selectedRating ? "filled" : ""}`}
+                    onMouseOver={() => handleMouseOver(index)}
+                    onMouseLeave={handleMouseLeave}
+                    onClick={() => handleClick(index)}
                   >
                     &#9733;
                   </span>
@@ -77,6 +65,25 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieI
               </div>
               <button className="sendPost">SEND POST</button>
             </div>
+          </div>
+          <div className="posts">
+            {(movieType === "movie" ? moviesRanks : peopleRanks)
+              .filter((item) => item.id === movieId)
+              .map((post) => (
+                <div className="post" key={post.rankerName}>
+                  <p className="userName">{
+                    message.id === post.rankerName ? "Your post" : post.rankerName
+                  }</p>
+                  <p className="userPost">{post.post}</p>
+                  <div className="userRank">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} style={{ color: i < movieAvg ? "gold" : "gray" }}>
+                        &#9733;
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>
