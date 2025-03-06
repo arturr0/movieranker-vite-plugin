@@ -26,7 +26,11 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   const queryRef = useRef(query);
   const typeRef = useRef(type);
 
-  
+  useEffect(() => {
+    if (sseData) {
+      console.log("New SSE data in SearchContent:", sseData);
+      searchMovies();      }
+  }, [sseData, searchMovies]);
 
   useEffect(() => {
     console.log("Message changed: ", message);
@@ -90,11 +94,7 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
       setError("Failed to load results. Please try again.");
     }
   }, [message, setLastQuery]);
-  useEffect(() => {
-    if (sseData) {
-      console.log("New SSE data in SearchContent:", sseData);
-      searchMovies();      }
-  }, [sseData, searchMovies]);
+
   useImperativeHandle(ref, () => ({ searchMovies }));
 
   const handleSearchChange = (event) => {
