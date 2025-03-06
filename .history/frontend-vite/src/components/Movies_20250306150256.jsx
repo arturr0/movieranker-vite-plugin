@@ -11,7 +11,7 @@ const Movies = () => {
   const [showRateContainer, setShowRateContainer] = useState(false);
   const navigate = useNavigate();
   const searchContentRef = useRef();
-  const [lastQuery, setLastQuery] = useState(null);
+  const [lastQuery, setLastQuery] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");

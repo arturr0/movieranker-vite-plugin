@@ -17,7 +17,7 @@ class Item {
 class Movie extends Item {}
 class Person extends Item {}
 
-const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onSelectMovie, isVisible, setLastQuery, lastQuery }, ref) => {
+const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onSelectMovie, isVisible, setLastQuery }, ref) => {
   const [query, setQuery] = useState("");
   const [type, setSearchType] = useState("title");
   const [results, setResults] = useState([]);
@@ -87,7 +87,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
       console.error("Error fetching movies:", error);
       setError("Failed to load results. Please try again.");
     }
-  }, [message, setLastQuery]);
+  }, [message]);
 
   useImperativeHandle(ref, () => ({ searchMovies }));
 

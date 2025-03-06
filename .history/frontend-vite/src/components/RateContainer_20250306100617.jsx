@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from "react";
 
-const RateContainer = ({ message, movieTitle, moviePoster, movieAvg, movieVotes, lastQuery }) => {
+const RateContainer = ({ message, moviesRanks, peopleRanks, searchMovies, movieId, movieType, movieTitle, moviePoster, movieAvg, movieVotes }) => {
+  
+
+  useEffect(() => {
+    console.log("Message changed: ", message);
+  }, [message]);
+
+  useEffect(() => {
+    console.log("Selected movie ID:", movieId);
+    console.log("Selected movie type:", movieType);
+    console.log("Selected movie title:", movieTitle);
+    console.log("Selected movie poster:", moviePoster);
+    console.log("Selected movie votes:", movieVotes);
+    console.log("Selected movie avg:", movieAvg);
+    setSelectedRating(0); // Reset rating every time movie changes
+  }, [movieId, movieType, movieTitle, moviePoster, movieVotes, movieAvg]);
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
-
-  useEffect(() => {
-    console.log("Message changed rate:", message);  // Log to ensure message is available
-  }, [message]);
-  useEffect(() => {
-    console.log("Last Query changed:", lastQuery);
-  }, [lastQuery]);
-
   useEffect(() => {
     setSelectedRating(0);
     setHoverRating(0);
   }, [movieTitle]);
-
   const handleMouseOver = (index) => {
     setSelectedRating(index + 1);
   };
@@ -39,7 +45,10 @@ const RateContainer = ({ message, movieTitle, moviePoster, movieAvg, movieVotes,
             <p className="votesInfo">{movieVotes}</p>
             <div className="starsInfo">
               {[...Array(5)].map((_, i) => (
-                <span key={i} className={i < movieAvg ? "filled" : ""}>
+                <span
+                  key={i}
+                  className={i < movieAvg ? "filled" : ""}
+                >
                   &#9733;
                 </span>
               ))}
@@ -66,7 +75,7 @@ const RateContainer = ({ message, movieTitle, moviePoster, movieAvg, movieVotes,
                   </span>
                 ))}
               </div>
-              <button className="sendPost">SEND POST</button>
+              <button className="sendPost" itemID={movieId} type={movieType} title={movieTitle} onClick={rateItem}>SEND POST</button>
             </div>
           </div>
         </div>

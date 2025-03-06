@@ -17,7 +17,7 @@ class Item {
 class Movie extends Item {}
 class Person extends Item {}
 
-const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onSelectMovie, isVisible, setLastQuery, lastQuery }, ref) => {
+const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onSelectMovie, isVisible }, ref) => {
   const [query, setQuery] = useState("");
   const [type, setSearchType] = useState("title");
   const [results, setResults] = useState([]);
@@ -26,12 +26,22 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
   const queryRef = useRef(query);
   const typeRef = useRef(type);
 
+  const [lastQuery, setLastQuery] = useState({});
+
+  useEffect(() => {
+    if (Number(data.querySenderID) === message.id) {
+      setLastQuery({
+        type: data.queryType,
+        text: data.queryText,
+        id: Number(data.querySenderID),
+      });
+    }
+  }, [data, message]);
+  
   useEffect(() => {
     console.log("Message changed: ", message);
   }, [message]);
-  useEffect(() => {
-    console.log("Last Query Updated:", lastQuery);
-  }, [lastQuery]);
+
   const searchMovies = useCallback(async () => {
     if (!queryRef.current.trim()) return;
 
@@ -41,7 +51,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
       console.log("Search Type:", typeRef.current);
 
       const response = await fetch(
-        `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}&id=${message.id}`
+        `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}`
       );
 
       const data = await response.json();
@@ -53,9 +63,11 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
           text: data.queryText,
           id: Number(data.querySenderID),
         });
-        console.log("set");
       }
-      console.log(lastQuery);
+      
+      
+      
+
       moviesRanks.length = 0;
       peopleRanks.length = 0;
       const resultItems = [];
@@ -87,7 +99,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
       console.error("Error fetching movies:", error);
       setError("Failed to load results. Please try again.");
     }
-  }, [message, setLastQuery]);
+  }, [message]);
 
   useImperativeHandle(ref, () => ({ searchMovies }));
 
@@ -192,3 +204,4 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
 });
 
 export default SearchContent;
+

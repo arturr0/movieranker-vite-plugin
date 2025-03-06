@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchContent from "./SearchContent";
 import RateContainer from "./RateContainer";
@@ -11,7 +11,7 @@ const Movies = () => {
   const [showRateContainer, setShowRateContainer] = useState(false);
   const navigate = useNavigate();
   const searchContentRef = useRef();
-  const [lastQuery, setLastQuery] = useState(null);
+  const [lastQuery, setLastQuery] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -45,28 +45,35 @@ const Movies = () => {
     setShowRateContainer(false);
     setSelectedMovie(null);
   };
-  
+
   return (
     <>
-      <SearchContent 
-        message={message}
-        setMoviesRanks={setMoviesRanks}
-        setPeopleRanks={setPeopleRanks}
-        onSelectMovie={handleSelectMovie}
-        isVisible={!showRateContainer}
-        setLastQuery={setLastQuery}
-        lastQuery={lastQuery}  // Pass lastQuery as a prop
-      />
-      {showRateContainer && selectedMovie && (
-        <RateContainer
-          message={message}
-          movieTitle={selectedMovie.title}
-          moviePoster={selectedMovie.poster}
-          movieAvg={selectedMovie.avgRating}
-          movieVotes={selectedMovie.votes}
-          lastQuery={lastQuery} // <-- Pass lastQuery to RateContainer
+      <h1>Movie Ranker</h1>
+      <div className="mainContent">
+        <SearchContent
+          ref={searchContentRef}
+          message={message}  // Ensure the message is passed here
+          setMoviesRanks={setMoviesRanks}
+          setPeopleRanks={setPeopleRanks}
+          onSelectMovie={handleSelectMovie}
+          isVisible={!showRateContainer}
         />
-      )}
+        {showRateContainer && (
+          <RateContainer
+            message={message}
+            lastQuery={lastQuery}
+            moviesRanks={moviesRanks}
+            peopleRanks={peopleRanks}
+            searchMovies={handleSearchMovies}
+            movieId={selectedMovie?.id}
+            movieType={selectedMovie?.type}
+            movieTitle={selectedMovie?.title}
+            moviePoster={selectedMovie?.poster}
+            movieVotes={selectedMovie?.votes}
+            movieAvg={selectedMovie?.avg}
+          />
+        )}
+      </div>
     </>
   );
 };

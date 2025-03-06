@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-const RateContainer = ({ message, movieTitle, moviePoster, movieAvg, movieVotes, lastQuery }) => {
+const RateContainer = ({ message, movieTitle, moviePoster, movieAvg, movieVotes }) => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
 
   useEffect(() => {
     console.log("Message changed rate:", message);  // Log to ensure message is available
   }, [message]);
-  useEffect(() => {
-    console.log("Last Query changed:", lastQuery);
-  }, [lastQuery]);
 
   useEffect(() => {
     setSelectedRating(0);

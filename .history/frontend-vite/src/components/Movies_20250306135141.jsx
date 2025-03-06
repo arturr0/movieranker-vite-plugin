@@ -11,7 +11,7 @@ const Movies = () => {
   const [showRateContainer, setShowRateContainer] = useState(false);
   const navigate = useNavigate();
   const searchContentRef = useRef();
-  const [lastQuery, setLastQuery] = useState(null);
+  const [lastQuery, setLastQuery] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -45,28 +45,36 @@ const Movies = () => {
     setShowRateContainer(false);
     setSelectedMovie(null);
   };
-  
+
   return (
     <>
-      <SearchContent 
+      <h1>Movie Ranker</h1>
+      <div className="mainContent">
+      <SearchContent
+        ref={searchContentRef}
         message={message}
         setMoviesRanks={setMoviesRanks}
         setPeopleRanks={setPeopleRanks}
         onSelectMovie={handleSelectMovie}
+        setLastQuery={setLastQuery}  // Pass down setLastQuery here
         isVisible={!showRateContainer}
-        setLastQuery={setLastQuery}
-        lastQuery={lastQuery}  // Pass lastQuery as a prop
       />
-      {showRateContainer && selectedMovie && (
+      {showRateContainer && (
         <RateContainer
           message={message}
-          movieTitle={selectedMovie.title}
-          moviePoster={selectedMovie.poster}
-          movieAvg={selectedMovie.avgRating}
-          movieVotes={selectedMovie.votes}
-          lastQuery={lastQuery} // <-- Pass lastQuery to RateContainer
+          lastQuery={lastQuery}
+          moviesRanks={moviesRanks}
+          peopleRanks={peopleRanks}
+          searchMovies={handleSearchMovies}
+          movieId={selectedMovie?.id}
+          movieType={selectedMovie?.type}
+          movieTitle={selectedMovie?.title}
+          moviePoster={selectedMovie?.poster}
+          movieVotes={selectedMovie?.votes}
+          movieAvg={selectedMovie?.avg}
         />
       )}
+      </div>
     </>
   );
 };

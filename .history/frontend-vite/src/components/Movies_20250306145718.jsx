@@ -11,7 +11,7 @@ const Movies = () => {
   const [showRateContainer, setShowRateContainer] = useState(false);
   const navigate = useNavigate();
   const searchContentRef = useRef();
-  const [lastQuery, setLastQuery] = useState(null);
+  const [lastQuery, setLastQuery] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -48,15 +48,16 @@ const Movies = () => {
   
   return (
     <>
-      <SearchContent 
+      <SearchContent
+        ref={searchContentRef}
         message={message}
         setMoviesRanks={setMoviesRanks}
         setPeopleRanks={setPeopleRanks}
         onSelectMovie={handleSelectMovie}
         isVisible={!showRateContainer}
-        setLastQuery={setLastQuery}
-        lastQuery={lastQuery}  // Pass lastQuery as a prop
+        setLastQuery={setLastQuery} // <-- Pass setLastQuery to SearchContent
       />
+      
       {showRateContainer && selectedMovie && (
         <RateContainer
           message={message}

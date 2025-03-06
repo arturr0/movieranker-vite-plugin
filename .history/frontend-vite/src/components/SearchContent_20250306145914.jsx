@@ -17,7 +17,7 @@ class Item {
 class Movie extends Item {}
 class Person extends Item {}
 
-const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onSelectMovie, isVisible, setLastQuery, lastQuery }, ref) => {
+const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onSelectMovie, isVisible, setLastQuery }, ref) => {
   const [query, setQuery] = useState("");
   const [type, setSearchType] = useState("title");
   const [results, setResults] = useState([]);
@@ -25,6 +25,7 @@ const SearchContent = forwardRef(({ message, setMoviesRanks, setPeopleRanks, onS
 
   const queryRef = useRef(query);
   const typeRef = useRef(type);
+  const [lastQuery, setLastQuery] = useState({});
 
   useEffect(() => {
     console.log("Message changed: ", message);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const RateContainer = ({ message, movieTitle, moviePoster, movieAvg, movieVotes, lastQuery }) => {
+const RateContainer = ({ message, movieTitle, moviePoster, movieAvg, movieVotes, setLastQuery }) => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
 

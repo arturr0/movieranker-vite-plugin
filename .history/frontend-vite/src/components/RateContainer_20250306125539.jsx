@@ -7,9 +7,8 @@ const RateContainer = ({ message, movieTitle, moviePoster, movieAvg, movieVotes,
   useEffect(() => {
     console.log("Message changed rate:", message);  // Log to ensure message is available
   }, [message]);
-  useEffect(() => {
-    console.log("Last Query changed:", lastQuery);
-  }, [lastQuery]);
+  console.log("Last Query changed:", lastQuery);
+
 
   useEffect(() => {
     setSelectedRating(0);
