@@ -75,7 +75,7 @@ const Movies = () => {
           searchMovies={handleSearchMovies}
           movieTitle={selectedMovie.title}
           moviePoster={selectedMovie.poster}
-          movieAvg={selectedMovie.avg}
+          movieAvg={selectedMovie.avgRating}
           movieVotes={selectedMovie.votes}
           movieID={selectedMovie.id}
           movieType={selectedMovie.type}

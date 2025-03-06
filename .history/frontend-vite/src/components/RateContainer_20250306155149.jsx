@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-const RateContainer = ({ message, moviesRanks, peopleRanks, movieID, movieType, movieTitle, moviePoster, movieAvg, movieVotes, lastQuery }) => {
+const RateContainer = ({ message, movieID, movieType, movieTitle, moviePoster, movieAvg, movieVotes, lastQuery }) => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
-  console.log("a", movieAvg);
   useEffect(() => {
     console.log("Message changed rate:", message);  // Log to ensure message is available
   }, [message]);
@@ -109,7 +108,7 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, movieID, movieType, 
           </div>
           <div className="posts">
             {(movieType === 'movie' ? moviesRanks : peopleRanks)
-              .filter(item => item.id === movieID)
+              .filter(item => item.id === movieId)
               .map(post => <div className="post" key={post.rankerName}>
                 <p className="userName">{
                     message.id === post.rankerName ? 'Your post' : post.rankerName

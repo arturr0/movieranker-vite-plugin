@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-const RateContainer = ({ message, moviesRanks, peopleRanks, movieID, movieType, movieTitle, moviePoster, movieAvg, movieVotes, lastQuery }) => {
+const RateContainer = ({ message, movieID, movieType, movieTitle, moviePoster, movieAvg, movieVotes, lastQuery }) => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
-  console.log("a", movieAvg);
   useEffect(() => {
     console.log("Message changed rate:", message);  // Log to ensure message is available
   }, [message]);
@@ -45,8 +44,8 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, movieID, movieType, 
                     type,
                     id,
                     title,
-                    rating: selectedRating,  // Use passed rating instead of missing selectedRating
-                    post: writePost,  // Ensure correct selection
+                    rating,  // Use passed rating instead of missing selectedRating
+                    post: document.querySelector('.writePost').value,  // Ensure correct selection
                     queryType: lastQuery?.type,    
                     queryText: lastQuery?.text,    
                     querySenderID: lastQuery?.id,
@@ -106,25 +105,6 @@ const RateContainer = ({ message, moviesRanks, peopleRanks, movieID, movieType, 
               </div>
               <button className="sendPost" onClick={() => rateItem(movieType, movieID, movieTitle)}>SEND POST</button>
             </div>
-          </div>
-          <div className="posts">
-            {(movieType === 'movie' ? moviesRanks : peopleRanks)
-              .filter(item => item.id === movieID)
-              .map(post => <div className="post" key={post.rankerName}>
-                <p className="userName">{
-                    message.id === post.rankerName ? 'Your post' : post.rankerName
-                  }
-                </p>
-                <p className="userPost">{post.post}</p>
-                <div className="userRank">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} style={{ color: i < movieAvg ? "gold" : "gray" }}>
-                      &#9733;
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>

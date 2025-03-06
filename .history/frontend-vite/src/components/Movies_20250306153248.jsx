@@ -48,16 +48,6 @@ const Movies = () => {
   
   return (
     <>
-      <h1>
-        <span className="fontawesome-star"></span> 
-        <span>Movie Ranker</span> 
-        <span className="fontawesome-star"></span>
-        <i 
-          className="icon-cancel-outline" 
-          style={{ display: showRateContainer ? "block" : "none", cursor: "pointer" }}
-          onClick={handleCloseRateContainer}
-        ></i>
-      </h1>
       <SearchContent 
         message={message}
         setMoviesRanks={setMoviesRanks}
@@ -70,15 +60,11 @@ const Movies = () => {
       {showRateContainer && selectedMovie && (
         <RateContainer
           message={message}
-          moviesRanks={moviesRanks}
-          peopleRanks={peopleRanks}
-          searchMovies={handleSearchMovies}
           movieTitle={selectedMovie.title}
           moviePoster={selectedMovie.poster}
-          movieAvg={selectedMovie.avg}
+          movieAvg={selectedMovie.avgRating}
           movieVotes={selectedMovie.votes}
           movieID={selectedMovie.id}
-          movieType={selectedMovie.type}
           lastQuery={lastQuery} // <-- Pass lastQuery to RateContainer
         />
       )}
