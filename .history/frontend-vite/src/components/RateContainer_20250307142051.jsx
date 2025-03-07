@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 const RateContainer = ({ sseData, message, moviesRanks, peopleRanks, movieID, movieType, movieTitle, moviePoster, movieAvg, movieVotes, lastQuery }) => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
+  console.log("moviesRanks", moviesRanks);
   useEffect(() => {
     if (sseData) {
       console.log("New SSE data in RateContainer:", sseData);
@@ -37,39 +38,84 @@ const RateContainer = ({ sseData, message, moviesRanks, peopleRanks, movieID, mo
   const [writePost, setWritePost] = useState(""); // Store the comment
 
   async function rateItem(type, id, title, rating) {
-    const token = localStorage.getItem('jwt');
-    
-    if (selectedRating && !isNaN(selectedRating) && selectedRating >= 1 && selectedRating <= 5) {
-        try {
-            const response = await fetch(`http://localhost:3000/movies/rate`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    type,
-                    id,
-                    title,
-                    rating: selectedRating,  // Use passed rating instead of missing selectedRating
-                    post: writePost,  // Ensure correct selection
-                    queryType: lastQuery?.type,    
-                    queryText: lastQuery?.text,    
-                    querySenderID: lastQuery?.id,
-                    userName: message?.email, 
-                }),
-            });
-
-            const data = await response.json();
-            console.log('Response:', data);
-
-        } catch (error) {
-            console.error('Error rating item:', error);
+    const token = localStorage.getItem("jwt");
+  
+    if (selectedRating >= 1 && selectedRating <= 5) {
+      try {
+        const response = await fetch(`http://localhost:3000/movies/rate`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type,
+            id,
+            title,
+            rating: selectedRating,
+            post: writePost,
+            queryType: lastQuery?.type,
+            queryText: lastQuery?.text,
+            querySenderID: lastQuery?.id,
+            userName: message?.email,
+          }),
+        });
+  
+        const data = await response.json();
+        console.log("Response:", data);
+  
+        // Update local state after posting
+        if (data.newPost) {
+          setPosts((prevPosts) => [...prevPosts, data.newPost]);
         }
+  
+      } catch (error) {
+        console.error("Error rating item:", error);
+      }
     } else {
-        alert('Invalid rating! Please provide a number between 1 and 5.');
+      alert("Invalid rating! Please provide a number between 1 and 5.");
     }
-}
+  }
+  
+
+  const [posts, setPosts] = useState(movieType === 'movie' ? moviesRanks : peopleRanks);
+  
+  const [votes, setVotes] = useState(movieVotes);
+  const [avgRating, setAvgRating] = useState(movieAvg);
+
+  
+  useEffect(() => {
+    if (sseData) {
+      console.log("New SSE data in RateContainer:", sseData);
+      console.log("posts", posts);
+      const newPosts = posts.filter(post => post.id === movieID);
+      const newVotesNo = newPosts.length;
+      const newVotes = newVotesNo === 1 ? "1 vote" : `${newVotesNo} votes`;
+      
+      console.log("newPosts", newPosts);
+      setVotes(newVotes);  // Update votes count
+      
+      const newAvg = Math.round(newPosts.reduce((sum, r) => sum + r, 0) / newVotesNo)
+      
+      setAvgRating(newAvg);      // Update average rating
+      // if (sseData.newPost) {
+      //     setPosts((prevPosts) => {
+      //       // Check if the post already exists (update it)
+      //       const existingPostIndex = prevPosts.findIndex(post => post.rankerName === sseData.newPost.rankerName);
+            
+      //       if (existingPostIndex !== -1) {
+      //         // Update existing post
+      //         const updatedPosts = [...prevPosts];
+      //         updatedPosts[existingPostIndex] = sseData.newPost;
+      //         return updatedPosts;
+      //       } else {
+      //         // Add new post
+      //         return [...prevPosts, sseData.newPost];
+      //       }
+      //     });
+      // }
+    }
+  }, [sseData]);
 
   return (
     <div className="ranks">
@@ -78,13 +124,10 @@ const RateContainer = ({ sseData, message, moviesRanks, peopleRanks, movieID, mo
         <div className="ratedContainer">
           <div className="ratedInfo">
             <img className="rankImg" src={moviePoster} alt="" />
-            <p className="votesInfo">{(movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length === 1 ?
-            "1 vote" : `${(movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length} votes` }</p>
+            <p className="votesInfo">{movieVotes}</p>
             <div className="starsInfo">
               {[...Array(5)].map((_, i) => (
-                <span key={i} 
-                className={i < Math.round((movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).reduce((sum, r) => sum + r.rank, 0) / (movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length) ? 
-                "filled" : ""}>
+                <span key={i} className={i < movieAvg ? "filled" : ""}>
                   &#9733;
                 </span>
               ))}
@@ -127,7 +170,7 @@ const RateContainer = ({ sseData, message, moviesRanks, peopleRanks, movieID, mo
                 <p className="userPost">{post.post}</p>
                 <div className="userRank">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} style={{ color: i < post.rank ? "gold" : "gray" }}>
+                    <span key={i} style={{ color: i < movieAvg ? "gold" : "gray" }}>
                       &#9733;
                     </span>
                   ))}

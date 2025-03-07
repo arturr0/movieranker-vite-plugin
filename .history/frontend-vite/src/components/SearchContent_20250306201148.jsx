@@ -26,14 +26,14 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   const queryRef = useRef(query);
   const typeRef = useRef(type);
 
-  
-
   useEffect(() => {
     console.log("Message changed: ", message);
   }, [message]);
+  
   useEffect(() => {
     console.log("Last Query Updated:", lastQuery);
   }, [lastQuery]);
+
   const searchMovies = useCallback(async () => {
     if (!queryRef.current.trim()) return;
 
@@ -57,6 +57,7 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
         });
         console.log("set");
       }
+      
       console.log(lastQuery);
       moviesRanks.length = 0;
       peopleRanks.length = 0;
@@ -90,11 +91,15 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
       setError("Failed to load results. Please try again.");
     }
   }, [message, setLastQuery]);
+  
   useEffect(() => {
     if (sseData) {
       console.log("New SSE data in SearchContent:", sseData);
-      searchMovies();      }
-  }, [sseData, searchMovies]);
+      searchMovies();
+      onSelectMovie();
+    }
+  }, [sseData, searchMovies, onSelectMovie]);
+
   useImperativeHandle(ref, () => ({ searchMovies }));
 
   const handleSearchChange = (event) => {

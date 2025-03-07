@@ -78,13 +78,10 @@ const RateContainer = ({ sseData, message, moviesRanks, peopleRanks, movieID, mo
         <div className="ratedContainer">
           <div className="ratedInfo">
             <img className="rankImg" src={moviePoster} alt="" />
-            <p className="votesInfo">{(movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length === 1 ?
-            "1 vote" : `${(movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length} votes` }</p>
+            <p className="votesInfo">{movieVotes}</p>
             <div className="starsInfo">
               {[...Array(5)].map((_, i) => (
-                <span key={i} 
-                className={i < Math.round((movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).reduce((sum, r) => sum + r.rank, 0) / (movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length) ? 
-                "filled" : ""}>
+                <span key={i} className={i < movieAvg ? "filled" : ""}>
                   &#9733;
                 </span>
               ))}
@@ -127,7 +124,7 @@ const RateContainer = ({ sseData, message, moviesRanks, peopleRanks, movieID, mo
                 <p className="userPost">{post.post}</p>
                 <div className="userRank">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} style={{ color: i < post.rank ? "gold" : "gray" }}>
+                    <span key={i} style={{ color: i < movieAvg ? "gold" : "gray" }}>
                       &#9733;
                     </span>
                   ))}

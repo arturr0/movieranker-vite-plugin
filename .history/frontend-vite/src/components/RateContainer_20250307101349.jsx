@@ -3,12 +3,39 @@ import React, { useEffect, useState } from "react";
 const RateContainer = ({ sseData, message, moviesRanks, peopleRanks, movieID, movieType, movieTitle, moviePoster, movieAvg, movieVotes, lastQuery }) => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
+  
+  const [movieVotes, setMovieVotes] = useState(movieVotes);
+  const [movieAvg, setMovieAvg] = useState(movieAvg);
+  const [posts, setPosts] = useState(movieType === 'movie' ? moviesRanks : peopleRanks);
+
   useEffect(() => {
     if (sseData) {
       console.log("New SSE data in RateContainer:", sseData);
-      // Perform any actions based on SSE updates
+  
+      if (sseData.movieID === movieID) {
+        setMovieVotes(sseData.newVotes);  // Update votes count
+        setMovieAvg(sseData.newAvg);      // Update average rating
+  
+        if (sseData.newPost) {
+          setPosts((prevPosts) => {
+            // Check if the post already exists (update it)
+            const existingPostIndex = prevPosts.findIndex(post => post.rankerName === sseData.newPost.rankerName);
+            
+            if (existingPostIndex !== -1) {
+              // Update existing post
+              const updatedPosts = [...prevPosts];
+              updatedPosts[existingPostIndex] = sseData.newPost;
+              return updatedPosts;
+            } else {
+              // Add new post
+              return [...prevPosts, sseData.newPost];
+            }
+          });
+        }
+      }
     }
   }, [sseData]);
+  
   
   useEffect(() => {
     console.log("Message changed rate:", message);  // Log to ensure message is available
@@ -78,13 +105,10 @@ const RateContainer = ({ sseData, message, moviesRanks, peopleRanks, movieID, mo
         <div className="ratedContainer">
           <div className="ratedInfo">
             <img className="rankImg" src={moviePoster} alt="" />
-            <p className="votesInfo">{(movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length === 1 ?
-            "1 vote" : `${(movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length} votes` }</p>
+            <p className="votesInfo">{movieVotes}</p>
             <div className="starsInfo">
               {[...Array(5)].map((_, i) => (
-                <span key={i} 
-                className={i < Math.round((movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).reduce((sum, r) => sum + r.rank, 0) / (movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length) ? 
-                "filled" : ""}>
+                <span key={i} className={i < movieAvg ? "filled" : ""}>
                   &#9733;
                 </span>
               ))}
@@ -127,7 +151,7 @@ const RateContainer = ({ sseData, message, moviesRanks, peopleRanks, movieID, mo
                 <p className="userPost">{post.post}</p>
                 <div className="userRank">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} style={{ color: i < post.rank ? "gold" : "gray" }}>
+                    <span key={i} style={{ color: i < movieAvg ? "gold" : "gray" }}>
                       &#9733;
                     </span>
                   ))}

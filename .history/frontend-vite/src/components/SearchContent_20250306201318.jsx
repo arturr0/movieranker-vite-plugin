@@ -93,8 +93,9 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   useEffect(() => {
     if (sseData) {
       console.log("New SSE data in SearchContent:", sseData);
-      searchMovies();      }
-  }, [sseData, searchMovies]);
+      searchMovies();
+      onSelectMovie();}
+  }, [sseData, searchMovies, onSelectMovie]);
   useImperativeHandle(ref, () => ({ searchMovies }));
 
   const handleSearchChange = (event) => {

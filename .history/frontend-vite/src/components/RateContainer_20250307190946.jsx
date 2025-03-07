@@ -82,9 +82,7 @@ const RateContainer = ({ sseData, message, moviesRanks, peopleRanks, movieID, mo
             "1 vote" : `${(movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length} votes` }</p>
             <div className="starsInfo">
               {[...Array(5)].map((_, i) => (
-                <span key={i} 
-                className={i < Math.round((movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).reduce((sum, r) => sum + r.rank, 0) / (movieType === 'movie' ? moviesRanks : peopleRanks).filter(rank => rank.id === movieID).length) ? 
-                "filled" : ""}>
+                <span key={i} className={i < movieAvg ? "filled" : ""}>
                   &#9733;
                 </span>
               ))}
