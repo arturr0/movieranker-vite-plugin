@@ -165,4 +165,4 @@ const UserPosts = ({ movieRanks, message }) => (
   </div>
 );
 
-export default RateContainer;
+export default RankComponent;
