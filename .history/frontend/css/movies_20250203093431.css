@@ -1,0 +1,51 @@
+body {
+    /* width: 100vw;
+    height: 100vh; */
+    margin: 0;
+    padding: 0;
+    /* background-image: url('bg.png'); */
+    /* background-size: cover; or 'contain' depending on your desired result */
+    /* background-position: center; */
+    /* background-repeat: no-repeat; */
+    /* height: 100vh; Ensure body takes up full height of the viewport */
+}
+#mainContent {
+    position: relative;
+    
+}
+
+/* #ranks {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    width: 200px;
+    height: 100px; 
+    background-color: #f0f0f0; Example background
+} */
+
+#ranks {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.item {
+    display:inline-block;
+}
+
+#results {
+    overflow: auto;
+}
+/* margin: top right bottom left; */
+.icon-cancel-outline {
+    margin: 10px 10px auto auto;
+    padding: 10px;
+    box-sizing: border-box; /* Ensures size remains the same */
+    border: 2px solid transparent; /* Transparent border to reserve space */
+    border-radius: 50%;
+}
+
+.icon-cancel-outline:hover {
+    border: 2px solid black; /* Border appears but doesn't affect size */
+}

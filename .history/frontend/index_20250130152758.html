@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Register</title>
+  <script>
+    async function handleFormSubmit(event, endpoint) {
+  event.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  const response = await fetch(`http://localhost:3000/auth/${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+
+  // Check if the response is OK (status code 2xx)
+  if (!response.ok) {
+    const errorResponse = await response.text(); // Get the response as text
+    console.log(errorResponse); // Log the raw response for debugging
+    alert('Request failed!');
+    return;
+  }
+
+  // Try to parse the response as JSON
+  try {
+    const data = await response.json();
+    console.log(data);
+
+    if (data.token) {
+      // Store the JWT token in localStorage
+      localStorage.setItem('accessToken', data.token);
+      console.log(localStorage);
+      fetchMovies();  // Call the function to fetch movies
+    } else {
+      alert(data.message || 'Error occurred');
+    }
+  } catch (error) {
+    // Handle case where response is not valid JSON
+    console.log('Error parsing JSON:', error);
+    alert('Error parsing server response.');
+  }
+}
+
+async function fetchMovies() {
+  const token = localStorage.getItem('accessToken');
+  if (!token) {
+    alert("Please log in first!");
+    return;
+  }
+
+  const response = await fetch('http://localhost:3000/movies', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`, // Send token in Authorization header
+    },
+  });
+
+  if (response.ok) {
+    try {
+      const movies = await response.json();
+      console.log(movies);
+    } catch (error) {
+      console.log('Error parsing movie data:', error);
+    }
+  } else {
+    console.log('Failed to fetch movies', response.status);
+    if (response.status === 401) {
+      alert('Session expired. Please log in again!');
+    }
+  }
+}
+
+  </script>
+</head>
+<body>
+  <h1>Login & Register</h1>
+  <form id="auth-form" onsubmit="handleFormSubmit(event, 'login')">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit">Login</button>
+  </form>
+
+  <button type="button" onclick="handleFormSubmit(event, 'register')">Create Account</button>
+</body>
+</html>

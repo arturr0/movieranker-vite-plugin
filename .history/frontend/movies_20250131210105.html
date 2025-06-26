@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Search</title>
+  <style>
+    div {
+      display: inline-block;
+    }
+  </style>
+  <script>
+    async function fetchMovies() {
+      let token = localStorage.getItem('jwt'); // Retrieve token
+
+      if (!token) {
+        console.error('No JWT token found!');
+        window.location.href = '/'; // Redirect to login page if no token
+        return;
+      }
+
+      console.log('Token Before Request:', token);
+
+      const response = await fetch('http://localhost:3000/movies', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        console.error('Request failed:', await response.text());
+        return;
+      }
+
+      const movies = await response.json();
+      console.log('Movies:', movies);
+      displayMovies(movies);
+    }
+
+    function displayMovies(movies) {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = movies.map(movie => `<p>${movie.title}</p>`).join('');
+    }
+
+    window.onload = fetchMovies; // Trigger fetchMovies when page loads
+  </script>
+</head>
+<body>
+  <h1>Movie Search</h1>
+  <div id="results">Loading...</div>
+</body>
+</html>

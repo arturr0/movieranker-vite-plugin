@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Movie Ranker</title>
+	<script src="jwt.js"></script>
+	<link rel="stylesheet" href="css/fontello.css">
+	<link rel="stylesheet" href="css/animation.css">
+	<link rel="stylesheet" href="css/movies.css">
+</head>
+<body>
+	<!-- <i class="icon icon-spin4 animate-spin"></i> -->
+	<i class="icon-cancel-outline" id="cancel" style="display: none"></i>
+	<h1><span class="fontawesome-star"></span> <span>Movie Ranker</span> <span class="fontawesome-star"></span></h1>
+	<div id="mainContent">
+		<div id="searchContent">
+			<div id="searchDiv">
+				<div id="searchContainer">
+					<input type="text" id="searchQuery" placeholder="Enter search query" style="border: none;" />
+					
+					<i class="icon-search-1" id="magnifier"></i>
+					
+				</div>
+				<!-- <br> -->
+				
+			</div>
+			<div id="searchTypes" style="display: flex;">
+				<label><input type="radio" name="searchType" value="title" checked>Movie</label>
+				<label><input type="radio" name="searchType" value="actor">Cast & Crew</label>
+			</div>
+			<!-- <label><input type="radio" name="searchType" value="director"> Director</label> -->
+			<!-- <br> -->
+			<!-- <button id="search">Search</button> -->
+			<div id="resultContainer">
+				<div id="results"></div>
+			</div>
+			<div class="tooltip" id="tooltip"></div>
+		</div>
+		<div id="ranks">
+			<!-- <div style=" display: flex; justify-content: flex-end; align-items: flex-start;">
+				<i class="icon-cancel-outline" id="cancel" style="display: none"></i>
+			</div> -->
+			<div id="rateContainer">
+				<div id="title"></div>
+				<div id="ratedContainer">
+					<div id="ratedInfo">
+						<img id="rankImg" src="" alt="">
+						<p id="votesInfo"></p>
+						<div id="starsInfo"></div>
+					</div>
+					<div id="myPost">
+						<div id="myRank"></div>
+						<div id="postInput">
+							<textarea  id="writePost" type="text" placeholder="Leave a comment..."></textarea>
+							<div id="stars">
+								<span class="star" data-value="1">&#9733;</span>
+								<span class="star" data-value="2">&#9733;</span>
+								<span class="star" data-value="3">&#9733;</span>
+								<span class="star" data-value="4">&#9733;</span>
+								<span class="star" data-value="5">&#9733;</span>
+							</div>
+							<button id="sendPost">SEND POST</button>
+
+						</div>
+						
+					</div>
+					<!-- <p id="movieVotes"></p> -->
+					<!-- <div id="rank"></div> -->
+					<div id="posts">
+					</div>
+				</div>
+				
+			</div>
+			
+			
+		</div>
+	</div>
+	<script src="movies.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Make sure you define this in your .env file
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model User {
+  id            Int           @id @default(autoincrement())
+  email         String        @unique
+  password      String
+  ratingMovies  RatingMovie[] @relation(name: "RatingMovieToUser")
+  ratingPersons RatingPerson[] @relation(name: "RatingPersonToUser")
+  
+  // Adding the reverse relations for the emails
+  emailRatingsMovie  RatingMovie[] @relation("RatingMovieToUserEmail")
+  emailRatingsPerson RatingPerson[] @relation("RatingPersonToUserEmail")
+}
+
+model RatingMovie {
+  id        Int     @id @default(autoincrement())
+  title     String
+  userId    Int
+  userEmail String   // Second foreign key: user's email
+  tmdbId    Int      // TMDB ID for the movie
+  rating    Int
+  comment   String
+  user      User     @relation("RatingMovieToUser", fields: [userId], references: [id], onDelete: Cascade)
+  email     User     @relation("RatingMovieToUserEmail", fields: [userEmail], references: [email], onDelete: Cascade)
+
+  @@unique([userId, tmdbId]) // Ensures that each user-movie pair is unique
+}
+
+model RatingPerson {
+  id        Int      @id @default(autoincrement())
+  title     String
+  userId    Int
+  userEmail String   // Second foreign key: user's email
+  tmdbId    Int      // TMDB ID for the person
+  rating    Int
+  comment   String
+  user      User     @relation("RatingPersonToUser", fields: [userId], references: [id], onDelete: Cascade)
+  email     User     @relation("RatingPersonToUserEmail", fields: [userEmail], references: [email], onDelete: Cascade)
+
+  @@unique([userId, tmdbId]) // Ensures that each user-person pair is unique
+}

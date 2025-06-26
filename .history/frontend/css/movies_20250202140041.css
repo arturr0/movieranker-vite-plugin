@@ -1,0 +1,13 @@
+#mainContent {
+    position: relative;
+}
+
+#ranks {
+    position: absolute;
+    top: 50%; /* Move the element to the vertical center */
+    left: 50%; /* Move the element to the horizontal center */
+    transform: translate(-50%, -50%); /* Shift it back by 50% of its width and height */
+    width: 200px; /* Example width */
+    height: 100px; /* Example height */
+    background-color: #f0f0f0; /* Example background */
+}

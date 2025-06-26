@@ -1,0 +1,18 @@
+html, body {
+	width: 100vw;  
+    height: 100vh;  
+	margin: 0;
+	padding: 0;
+	background: rgb(112,172,173);
+	/* background: radial-gradient(circle, rgba(112,172,173,1) 16%, rgba(78,88,106,1) 100%); */
+	color: .121212;
+    z-index: 0;
+	/* background-image: url('bg.WebP'); */
+    /* background-size: cover;   */
+    /* background-repeat: no-repeat;   */
+    /* background-position: center center;   */
+	overflow-y: auto;
+	font-family: "Oswald", Sans-serif;
+	z-index: 0;
+    box-sizing: border-box;
+}

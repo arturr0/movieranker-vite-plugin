@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Register</title>
+  <script>
+    // Handle form submission dynamically for login & register
+    async function handleFormSubmit(event, endpoint) {
+      event.preventDefault(); // Prevent form from reloading the page
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch(`http://localhost:3000/auth/${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (data.token) {
+          localStorage.setItem('jwtToken', data.token);  // Store token
+          window.location.href = "/movies";  // Navigate to movies page
+        } else {
+          console.error(`${endpoint} failed:`, data.error);
+          alert(`${endpoint} failed: ${data.error}`);
+        }
+      } catch (error) {
+        console.error(`Request error:`, error);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Login & Register</h1>
+
+  <!-- Login Form -->
+  <form id="auth-form" onsubmit="handleFormSubmit(event, 'login')">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit">Login</button>
+  </form>
+
+  <!-- Register Button -->
+  <button type="button" id="register-btn">Create Account</button>
+
+  <script>
+    // Attach event listener for registration
+    document.getElementById('register-btn').addEventListener('click', function(event) {
+      handleFormSubmit(event, 'register');
+    });
+  </script>
+
+</body>
+</html>

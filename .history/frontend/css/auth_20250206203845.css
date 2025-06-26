@@ -1,0 +1,60 @@
+/* auth.css */
+
+/* Title Styles */
+#title {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Auth Div Styles */
+#authDiv {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+/* Form Styles */
+#auth-form {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px; /* Ensure the form doesn’t become too narrow */
+    width: 100%;
+    max-width: 300px; /* Optional: Prevent it from becoming too wide */
+}
+
+/* Input Styles */
+#auth-form input {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+}
+
+/* Buttons Container Styles */
+/* Buttons Container Styles */
+#buttons {
+    display: flex;
+    justify-content: space-between;
+    min-width: 200px;
+    width: 100%;
+    max-width: 300px;
+    gap: 10px; /* Adds spacing between buttons */
+    height: 70px;
+}
+
+
+button {
+    font-size: 1em;
+    cursor: pointer;
+    flex: 1 1 auto; /* Allow buttons to shrink/grow properly */
+    min-width: 100px; /* Prevents buttons from becoming too small */
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    white-space: nowrap; /* Prevents text from wrapping */
+}

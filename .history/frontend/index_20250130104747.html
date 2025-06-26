@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Register</title>
+  <script>
+    // Handle form submit (login or registration)
+    async function handleFormSubmit(event, endpoint) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch(`http://localhost:3000/auth/${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        alert(errorResponse.error || 'Request failed!');
+        return;
+      }
+
+      const data = await response.json();
+      console.log(data);
+
+      if (data.token) {
+        // Store the JWT token in localStorage
+        localStorage.setItem('accessToken', data.token);
+        console.log(localStorage);
+        // Optionally redirect to /movies after login
+        window.location.href = '/movies';
+      } else {
+        alert(data.message || 'Error occurred');
+      }
+    }
+
+    // Function to fetch movies after login and redirection
+    async function fetchMovies() {
+      const token = localStorage.getItem('accessToken'); // Retrieve the token
+      if (!token) {
+        alert("Please log in first!");
+        return;
+      }
+
+      const response = await fetch('http://localhost:3000/movies', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`, // Send token in Authorization header
+        },
+      });
+
+      if (response.ok) {
+        const movies = await response.json();
+        console.log(movies); // Display movies in the console or render them on the page
+      } else {
+        console.log('Failed to fetch movies', response.status);
+      }
+    }
+
+    // Call fetchMovies when the page loads (after redirection)
+    window.onload = fetchMovies;
+  </script>
+</head>
+<body>
+  <h1>Login & Register</h1>
+  <form id="auth-form" onsubmit="handleFormSubmit(event, 'login')">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit">Login</button>
+  </form>
+
+  <button type="button" onclick="handleFormSubmit(event, 'register')">Create Account</button>
+</body>
+</html>

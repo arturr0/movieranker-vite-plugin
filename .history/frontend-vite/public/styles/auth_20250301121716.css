@@ -1,0 +1,155 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	color: .121212;
+	overflow-y: auto;
+	font-family: "Oswald", Sans-serif;
+	z-index: 0;
+	/* background-image: url('bg.WebP');
+    background-size: cover;  
+    background-repeat: no-repeat;  
+    background-position: center center;   */
+    width: 100vw;  
+    min-height: 100vh; 
+}
+/* Default background for the Auth page */
+.auth-bg {
+    background-image: url('bg.WebP'); /* Replace with your actual image path */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+  
+  /* No background for the Movies page */
+  .no-bg {
+    background: none;
+  }
+  
+#root {
+    height: 100vh;
+}
+.box {
+    position: relative;
+    background: rgb(0,0,0);
+    background: radial-gradient(circle, rgba(0,0,0,0) 48%, rgba(47,109,136,1) 91%);
+    width: 100%;
+    min-height: 100%;
+}
+.titleStripes {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 40px;
+}
+.authDiv {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+.authForm {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px; 
+    width: 100%;
+    max-width: 300px; 
+}
+.authForm input {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+}
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    min-width: 200px;
+    width: 100%;
+    max-width: 300px;
+    gap: 10px; 
+    height: 70px;
+}
+button {
+    font-size: 1em;
+    cursor: pointer;
+    flex: 1 1 auto; /* Allow buttons to shrink/grow properly */
+    min-width: 100px; /* Prevents buttons from becoming too small */
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    white-space: nowrap; /* Prevents text from wrapping */
+}
+.threejs-container {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: visible; /* Ensure no cropping */
+}
+h1 span {
+	display: inline-block;
+	vertical-align: middle;
+	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
+	
+}
+span.star {
+	font-size: 2rem;
+}
+.titleStripes {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    height: 100px;
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	white-space: nowrap;
+	margin-bottom: 15px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	text-align: center;
+	white-space: normal;
+	max-width: 100%;
+}
+.titleStripes:before,
+.titleStripes:after {
+    content: "";
+    width: 140px; 
+    height: 4px;
+    border-top: 2px solid #121212;
+    border-bottom: 2px solid #121212;
+}
+.titleStripes:before {
+    margin-right: 10px; 
+}
+.titleStripes:after {
+    margin-left: 10px; 
+}
+h3 {
+	font-family: "Open Sans", Sans-serif;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 20px;
+	letter-spacing: 0.1em;
+	margin-bottom: 10px;  
+	position: relative;
+}
+h3:before, h3:after {
+	content: " ";
+	position: absolute;
+	width: 100px;
+	height: 4px;
+	border-top: 2px solid #121212;
+	border-bottom: 2px solid #121212;
+}
+h3:before {
+	margin: 5px 0 0 -110px;
+}
+h3:after {
+	margin: 5px 0 0 10px;
+}
+

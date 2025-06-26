@@ -1,0 +1,53 @@
+/* auth.css */
+
+/* Title Styles */
+#title {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Auth Div Styles */
+#authDiv {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+/* Form Styles */
+#auth-form {
+    display: flex;
+    flex-direction: column;
+    width: 20vw;
+}
+
+/* Input Styles */
+#auth-form input {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+}
+
+/* Buttons Container Styles */
+/* Buttons Container Styles */
+#buttons {
+    display: flex;
+    /* width: 100%; Make the container take the full width of the parent */
+    justify-content: space-between;
+    width: 20vw;
+    height: 60px;
+    text-align: center;
+}
+
+/* Button Styles */
+button {
+    /* padding: 10px; */
+    font-size: 1em;
+    cursor: pointer;
+    flex-grow: 1; /* Make buttons grow to take up equal space */
+    margin: 0 5px; /* Optional: Adds small space between buttons */
+    height: 40px;
+}
+

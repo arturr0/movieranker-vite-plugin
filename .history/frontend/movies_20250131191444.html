@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Search</title>
+  <style>
+    div {
+      display: inline-block;
+    }
+  </style>
+  <script>
+    // Function to check if JWT exists in localStorage and fetch movies
+    const token = localStorage.getItem('jwt'); // Retrieve JWT from localStorage
+
+if (!token) {
+  alert('You need to log in first!');
+  window.location.href = '/'; // Redirect to login page if no token
+  return;
+}
+
+const response = await fetch('http://localhost:3000/movies', {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${token}`,  // Ensure the header is sent properly
+    'Content-Type': 'application/json',
+  },
+});
+
+
+
+    // Function to display the fetched movies on the page
+    function displayMovies(movies) {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = ''; // Clear previous results
+
+      if (movies.length === 0) {
+        resultsDiv.innerHTML = 'No movies found.';
+        return;
+      }
+
+      movies.forEach(movie => {
+        const movieElement = document.createElement('div');
+        movieElement.innerHTML = `<h3>${movie.title} (${movie.year})</h3>
+          <img src="${movie.poster}" alt="${movie.title} Poster" width="200" />`;
+        resultsDiv.appendChild(movieElement);
+      });
+    }
+
+    // Call fetchMovies when the page loads
+    //window.onload = fetchMovies;
+  </script>
+</head>
+<body>
+  <h1>Movie Search</h1>
+  <input type="text" id="searchQuery" placeholder="Enter search query" />
+  <br>
+  <label><input type="radio" name="searchType" value="title" checked> Title</label>
+  <label><input type="radio" name="searchType" value="actor"> Actor</label>
+  <label><input type="radio" name="searchType" value="director"> Director</label>
+  <br>
+  <button onclick="searchMovies()">Search</button>
+  <div id="results"></div>
+</body>
+</html>

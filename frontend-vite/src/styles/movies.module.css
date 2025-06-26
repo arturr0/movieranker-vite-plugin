@@ -1,0 +1,472 @@
+@import url(https://fonts.googleapis.com/css?family=Oswald:400|Open+Sans:700);
+		
+@import url(https://weloveiconfonts.com/api/?family=fontawesome);
+
+[class*="fontawesome-"]:before {
+	font-family: 'FontAwesome', sans-serif;
+}
+section.text {
+	position: absolute;
+	width: 100%;
+	min-width: 800px;
+	text-align: center;
+	top: 50%;
+	margin-top: -55px;
+}
+h1 {
+	font-family: "Oswald", Sans-serif;
+	text-transform: uppercase;
+	font-weight: 400;
+	width: 100%;
+  	text-align: center;
+	position: relative;
+}
+h1 span {
+	display: inline-block;
+	vertical-align: middle;
+	text-shadow: 4px 5px #e6e6d8, 6px 7px #c6a39a;
+	
+}
+span.star {
+	font-size: 2rem;
+}
+h3 {
+	font-family: "Open Sans", Sans-serif;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 20px;
+	letter-spacing: 0.1em;
+	margin-bottom: 10px;  
+	position: relative;
+}
+h3:before, h3:after {
+	content: " ";
+	position: absolute;
+	width: 100px;
+	height: 4px;
+	border-top: 2px solid #121212;
+	border-bottom: 2px solid #121212;
+}
+h3:before {
+	margin: 5px 0 0 -110px;
+}
+h3:after {
+	margin: 5px 0 0 10px;
+}
+html, body {
+	width: 100vw;  
+    height: 100vh;  
+	margin: 0;
+	padding: 0;
+	background: rgb(112,172,173);
+	background: radial-gradient(circle, rgba(112,172,173,1) 16%, rgba(78,88,106,1) 100%);
+	color: #121212;
+	overflow-y: auto;
+	font-family: "Oswald", Sans-serif;
+	z-index: 0;
+}
+body {
+	overflow-y: auto;  
+}
+#mainContent {
+	position: relative;
+}
+#logoDiv {
+	position: absolute;
+	left: 20px;
+}
+#searchContainer {
+	display: inline-flex;
+	padding: 10px;
+	height: 30px;
+	border-radius: 40px;
+	border: 2px solid black;
+	position: relative; 
+	width: 30vw;
+	background: white;
+	align-items: center;
+	margin-bottom: 5px;
+}
+
+#searchDiv {
+	display: inline-flex;
+}
+#searchQuery {
+	border: none;
+	width: 100%;
+	font-size: 1.3rem;
+}
+#searchQuery:focus {
+	outline: none;
+	border: none;
+	box-shadow: none;
+}
+.icon-search-1 {
+	font-size: 1.7rem;
+	margin-left: auto;
+}
+#searchDiv {
+	margin: 30px auto 0 auto; /* Centers horizontally */
+	display: flex; /* Ensures it respects the margin */
+	width: fit-content; /* Adjusts width to its content */
+}
+
+#searchTypes {
+	display: flex;
+	font-size: 1.2rem;
+	margin-right: 10px;
+	justify-content: center;
+}
+input[type="radio"] {
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border: 2px solid black;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+input[type="radio"]:checked::before {
+    content: "🎥"; 
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+}
+input[type="radio"]#person:checked::before {
+    content: "👤"; 
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.votesNo {
+	font-size: 1.2rem;
+	margin-bottom: 0;
+}
+span {
+	font-size: 2rem;
+}
+.tooltip {
+	position: absolute;
+	background: rgba(0, 0, 0, 0.8);
+	color: white;
+	padding: 5px 10px;
+	border-radius: 5px;
+	font-size: 14px;
+	display: none;
+	white-space: nowrap;
+	z-index: 1000;
+	pointer-events: none; 
+}
+#ranks {
+	display: none;
+	width: 100%;
+	height: 100%;
+}
+#results {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	grid-auto-rows: auto;
+	gap: 10px;
+	padding: 10px;
+	box-sizing: border-box;
+	width: 100%;
+	margin: 0 auto;
+	
+}
+.item {
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	text-align: center;
+	margin: 0;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	white-space: normal;
+	justify-content: space-between; /* Space between title and bottom content */
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.title {
+	flex-grow: 1; /* Allow the title to take available space */
+	font-size: 1.5rem;
+	display: flex;
+	align-items: center; /* Vertically center the title */
+	justify-content: center; /* Horizontally center the title */
+	margin-bottom: 10px; /* Space between title and bottom content */
+	z-index: 2;
+}
+.img:hover {
+	transform: scale(1.1);
+	
+}
+.img {
+	background-size: cover; 
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 200px;
+	height: 300px;
+	transition: transform 0.3s ease;
+	transform-origin: center bottom; /* Keeps item within bounds */
+	margin: auto;
+}
+
+#results {
+	overflow: auto;
+}
+.icon-cancel-outline {
+	
+	box-sizing: border-box; /* Ensures size remains the same */
+	border: 2px solid transparent; /* Transparent border to reserve space */
+	border-radius: 50%;
+	font-size: 2rem;
+	position: absolute;
+	right: 0; /* Align to the right */
+	top: 50%; /* Move halfway down */
+	transform: translateY(-50%); /* Adjust for element's height */
+	z-index: 9999;
+}
+
+.icon-cancel-outline:hover {
+	color: white;
+}
+#rateContainer {
+	display: flex;
+	flex-direction: column;
+}
+#rateContainer {
+	display: flex;
+}
+#ratedContainer {
+	display: flex;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+#title {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	white-space: nowrap;
+	margin-bottom: 15px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	text-align: center;
+	white-space: normal;
+	max-width: 100%;
+}
+#title:before,
+#title:after {
+    content: "";
+    width: 140px; 
+    height: 4px;
+    border-top: 2px solid #121212;
+    border-bottom: 2px solid #121212;
+}
+#title:before {
+    margin-right: 10px; 
+}
+#title:after {
+    margin-left: 10px; 
+}
+#stars {
+	display: flex;
+	justify-content: center;
+}
+#myPost {
+	margin-left: 20px;
+	margin-right: 20px;
+}
+#postInput {
+	display: flex;
+	flex-direction: column;
+	height: 300px;
+}
+#writePost {
+	min-height: 200px;
+	width: 300px;
+}
+#starsInfo, #votesInfo {
+	text-align: center;
+	font-size: 1.2rem;
+	margin: 0;
+}
+textarea::placeholder {
+	text-align: center;
+	font-size: 1.5rem;
+}
+#posts {
+	width: 100%;
+}
+.post {
+	border: 6px ridge black;
+	margin-right: 20px;
+	margin-bottom: 5px;
+}
+.userName  {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	text-align: center;
+}
+.userName {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap; 
+}
+.userName:before,
+.userName:after {
+    content: "";
+    width: 80px; 
+    height: 4px;
+    border-top: 2px solid #121212;
+    border-bottom: 2px solid #121212;
+}
+.userName:before {
+    margin-right: 10px; 
+}
+.userName:after {
+    margin-left: 10px; 
+}
+.userPost {
+	
+	margin-bottom: 5px;
+	text-align: center;
+	white-space: normal;
+	word-wrap: break-word; /* Older support */
+	overflow-wrap: break-word; /* Modern browsers */
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.userRank {
+	margin: 0;
+	text-align: center;
+} 
+#sendPost {
+	height: 100%;
+}
+button {
+	background: rgb(242, 239, 194);
+	border: 2px solid #422800;
+	border-radius: 30px;
+	box-shadow: #422800 4px 4px 0 0;
+	color: #422800;
+	cursor: pointer;
+	display: inline-block;
+	font-weight: 600;
+	font-size: 18px;
+	padding: 0 18px;
+	/* line-height: 50px; */
+	text-align: center;
+	text-decoration: none;
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+}
+button:hover {
+	background-color: #fff;
+}
+button:active {
+	box-shadow: #422800 2px 2px 0 0;
+	transform: translate(2px, 2px);
+}
+.star {
+	cursor: pointer;
+	color: gray;
+	transition: color 0.3s ease;
+}
+.star.filled {
+	color: gold;
+}
+.star.half {
+	color: gold;
+	background: linear-gradient(to right, gold 50%, gray 50%);
+	-webkit-background-clip: text;
+	background-clip: text;
+}
+input:focus,
+textarea:focus {
+	outline: 2px solid black; 
+}
+
+@media only screen and (max-device-width: 768px) and (orientation: portrait) {
+	#searchDiv #searchContainer {
+		width: 65vw;
+	}
+	#rateContainer #ratedContainer {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	#ratedContainer #myPost {
+		margin: 0;
+		width: 100%;
+	}
+	#posts .post {
+		margin-top: 10px;
+		margin-right: 0;
+	}	
+	#postInput #writePost {
+		width: auto;
+	}
+}
+
+@media only screen and (max-device-width: 1200px) and (orientation: landscape) {
+	#ranks #rateContainer {
+		width: 100vw;
+	}
+	#rateContainer #ratedContainer {
+		flex-wrap: wrap;
+		justify-content: center;
+		margin: 0;
+		width: 100%;
+	}
+	#ratedInfo #votesInfo ,#ratedInfo #starsInfo {
+		width: 200px;
+	}
+	#ratedContainer #myPost, #ratedContainer #ratedInfo {
+		margin: 0;
+	}
+	#ratedContainer #myPost {
+		width: 60%; 
+	}
+	#ratedContainer #ratedInfo {
+		width: 30%;
+	}
+	#ratedContainer #posts {
+		width: 90%; 
+	}
+	#postInput #writePost {
+		width: auto;
+		margin-left: 5px;
+	}
+	#posts .post {
+		margin-right: 0;
+		
+	}
+	#postInput #writePost {
+		height: 300px;
+		box-sizing: border-box;
+	}
+	#postInput #sendPost {
+		height: 50px;
+		margin-bottom: 10px;
+	}
+	#myPost #postInput {
+		height: auto;
+	}
+}
+	
