@@ -43,8 +43,6 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
     setIsLoading(true);
 
     try {
-      console.log("Search Type:", typeRef.current);
-
       const response = await fetch(
         `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}&id=${message.id}`
       );
@@ -54,7 +52,6 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
       }
 
       const data = await response.json();
-      console.log("Movies Data:", data);
 
       if (Number(data.querySenderID) === message.id) {
         setLastQuery({
@@ -109,7 +106,6 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
 
   useEffect(() => {
     if (sseData) {
-      console.log("New SSE data in SearchContent:", sseData);
       searchMovies();
     }
   }, [sseData, searchMovies]);
@@ -223,14 +219,14 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
 
       <div className="resultContainer">
         {isLoading ? (
-          <div className="loading-spinner">Loading...</div>
+          <div className="loader"></div>
         ) : error ? (
           <p className="error">{error}</p>
         ) : (
           <div className="results">
-            {results.length > 0 
-              ? results.map((item, index) => <div key={index}>{item}</div>)
-              : <p className="no-results">No results found</p>}
+            {results.length > 0 && results.map((item, index) => (
+              <div key={index}>{item}</div>
+            ))}
           </div>
         )}
       </div>
