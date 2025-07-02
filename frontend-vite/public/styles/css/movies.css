@@ -469,7 +469,7 @@ textarea:focus {
 		height: auto;
 	}
 }
-.loader {
+.loading-spinner {
   width: 50px;
   padding: 8px;
   aspect-ratio: 1;
