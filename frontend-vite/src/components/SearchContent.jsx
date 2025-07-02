@@ -22,22 +22,25 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   const [type, setSearchType] = useState("title");
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const queryRef = useRef(query);
   const typeRef = useRef(type);
 
-  
-
   useEffect(() => {
     console.log("Message changed: ", message);
   }, [message]);
+
   useEffect(() => {
     console.log("Last Query Updated:", lastQuery);
   }, [lastQuery]);
+
   const searchMovies = useCallback(async () => {
     if (!queryRef.current.trim()) return;
 
     setError(null);
+    setResults([]);
+    setIsLoading(true);
 
     try {
       console.log("Search Type:", typeRef.current);
@@ -45,6 +48,10 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
       const response = await fetch(
         `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}&id=${message.id}`
       );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const data = await response.json();
       console.log("Movies Data:", data);
@@ -55,9 +62,8 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
           text: data.queryText,
           id: Number(data.querySenderID),
         });
-        console.log("set");
       }
-      console.log(lastQuery);
+
       moviesRanks.length = 0;
       peopleRanks.length = 0;
       const resultItems = [];
@@ -69,7 +75,14 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
           resultArray.push(createItemElement(item, type));
 
           item.ratings?.forEach(({ rating, userEmail, comment, id }) => {
-            rankArray.push(new RankClass(item.id, item[type === "movie" ? "title" : "name"], rating, userEmail, comment, id));
+            rankArray.push(new RankClass(
+              item.id, 
+              item[type === "movie" ? "title" : "name"], 
+              rating, 
+              userEmail, 
+              comment, 
+              id
+            ));
           });
         });
       };
@@ -78,30 +91,38 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
         processItems(data.movies, "movie", resultItems, moviesRanks, Movie);
       } else if (data.people) {
         processItems(data.people, "person", resultItems, peopleRanks, Person);
-      } else {
-        setError("No results found.");
       }
 
       setMoviesRanks([...moviesRanks]);
       setPeopleRanks([...peopleRanks]);
       setResults(resultItems);
+
     } catch (error) {
       console.error("Error fetching movies:", error);
-      setError("Failed to load results. Please try again.");
+      setError(error.message.includes("Failed to fetch") 
+        ? "Network error. Please check your connection."
+        : "Failed to load results. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }, [message, setLastQuery]);
+
   useEffect(() => {
     if (sseData) {
       console.log("New SSE data in SearchContent:", sseData);
-      searchMovies();      }
+      searchMovies();
+    }
   }, [sseData, searchMovies]);
+
   useImperativeHandle(ref, () => ({ searchMovies }));
 
   const handleSearchChange = (event) => {
+    setQuery(event.target.value);
     queryRef.current = event.target.value;
   };
   
   const handleRadioChange = (event) => {
+    setSearchType(event.target.value);
     typeRef.current = event.target.value;
   };
   
@@ -114,12 +135,11 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
       ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
       : item.name;
   
-    const avgRating =
-      item.ratings && item.ratings.length
-        ? Math.round(item.ratings.reduce((sum, r) => sum + r.rating, 0) / item.ratings.length)
-        : "No rating yet";
+    const avgRating = item.ratings?.length
+      ? Math.round(item.ratings.reduce((sum, r) => sum + r.rating, 0) / item.ratings.length)
+      : 0;
   
-    const voteCount = item.ratings ? item.ratings.length : 0;
+    const voteCount = item.ratings?.length || 0;
     const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
   
     return (
@@ -129,7 +149,14 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
           className="img" 
           style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }} 
           id={item.id} 
-          onClick={() => onSelectMovie(item.id, type, title, type === 'movie' ? item.poster : item.profile, avgRating, voteText)}
+          onClick={() => onSelectMovie(
+            item.id, 
+            type, 
+            title, 
+            type === 'movie' ? item.poster : item.profile, 
+            avgRating, 
+            voteText
+          )}
         ></div>
         <p className="votesNo">{voteText}</p>
         {createRatingElement(avgRating)}
@@ -157,48 +184,56 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
             type="text"
             className="searchQuery"
             placeholder="Enter search query"
-            defaultValue={query}
+            value={query}
             onChange={handleSearchChange}
+            onKeyPress={(e) => e.key === 'Enter' && searchMovies()}
           />
-          <i className="icon-search-1 magnifier" onClick={searchMovies}></i>
+          <i 
+            className="icon-search-1 magnifier" 
+            onClick={searchMovies}
+            style={{ cursor: 'pointer' }}
+          ></i>
         </div>
       </div>
 
       <div className="searchTypes" style={{ display: "flex" }}>
-        <label style={{ display: "flex" }}>
+        <label style={{ display: "flex", alignItems: 'center' }}>
           <input
             type="radio"
             name="type"
             value="title"
-            defaultChecked={type === "title"}
+            checked={type === "title"}
             onChange={handleRadioChange}
+            style={{ marginRight: '5px' }}
           />
           Movie
         </label>
-        <label style={{ display: "flex", marginLeft: "20px" }}>
+        <label style={{ display: "flex", alignItems: 'center', marginLeft: "20px" }}>
           <input
             type="radio"
             name="type"
             value="actor"
-            defaultChecked={type === "actor"}
+            checked={type === "actor"}
             onChange={handleRadioChange}
+            style={{ marginRight: '5px' }}
           />
           Cast & Crew
         </label>
       </div>
 
-     <div className="resultContainer">
-        {error ? (
+      <div className="resultContainer">
+        {isLoading ? (
+          <div className="loading-spinner">Loading...</div>
+        ) : error ? (
           <p className="error">{error}</p>
         ) : (
           <div className="results">
-            {results.length > 0
+            {results.length > 0 
               ? results.map((item, index) => <div key={index}>{item}</div>)
-              : <p>No results found</p>}
+              : <p className="no-results">No results found</p>}
           </div>
         )}
       </div>
-
     </div>
   );
 });
