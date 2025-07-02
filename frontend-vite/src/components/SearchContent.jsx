@@ -187,12 +187,18 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
         </label>
       </div>
 
-      <div className="resultContainer">
-        {error && <p className="error">{error}</p>}
-        <div className="results">
-          {results.length > 0 ? results.map((item, index) => <div key={index}>{item}</div>) : <p>No results found</p>}
-        </div>
+     <div className="resultContainer">
+        {error ? (
+          <p className="error">{error}</p>
+        ) : (
+          <div className="results">
+            {results.length > 0
+              ? results.map((item, index) => <div key={index}>{item}</div>)
+              : <p>No results found</p>}
+          </div>
+        )}
       </div>
+
     </div>
   );
 });
