@@ -57,7 +57,7 @@ const AuthForm = () => {
       </div>
       <div className="authDiv">
         <form className="authForm">
-          <input ref={emailRef} type="email" className="email" placeholder="Email" required />
+          <input ref={emailRef} type="email" className="email" placeholder="Login" required />
           <input ref={passwordRef} type="password" className="password" placeholder="Password" required />
         </form>
         <div className="buttons">
