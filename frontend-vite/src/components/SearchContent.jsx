@@ -361,7 +361,6 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   );
 });
 
-export default SearchContent;
   
   const createRatingElement = (avgRating) => {
     return (
