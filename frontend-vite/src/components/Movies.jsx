@@ -15,7 +15,7 @@ const Movies = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    //if (!token) return navigate("/");
+    if (!token) return navigate("/");
 
     fetch("https://movieranker-react.onrender.com/movies/protected", {
       headers: { Authorization: `Bearer ${token}` },
