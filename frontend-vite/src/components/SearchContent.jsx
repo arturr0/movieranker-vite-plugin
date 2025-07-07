@@ -105,10 +105,32 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   }, [message, setLastQuery]);
 
   useEffect(() => {
-    if (sseData) {
-      searchMovies();
+  if (!sseData) return;
+
+  const { id, type, avgRating, voteCount } = sseData;
+
+  // Find and update the specific item element
+  const itemEl = document.getElementById(id);
+  if (itemEl) {
+    const parent = itemEl.parentElement;
+    const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
+
+    // Update vote text
+    const votesEl = parent.querySelector(".votesNo");
+    if (votesEl) votesEl.textContent = voteText;
+
+    // Update stars
+    const starsEl = parent.querySelector(".ratedStars");
+    if (starsEl) {
+      starsEl.innerHTML = [...Array(5)]
+        .map((_, i) =>
+          `<span style="color: ${i < avgRating ? 'gold' : 'gray'}">&#9733;</span>`
+        ).join("");
     }
-  }, [sseData, searchMovies]);
+  }
+
+}, [sseData]);
+
 
   useImperativeHandle(ref, () => ({ searchMovies }));
 
