@@ -1,173 +1,95 @@
-import React, { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from "react";
+import React, { useState, useEffect, useCallback, useRef, forwardRef } from "react";
 
-const moviesRanks = [];
-const peopleRanks = [];
-
-class Item {
+class RankItem {
   constructor(id, title, rank, rankerName, post, dbID) {
-    this.id = id;
-    this.title = title;
-    this.rank = rank;
-    this.rankerName = rankerName;
-    this.post = post;
-    this.dbID = dbID;
+    Object.assign(this, { id, title, rank, rankerName, post, dbID });
   }
 }
 
-class Movie extends Item {}
-class Person extends Item {}
-
-const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleRanks, onSelectMovie, isVisible, setLastQuery, lastQuery }, ref) => {
+const SearchContent = forwardRef(({ 
+  sseData, message, setMoviesRanks, setPeopleRanks, onSelectMovie, isVisible, setLastQuery 
+}, ref) => {
   const [query, setQuery] = useState("");
-  const [type, setSearchType] = useState("title");
+  const [type, setType] = useState("title");
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  
   const queryRef = useRef(query);
   const typeRef = useRef(type);
+  const ranksRef = useRef({ movies: [], people: [] });
 
-  useEffect(() => {
-    console.log("Message changed: ", message);
-  }, [message]);
+  useEffect(() => { queryRef.current = query }, [query]);
+  useEffect(() => { typeRef.current = type }, [type]);
 
-  useEffect(() => {
-    console.log("Last Query Updated:", lastQuery);
-  }, [lastQuery]);
-
-  const searchMovies = useCallback(async () => {
+  const search = useCallback(async () => {
     if (!queryRef.current.trim()) return;
-
+    
     setError(null);
     setResults([]);
-    setIsLoading(true);
+    setLoading(true);
+    ranksRef.current = { movies: [], people: [] };
 
     try {
-      const response = await fetch(
-        `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}&id=${message.id}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
+      const res = await fetch(`/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}&id=${message.id}`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      
+      const data = await res.json();
       if (Number(data.querySenderID) === message.id) {
-        setLastQuery({
-          type: data.queryType,
-          text: data.queryText,
-          id: Number(data.querySenderID),
-        });
+        setLastQuery({ type: data.queryType, text: data.queryText, id: Number(data.querySenderID) });
       }
 
-      moviesRanks.length = 0;
-      peopleRanks.length = 0;
-      const resultItems = [];
-
-      const processItems = (items, type, resultArray, rankArray, RankClass) => {
-        items?.forEach((item) => {
-          if (!(type === "movie" ? item.poster : item.profile)) return;
-
-          resultArray.push(createItemElement(item, type));
-
-          item.ratings?.forEach(({ rating, userEmail, comment, id }) => {
-            rankArray.push(new RankClass(
-              item.id, 
-              item[type === "movie" ? "title" : "name"], 
-              rating, 
-              userEmail, 
-              comment, 
-              id
-            ));
+      const items = [];
+      const process = (arr, itemType, Class) => {
+        arr?.forEach(item => {
+          if (!item[itemType === "movie" ? "poster" : "profile"]) return;
+          
+          items.push(renderItem(item, itemType));
+          
+          item.ratings?.forEach(r => {
+            ranksRef.current[itemType === "movie" ? "movies" : "people"].push(
+              new Class(item.id, item[itemType === "movie" ? "title" : "name"], r.rating, r.userEmail, r.comment, r.id)
+            );
           });
         });
       };
 
-      if (data.movies) {
-        processItems(data.movies, "movie", resultItems, moviesRanks, Movie);
-      } else if (data.people) {
-        processItems(data.people, "person", resultItems, peopleRanks, Person);
-      }
+      if (data.movies) process(data.movies, "movie", RankItem);
+      if (data.people) process(data.people, "person", RankItem);
 
-      setMoviesRanks([...moviesRanks]);
-      setPeopleRanks([...peopleRanks]);
-      setResults(resultItems);
-
-    } catch (error) {
-      console.error("Error fetching movies:", error);
-      setError(error.message.includes("Failed to fetch") 
-        ? "Network error. Please check your connection."
-        : "Failed to load results. Please try again.");
+      setMoviesRanks([...ranksRef.current.movies]);
+      setPeopleRanks([...ranksRef.current.people]);
+      setResults(items);
+    } catch (err) {
+      setError(err.message.includes("Failed to fetch") ? "Network error" : "Failed to load results");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
-  }, [message, setLastQuery]);
+  }, [message.id, setLastQuery, setMoviesRanks, setPeopleRanks]);
 
   useEffect(() => {
-    if (sseData) {
-      searchMovies();
-    }
-  }, [sseData, searchMovies]);
+    if (sseData?.id === message.id) search();
+  }, [sseData, message.id, search]);
 
-  useImperativeHandle(ref, () => ({ searchMovies }));
+  useImperativeHandle(ref, () => ({ searchMovies: search }));
 
-  const handleSearchChange = (event) => {
-    setQuery(event.target.value);
-    queryRef.current = event.target.value;
-  };
-  
-  const handleRadioChange = (event) => {
-    setSearchType(event.target.value);
-    typeRef.current = event.target.value;
-  };
-  
-  const handleSearchClick = () => {
-    searchMovies();
-  };
-  
-  const createItemElement = (item, type) => {
-    const title = type === "movie"
-      ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
-      : item.name;
-  
-    const avgRating = item.ratings?.length
-      ? Math.round(item.ratings.reduce((sum, r) => sum + r.rating, 0) / item.ratings.length)
-      : 0;
-  
-    const voteCount = item.ratings?.length || 0;
-    const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
-  
+  const renderItem = (item, itemType) => {
+    const title = `${item[itemType === "movie" ? "title" : "name"]}${item.year && item.year !== "N/A" ? ` (${item.year})` : ""}`;
+    const avgRating = item.ratings?.length ? Math.round(item.ratings.reduce((s, r) => s + r.rating, 0) / item.ratings.length) : 0;
+    const votes = item.ratings?.length || 0;
+
     return (
-      <div key={item.id} className="item">
-        <p className="titles" data-title={title}>{title}</p>
+      <div key={`${item.id}-${itemType}`} className="item">
+        <p className="titles">{title}</p>
         <div 
           className="img" 
-          style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }} 
-          id={item.id} 
-          onClick={() => onSelectMovie(
-            item.id, 
-            type, 
-            title, 
-            type === 'movie' ? item.poster : item.profile, 
-            avgRating, 
-            voteText
-          )}
-        ></div>
-        <p className="votesNo">{voteText}</p>
-        {createRatingElement(avgRating)}
-      </div>
-    );
-  };
-  
-  const createRatingElement = (avgRating) => {
-    return (
-      <div className="ratedStars">
-        {[...Array(5)].map((_, i) => (
-          <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>
-            &#9733;
-          </span>
-        ))}
+          style={{ backgroundImage: `url(${item[itemType === "movie" ? "poster" : "profile"]})` }}
+          onClick={() => onSelectMovie(item.id, itemType, title, item[itemType === "movie" ? "poster" : "profile"], avgRating, `${votes} vote${votes !== 1 ? "s" : ""}`)}
+        />
+        <p className="votesNo">{votes} vote{votes !== 1 ? "s" : ""}</p>
+        <div className="ratedStars">
+          {[...Array(5)].map((_, i) => <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>★</span>)}
+        </div>
       </div>
     );
   };
@@ -175,59 +97,36 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   return (
     <div className="searchContent" style={{ display: isVisible ? "block" : "none" }}>
       <div className="searchDiv">
-        <div className="searchContainer">
-          <input
-            type="text"
-            className="searchQuery"
-            placeholder="Enter search query"
-            value={query}
-            onChange={handleSearchChange}
-            onKeyPress={(e) => e.key === 'Enter' && searchMovies()}
-          />
-          <i 
-            className="icon-search-1 magnifier" 
-            onClick={searchMovies}
-            style={{ cursor: 'pointer' }}
-          ></i>
-        </div>
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyPress={(e) => e.key === "Enter" && search()}
+          placeholder="Enter search query"
+        />
+        <i className="icon-search-1 magnifier" onClick={search} />
       </div>
 
-      <div className="searchTypes" style={{ display: "flex" }}>
-        <label style={{ display: "flex", alignItems: 'center' }}>
-          <input
-            type="radio"
-            name="type"
-            value="title"
-            checked={type === "title"}
-            onChange={handleRadioChange}
-            style={{ marginRight: '5px' }}
-          />
-          Movie
-        </label>
-        <label style={{ display: "flex", alignItems: 'center', marginLeft: "20px" }}>
-          <input
-            type="radio"
-            name="type"
-            value="actor"
-            checked={type === "actor"}
-            onChange={handleRadioChange}
-            style={{ marginRight: '5px' }}
-          />
-          Cast & Crew
-        </label>
+      <div className="searchTypes">
+        {["title", "actor"].map((t) => (
+          <label key={t}>
+            <input
+              type="radio"
+              name="type"
+              value={t}
+              checked={type === t}
+              onChange={() => setType(t)}
+            />
+            {t === "title" ? "Movie" : "Cast & Crew"}
+          </label>
+        ))}
       </div>
 
       <div className="resultContainer">
-        {isLoading ? (
-          <div className="loader"></div>
-        ) : error ? (
+        {loading ? <div className="loader" /> : error ? (
           <p className="error">{error}</p>
         ) : (
-          <div className="results">
-            {results.length > 0 && results.map((item, index) => (
-              <div key={index}>{item}</div>
-            ))}
-          </div>
+          <div className="results">{results}</div>
         )}
       </div>
     </div>
