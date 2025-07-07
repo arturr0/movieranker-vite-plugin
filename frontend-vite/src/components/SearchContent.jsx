@@ -126,7 +126,6 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
     searchMovies();
   };
   
-  i want rerender only votesnote and ratedstars on sse. give me full fixed code. import React, { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from "react";
 
 const moviesRanks = [];
 const peopleRanks = [];
