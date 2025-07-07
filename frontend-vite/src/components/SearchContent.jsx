@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useRef,
   forwardRef,
-  useImperativeHandle
+  useImperativeHandle,
 } from "react";
 
 const moviesRanks = [];
@@ -34,7 +34,7 @@ const SearchContent = forwardRef(
       onSelectMovie,
       isVisible,
       setLastQuery,
-      lastQuery
+      lastQuery,
     },
     ref
   ) => {
@@ -46,66 +46,6 @@ const SearchContent = forwardRef(
 
     const queryRef = useRef(query);
     const typeRef = useRef(type);
-    const resultsRef = useRef({}); // key: id, value: itemData
-
-    const updateRatingsFromSSE = useCallback(() => {
-      if (!sseData?.ratedItem) return;
-
-      const { ratedItem } = sseData;
-
-      const item = resultsRef.current[ratedItem.id];
-      if (!item) return;
-
-      const updatedRatings = ratedItem.ratings || [];
-
-      const avgRating = updatedRatings.length
-        ? Math.round(
-            updatedRatings.reduce((sum, r) => sum + r.rating, 0) /
-              updatedRatings.length
-          )
-        : 0;
-
-      const voteCount = updatedRatings.length;
-      const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
-
-      item.ratings = updatedRatings;
-
-      const updatedItem = createItemElement(item, typeRef.current);
-
-      setResults((prev) =>
-        prev.map((el) =>
-          el.key === item.id.toString() ? (
-            <div key={item.id}>{updatedItem}</div>
-          ) : (
-            el
-          )
-        )
-      );
-
-      // Update ranks
-      const RankClass = typeRef.current === "title" ? Movie : Person;
-      const ranksArray = updatedRatings.map(
-        ({ rating, userEmail, comment, id }) =>
-          new RankClass(
-            item.id,
-            typeRef.current === "title" ? item.title : item.name,
-            rating,
-            userEmail,
-            comment,
-            id
-          )
-      );
-
-      if (typeRef.current === "title") {
-        setMoviesRanks(ranksArray);
-      } else {
-        setPeopleRanks(ranksArray);
-      }
-    }, [sseData, setMoviesRanks, setPeopleRanks]);
-
-    useEffect(() => {
-      if (sseData) updateRatingsFromSSE();
-    }, [sseData, updateRatingsFromSSE]);
 
     const searchMovies = useCallback(async () => {
       if (!queryRef.current.trim()) return;
@@ -113,13 +53,10 @@ const SearchContent = forwardRef(
       setError(null);
       setResults([]);
       setIsLoading(true);
-      resultsRef.current = {};
 
       try {
         const response = await fetch(
-          `/movies/search?query=${encodeURIComponent(
-            queryRef.current
-          )}&type=${typeRef.current}&id=${message.id}`
+          `/movies/search?query=${encodeURIComponent(queryRef.current)}&type=${typeRef.current}&id=${message.id}`
         );
 
         if (!response.ok) {
@@ -132,7 +69,7 @@ const SearchContent = forwardRef(
           setLastQuery({
             type: data.queryType,
             text: data.queryText,
-            id: Number(data.querySenderID)
+            id: Number(data.querySenderID),
           });
         }
 
@@ -143,8 +80,6 @@ const SearchContent = forwardRef(
         const processItems = (items, type, resultArray, rankArray, RankClass) => {
           items?.forEach((item) => {
             if (!(type === "movie" ? item.poster : item.profile)) return;
-
-            resultsRef.current[item.id] = item;
 
             resultArray.push(createItemElement(item, type));
 
@@ -171,10 +106,7 @@ const SearchContent = forwardRef(
 
         setMoviesRanks([...moviesRanks]);
         setPeopleRanks([...peopleRanks]);
-
-        setResults(
-          resultItems.map((el, idx) => <div key={el.key || idx}>{el}</div>)
-        );
+        setResults(resultItems);
       } catch (error) {
         console.error("Error fetching movies:", error);
         setError(
@@ -187,6 +119,7 @@ const SearchContent = forwardRef(
       }
     }, [message, setLastQuery, setMoviesRanks, setPeopleRanks]);
 
+    // Use this for search manually
     useImperativeHandle(ref, () => ({ searchMovies }));
 
     const handleSearchChange = (event) => {
@@ -225,7 +158,7 @@ const SearchContent = forwardRef(
             style={{
               backgroundImage: `url(${
                 type === "movie" ? item.poster : item.profile
-              })`
+              })`,
             }}
             id={item.id}
             onClick={() =>
@@ -239,15 +172,17 @@ const SearchContent = forwardRef(
               )
             }
           ></div>
-          <p className="votesNo">{voteText}</p>
-          {createRatingElement(avgRating)}
+          <p className="votesNo" id={`votes-${item.id}`}>
+            {voteText}
+          </p>
+          {createRatingElement(avgRating, item.id)}
         </div>
       );
     };
 
-    const createRatingElement = (avgRating) => {
+    const createRatingElement = (avgRating, id) => {
       return (
-        <div className="ratedStars">
+        <div className="ratedStars" id={`rating-${id}`}>
           {[...Array(5)].map((_, i) => (
             <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>
               &#9733;
@@ -256,6 +191,44 @@ const SearchContent = forwardRef(
         </div>
       );
     };
+
+    // Update vote info on SSE event
+    const updateVoteInfo = (data) => {
+      const ranks = data.type === "movie" ? moviesRanks : peopleRanks;
+
+      // Push new rank
+      ranks.push(
+        new (data.type === "movie" ? Movie : Person)(
+          data.id,
+          data.title,
+          data.rank,
+          data.userEmail,
+          data.comment,
+          data.dbID
+        )
+      );
+
+      // Update stars
+      const stars = document.querySelectorAll(`#rating-${data.id} span`);
+      stars.forEach((star, index) => {
+        star.style.color = index < data.rank ? "gold" : "gray";
+      });
+
+      // Update vote count
+      const voteCountElem = document.getElementById(`votes-${data.id}`);
+      if (voteCountElem) {
+        const totalVotes = ranks.filter((r) => r.id === data.id).length;
+        voteCountElem.textContent =
+          totalVotes + (totalVotes === 1 ? " vote" : " votes");
+      }
+    };
+
+    // When new vote arrives
+    useEffect(() => {
+      if (sseData) {
+        updateVoteInfo(sseData);
+      }
+    }, [sseData]);
 
     return (
       <div
@@ -313,7 +286,10 @@ const SearchContent = forwardRef(
           ) : error ? (
             <p className="error">{error}</p>
           ) : (
-            <div className="results">{results}</div>
+            <div className="results">
+              {results.length > 0 &&
+                results.map((item, index) => <div key={index}>{item}</div>)}
+            </div>
           )}
         </div>
       </div>
