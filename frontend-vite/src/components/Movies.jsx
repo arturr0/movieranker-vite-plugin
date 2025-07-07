@@ -17,7 +17,7 @@ const Movies = () => {
     const token = localStorage.getItem("jwt");
     //if (!token) return navigate("/");
 
-    fetch("http://localhost:3000/movies/protected", {
+    fetch("https://movieranker-react.onrender.com/movies/protected", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
