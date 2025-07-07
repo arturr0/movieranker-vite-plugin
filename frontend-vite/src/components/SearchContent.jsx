@@ -4,194 +4,196 @@ import React, {
   useCallback,
   useRef,
   forwardRef,
-  useImperativeHandle
+  useImperativeHandle,
+  memo
 } from "react";
 
-const moviesRanks = [];
-const peopleRanks = [];
+// Memoized components for efficient updates
+const VotesDisplay = memo(({ count }) => {
+  const voteText = count === 1 ? "1 vote" : `${count} votes`;
+  return <p className="votesNo">{voteText}</p>;
+});
 
-class Item {
-  constructor(id, title, rank, rankerName, post, dbID) {
-    this.id = id;
-    this.title = title;
-    this.rank = rank;
-    this.rankerName = rankerName;
-    this.post = post;
-    this.dbID = dbID;
-  }
-}
+const StarsDisplay = memo(({ rating }) => {
+  return (
+    <div className="ratedStars">
+      {[...Array(5)].map((_, i) => (
+        <span key={i} style={{ color: i < rating ? "gold" : "gray" }}>
+          ★
+        </span>
+      ))}
+    </div>
+  );
+});
 
-class Movie extends Item {}
-class Person extends Item {}
+const MovieItem = memo(({ item, type, onSelectMovie }) => {
+  const title =
+    type === "movie"
+      ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
+      : item.name;
 
-const SearchContent = forwardRef(({
-  sseData,
-  message,
-  setMoviesRanks,
-  setPeopleRanks,
-  onSelectMovie,
-  isVisible,
-  setLastQuery,
-  lastQuery
-}, ref) => {
+  const avgRating = item.ratings?.length
+    ? Math.round(
+        item.ratings.reduce((sum, r) => sum + r.rating, 0) / item.ratings.length
+      )
+    : 0;
+
+  const voteCount = item.ratings?.length || 0;
+
+  return (
+    <div className="item">
+      <p className="titles" data-title={title}>
+        {title}
+      </p>
+      <div
+        className="img"
+        style={{
+          backgroundImage: `url(${
+            type === "movie" ? item.poster : item.profile
+          })`,
+        }}
+        onClick={() =>
+          onSelectMovie(
+            item.id,
+            type,
+            title,
+            type === "movie" ? item.poster : item.profile,
+            avgRating,
+            voteCount === 1 ? "1 vote" : `${voteCount} votes`
+          )
+        }
+      ></div>
+      <VotesDisplay count={voteCount} />
+      <StarsDisplay rating={avgRating} />
+    </div>
+  );
+});
+
+const SearchContent = forwardRef((props, ref) => {
+  const {
+    sseData,
+    message,
+    setMoviesRanks,
+    setPeopleRanks,
+    onSelectMovie,
+    isVisible,
+    setLastQuery,
+    lastQuery,
+  } = props;
+
   const [query, setQuery] = useState("");
   const [type, setSearchType] = useState("title");
-  const [results, setResults] = useState([]);
+  const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const queryRef = useRef(query);
   const typeRef = useRef(type);
-  const lastSearchRef = useRef({ text: "", type: "", id: null });
+  const moviesRanks = useRef([]);
+  const peopleRanks = useRef([]);
+
+  // Handle SSE updates efficiently
+  useEffect(() => {
+    if (!sseData) return;
+
+    if (sseData.type === 'ratingUpdate') {
+      const updatedItem = sseData.payload;
+      setItems(prevItems => {
+        return prevItems.map(item => {
+          if (item.id === updatedItem.id) {
+            return {
+              ...item,
+              ratings: updatedItem.ratings
+            };
+          }
+          return item;
+        });
+      });
+    } else {
+      searchMovies();
+    }
+  }, [sseData]);
 
   const searchMovies = useCallback(async () => {
-    const currentQuery = queryRef.current.trim();
-    if (!currentQuery) return;
+    if (!queryRef.current.trim()) return;
 
     setError(null);
     setIsLoading(true);
 
     try {
       const response = await fetch(
-        `/movies/search?query=${encodeURIComponent(currentQuery)}&type=${typeRef.current}&id=${message.id}`
+        `/movies/search?query=${encodeURIComponent(
+          queryRef.current
+        )}&type=${typeRef.current}&id=${message.id}`
       );
+
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const data = await response.json();
 
       if (Number(data.querySenderID) === message.id) {
-        const newQuery = {
+        setLastQuery({
           type: data.queryType,
           text: data.queryText,
           id: Number(data.querySenderID),
-        };
-        setLastQuery(newQuery);
-        lastSearchRef.current = newQuery;
+        });
       }
 
-      moviesRanks.length = 0;
-      peopleRanks.length = 0;
+      moviesRanks.current = [];
+      peopleRanks.current = [];
+      const newItems = [];
 
-      const resultItems = [];
-
-      const processItems = (items, type, resultArray, rankArray, RankClass) => {
+      const processItems = (items, type, rankArray) => {
         items?.forEach((item) => {
-          const image = type === "movie" ? item.poster : item.profile;
-          if (!image) return;
+          if (!(type === "movie" ? item.poster : item.profile)) return;
 
-          resultArray.push(createItemElement(item, type));
+          newItems.push(item);
 
           item.ratings?.forEach(({ rating, userEmail, comment, id }) => {
-            rankArray.push(new RankClass(
-              item.id,
-              item[type === "movie" ? "title" : "name"],
-              rating,
-              userEmail,
-              comment,
-              id
-            ));
+            rankArray.push({
+              id: item.id,
+              title: item[type === "movie" ? "title" : "name"],
+              rank: rating,
+              rankerName: userEmail,
+              post: comment,
+              dbID: id
+            });
           });
         });
       };
 
       if (data.movies) {
-        processItems(data.movies, "movie", resultItems, moviesRanks, Movie);
+        processItems(data.movies, "movie", moviesRanks.current);
       } else if (data.people) {
-        processItems(data.people, "person", resultItems, peopleRanks, Person);
+        processItems(data.people, "person", peopleRanks.current);
       }
 
-      setMoviesRanks([...moviesRanks]);
-      setPeopleRanks([...peopleRanks]);
-      setResults(resultItems);
+      setItems(newItems);
+      setMoviesRanks([...moviesRanks.current]);
+      setPeopleRanks([...peopleRanks.current]);
+
     } catch (error) {
       console.error("Error fetching movies:", error);
-      setError(error.message.includes("Failed to fetch")
-        ? "Network error. Please check your connection."
-        : "Failed to load results. Please try again.");
+      setError(
+        error.message.includes("Failed to fetch")
+          ? "Network error. Please check your connection."
+          : "Failed to load results. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
-  }, [message.id, setLastQuery, setMoviesRanks, setPeopleRanks]);
-
-  useEffect(() => {
-    if (!sseData) return;
-
-    const isRelevant =
-      sseData.type === lastSearchRef.current.type &&
-      sseData.query === lastSearchRef.current.text &&
-      sseData.senderID === lastSearchRef.current.id;
-
-    if (!isRelevant) return;
-
-    // Just update votes and rating stars
-    const el = document.getElementById(sseData.itemID);
-    if (!el) return;
-
-    const voteEl = el.querySelector(".votesNo");
-    if (voteEl) {
-      const voteCount = sseData.ratingCount;
-      voteEl.textContent = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
-    }
-
-    const ratingEl = el.querySelector(".ratedStars");
-    if (ratingEl) {
-      ratingEl.innerHTML = "";
-      for (let i = 0; i < 5; i++) {
-        const star = document.createElement("span");
-        star.style.color = i < sseData.avgRating ? "gold" : "gray";
-        star.innerHTML = "★";
-        ratingEl.appendChild(star);
-      }
-    }
-  }, [sseData]);
+  }, [message, setLastQuery, setMoviesRanks, setPeopleRanks]);
 
   useImperativeHandle(ref, () => ({ searchMovies }));
 
-  const handleSearchChange = (e) => {
-    setQuery(e.target.value);
-    queryRef.current = e.target.value;
+  const handleSearchChange = (event) => {
+    setQuery(event.target.value);
+    queryRef.current = event.target.value;
   };
 
-  const handleRadioChange = (e) => {
-    setSearchType(e.target.value);
-    typeRef.current = e.target.value;
-  };
-
-  const createItemElement = (item, type) => {
-    const title = type === "movie"
-      ? `${item.title}${item.year !== "N/A" ? ` (${item.year})` : ""}`
-      : item.name;
-
-    const avgRating = item.ratings?.length
-      ? Math.round(item.ratings.reduce((sum, r) => sum + r.rating, 0) / item.ratings.length)
-      : 0;
-
-    const voteCount = item.ratings?.length || 0;
-    const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
-
-    return (
-      <div key={item.id} className="item" id={item.id}>
-        <p className="titles" data-title={title}>{title}</p>
-        <div
-          className="img"
-          style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }}
-          onClick={() => onSelectMovie(
-            item.id,
-            type,
-            title,
-            type === 'movie' ? item.poster : item.profile,
-            avgRating,
-            voteText
-          )}
-        ></div>
-        <p className="votesNo">{voteText}</p>
-        <div className="ratedStars">
-          {[...Array(5)].map((_, i) => (
-            <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>&#9733;</span>
-          ))}
-        </div>
-      </div>
-    );
+  const handleRadioChange = (event) => {
+    setSearchType(event.target.value);
+    typeRef.current = event.target.value;
   };
 
   return (
@@ -246,8 +248,13 @@ const SearchContent = forwardRef(({
           <p className="error">{error}</p>
         ) : (
           <div className="results">
-            {results.map((item, index) => (
-              <div key={index}>{item}</div>
+            {items.map(item => (
+              <MovieItem
+                key={`${item.id}-${item.ratings?.length || 0}`}
+                item={item}
+                type={type === "movie" ? "movie" : "person"}
+                onSelectMovie={onSelectMovie}
+              />
             ))}
           </div>
         )}
