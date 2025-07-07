@@ -5,6 +5,7 @@ import React, {
   useRef,
   forwardRef,
   useImperativeHandle,
+  memo
 } from "react";
 
 const moviesRanks = [];
@@ -23,6 +24,24 @@ class Item {
 
 class Movie extends Item {}
 class Person extends Item {}
+
+// Memoized components for efficient updates
+const VotesDisplay = memo(({ count }) => {
+  const voteText = count === 1 ? "1 vote" : `${count} votes`;
+  return <p className="votesNo">{voteText}</p>;
+});
+
+const StarsDisplay = memo(({ rating }) => {
+  return (
+    <div className="ratedStars">
+      {[...Array(5)].map((_, i) => (
+        <span key={i} style={{ color: i < rating ? "gold" : "gray" }}>
+          &#9733;
+        </span>
+      ))}
+    </div>
+  );
+});
 
 const SearchContent = forwardRef(
   (
@@ -43,6 +62,7 @@ const SearchContent = forwardRef(
     const [results, setResults] = useState([]);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [itemsData, setItemsData] = useState({});
 
     const queryRef = useRef(query);
     const typeRef = useRef(type);
@@ -54,18 +74,6 @@ const SearchContent = forwardRef(
     useEffect(() => {
       console.log("Last Query Updated:", lastQuery);
     }, [lastQuery]);
-
-    const createRatingElement = (avgRating) => {
-      return (
-        <div className="ratedStars">
-          {[...Array(5)].map((_, i) => (
-            <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>
-              &#9733;
-            </span>
-          ))}
-        </div>
-      );
-    };
 
     const createItemElement = (item, type) => {
       const title =
@@ -81,10 +89,9 @@ const SearchContent = forwardRef(
         : 0;
 
       const voteCount = item.ratings?.length || 0;
-      const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
 
       return (
-        <div key={item.id} className="item">
+        <div key={`${item.id}-${voteCount}-${avgRating}`} className="item">
           <p className="titles" data-title={title}>
             {title}
           </p>
@@ -103,15 +110,37 @@ const SearchContent = forwardRef(
                 title,
                 type === "movie" ? item.poster : item.profile,
                 avgRating,
-                voteText
+                voteCount === 1 ? "1 vote" : `${voteCount} votes`
               )
             }
           ></div>
-          <p className="votesNo">{voteText}</p>
-          {createRatingElement(avgRating)}
+          <VotesDisplay count={voteCount} />
+          <StarsDisplay rating={avgRating} />
         </div>
       );
     };
+
+    // Function to update ratings when SSE data arrives
+    const updateItemRatings = useCallback((updatedItem) => {
+      setItemsData(prev => {
+        const newData = {...prev};
+        if (newData[updatedItem.id]) {
+          newData[updatedItem.id].ratings = updatedItem.ratings;
+        }
+        return newData;
+      });
+    }, []);
+
+    useEffect(() => {
+      if (sseData) {
+        if (sseData.type === 'ratingUpdate') {
+          // Update only the specific item's ratings
+          updateItemRatings(sseData.payload);
+        } else {
+          searchMovies();
+        }
+      }
+    }, [sseData, searchMovies, updateItemRatings]);
 
     const searchMovies = useCallback(async () => {
       if (!queryRef.current.trim()) return;
@@ -144,11 +173,13 @@ const SearchContent = forwardRef(
         moviesRanks.length = 0;
         peopleRanks.length = 0;
         const resultItems = [];
+        const newItemsData = {};
 
         const processItems = (items, type, resultArray, rankArray, RankClass) => {
           items?.forEach((item) => {
             if (!(type === "movie" ? item.poster : item.profile)) return;
 
+            newItemsData[item.id] = item;
             resultArray.push(createItemElement(item, type));
 
             item.ratings?.forEach(({ rating, userEmail, comment, id }) => {
@@ -172,6 +203,7 @@ const SearchContent = forwardRef(
           processItems(data.people, "person", resultItems, peopleRanks, Person);
         }
 
+        setItemsData(newItemsData);
         setMoviesRanks([...moviesRanks]);
         setPeopleRanks([...peopleRanks]);
         setResults(resultItems);
@@ -187,11 +219,19 @@ const SearchContent = forwardRef(
       }
     }, [message, setLastQuery]);
 
+    // Update results when itemsData changes
     useEffect(() => {
-      if (sseData) {
-        searchMovies();
+      if (Object.keys(itemsData).length > 0) {
+        const resultItems = [];
+        
+        Object.values(itemsData).forEach(item => {
+          const itemType = item.title ? "movie" : "person";
+          resultItems.push(createItemElement(item, itemType));
+        });
+
+        setResults(resultItems);
       }
-    }, [sseData, searchMovies]);
+    }, [itemsData]);
 
     useImperativeHandle(ref, () => ({ searchMovies }));
 
