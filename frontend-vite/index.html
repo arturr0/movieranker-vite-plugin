@@ -1,26 +1,26 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="https://cdn.glitch.global/9b6e30d1-a1c2-46a0-a831-d48ce809e60a/iconfinder-video-film-camera-movie-photography-4593167_122280.ico?v=1750964605873" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preload" href="https://fonts.googleapis.com/css?family=Oswald:400|Open+Sans:700" as="style" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Oswald:400|Open+Sans:700" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MovieRanker</title>
 
-    <title>MovieRanker</title>
-    <!-- Include OrbitControls from a working CDN -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js"></script>
-      
-    <!-- Include GLTFLoader from CDN -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js"></script>
-    <link rel="stylesheet" href="/styles/auth.css">
-    <link rel="stylesheet" href="/styles/movies.css">
-    <link rel="stylesheet" href="/styles/fontello.css">
+  <!-- Ikona -->
+  <link rel="icon" href="https://cdn.glitch.global/9b6e30d1-a1c2-46a0-a831-d48ce809e60a/iconfinder-video-film-camera-movie-photography-4593167_122280.ico?v=1750964605873" />
 
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+  <!-- Google Fonts preload (fix) -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Oswald:400|Open+Sans:700" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400|Open+Sans:700" />
+  </noscript>
+
+  <!-- Font Awesome (działa) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+  <!-- Style -->
+  <link rel="stylesheet" href="/styles/auth.css">
+  <link rel="stylesheet" href="/styles/movies.css">
+  <link rel="stylesheet" href="/styles/fontello.css">
+
+  <!-- JS modules (usuń jeśli używasz importów w kodzie) -->
+  <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js"></script> -->
+  <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js"></script> -->
+</head>
