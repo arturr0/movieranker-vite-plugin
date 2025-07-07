@@ -42,7 +42,6 @@ const SearchContent = forwardRef(({
 
   const queryRef = useRef(query);
   const typeRef = useRef(type);
-
   const lastSearchRef = useRef({ text: "", type: "", id: null });
 
   const searchMovies = useCallback(async () => {
@@ -50,17 +49,13 @@ const SearchContent = forwardRef(({
     if (!currentQuery) return;
 
     setError(null);
-    setResults([]);
     setIsLoading(true);
 
     try {
       const response = await fetch(
         `/movies/search?query=${encodeURIComponent(currentQuery)}&type=${typeRef.current}&id=${message.id}`
       );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const data = await response.json();
 
@@ -76,11 +71,13 @@ const SearchContent = forwardRef(({
 
       moviesRanks.length = 0;
       peopleRanks.length = 0;
+
       const resultItems = [];
 
       const processItems = (items, type, resultArray, rankArray, RankClass) => {
         items?.forEach((item) => {
-          if (!(type === "movie" ? item.poster : item.profile)) return;
+          const image = type === "movie" ? item.poster : item.profile;
+          if (!image) return;
 
           resultArray.push(createItemElement(item, type));
 
@@ -106,7 +103,6 @@ const SearchContent = forwardRef(({
       setMoviesRanks([...moviesRanks]);
       setPeopleRanks([...peopleRanks]);
       setResults(resultItems);
-
     } catch (error) {
       console.error("Error fetching movies:", error);
       setError(error.message.includes("Failed to fetch")
@@ -117,7 +113,6 @@ const SearchContent = forwardRef(({
     }
   }, [message.id, setLastQuery, setMoviesRanks, setPeopleRanks]);
 
-  // Trigger search only if sseData relates to last query (optional: check action type too)
   useEffect(() => {
     if (!sseData) return;
 
@@ -126,26 +121,40 @@ const SearchContent = forwardRef(({
       sseData.query === lastSearchRef.current.text &&
       sseData.senderID === lastSearchRef.current.id;
 
-    if (isRelevant) {
-      console.log("SSE update relevant, refetching...");
-      searchMovies();
+    if (!isRelevant) return;
+
+    // Just update votes and rating stars
+    const el = document.getElementById(sseData.itemID);
+    if (!el) return;
+
+    const voteEl = el.querySelector(".votesNo");
+    if (voteEl) {
+      const voteCount = sseData.ratingCount;
+      voteEl.textContent = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
     }
-  }, [sseData, searchMovies]);
+
+    const ratingEl = el.querySelector(".ratedStars");
+    if (ratingEl) {
+      ratingEl.innerHTML = "";
+      for (let i = 0; i < 5; i++) {
+        const star = document.createElement("span");
+        star.style.color = i < sseData.avgRating ? "gold" : "gray";
+        star.innerHTML = "★";
+        ratingEl.appendChild(star);
+      }
+    }
+  }, [sseData]);
 
   useImperativeHandle(ref, () => ({ searchMovies }));
 
-  const handleSearchChange = (event) => {
-    setQuery(event.target.value);
-    queryRef.current = event.target.value;
+  const handleSearchChange = (e) => {
+    setQuery(e.target.value);
+    queryRef.current = e.target.value;
   };
 
-  const handleRadioChange = (event) => {
-    setSearchType(event.target.value);
-    typeRef.current = event.target.value;
-  };
-
-  const handleSearchClick = () => {
-    searchMovies();
+  const handleRadioChange = (e) => {
+    setSearchType(e.target.value);
+    typeRef.current = e.target.value;
   };
 
   const createItemElement = (item, type) => {
@@ -161,12 +170,11 @@ const SearchContent = forwardRef(({
     const voteText = voteCount === 1 ? "1 vote" : `${voteCount} votes`;
 
     return (
-      <div key={item.id} className="item">
+      <div key={item.id} className="item" id={item.id}>
         <p className="titles" data-title={title}>{title}</p>
         <div
           className="img"
           style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }}
-          id={item.id}
           onClick={() => onSelectMovie(
             item.id,
             type,
@@ -177,20 +185,14 @@ const SearchContent = forwardRef(({
           )}
         ></div>
         <p className="votesNo">{voteText}</p>
-        {createRatingElement(avgRating)}
+        <div className="ratedStars">
+          {[...Array(5)].map((_, i) => (
+            <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>&#9733;</span>
+          ))}
+        </div>
       </div>
     );
   };
-
-  const createRatingElement = (avgRating) => (
-    <div className="ratedStars">
-      {[...Array(5)].map((_, i) => (
-        <span key={i} style={{ color: i < avgRating ? "gold" : "gray" }}>
-          &#9733;
-        </span>
-      ))}
-    </div>
-  );
 
   return (
     <div className="searchContent" style={{ display: isVisible ? "block" : "none" }}>
@@ -202,36 +204,36 @@ const SearchContent = forwardRef(({
             placeholder="Enter search query"
             value={query}
             onChange={handleSearchChange}
-            onKeyPress={(e) => e.key === 'Enter' && searchMovies()}
+            onKeyPress={(e) => e.key === "Enter" && searchMovies()}
           />
           <i
             className="icon-search-1 magnifier"
             onClick={searchMovies}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           ></i>
         </div>
       </div>
 
       <div className="searchTypes" style={{ display: "flex" }}>
-        <label style={{ display: "flex", alignItems: 'center' }}>
+        <label style={{ display: "flex", alignItems: "center" }}>
           <input
             type="radio"
             name="type"
             value="title"
             checked={type === "title"}
             onChange={handleRadioChange}
-            style={{ marginRight: '5px' }}
+            style={{ marginRight: "5px" }}
           />
           Movie
         </label>
-        <label style={{ display: "flex", alignItems: 'center', marginLeft: "20px" }}>
+        <label style={{ display: "flex", alignItems: "center", marginLeft: "20px" }}>
           <input
             type="radio"
             name="type"
             value="actor"
             checked={type === "actor"}
             onChange={handleRadioChange}
-            style={{ marginRight: '5px' }}
+            style={{ marginRight: "5px" }}
           />
           Cast & Crew
         </label>
