@@ -25,13 +25,10 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
 
   const queryRef = useRef(query);
   const typeRef = useRef(type);
-  const rootDivRef = useRef(null);
 
-  // Auto-scroll function for root div
+  // Auto-scroll body to top
   const scrollToTop = useCallback(() => {
-    if (rootDivRef.current) {
-      rootDivRef.current.scrollTop = 0;
-    }
+    window.scrollTo(0, 0);
   }, []);
 
   // Wrapper for onSelectMovie that triggers scroll
@@ -167,7 +164,7 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   };
 
   return (
-    <div className="searchContent" ref={rootDivRef} style={{ display: isVisible ? "block" : "none" }}>
+    <div className="searchContent" style={{ display: isVisible ? "block" : "none" }}>
       <div className="searchDiv">
         <div className="searchContainer">
           <input
