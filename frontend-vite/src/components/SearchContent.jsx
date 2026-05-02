@@ -26,16 +26,19 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   const queryRef = useRef(query);
   const typeRef = useRef(type);
 
-  // Auto-scroll body to top
-  const scrollToTop = useCallback(() => {
-    window.scrollTo(0, 0);
+  // Scroll div.ranks to top
+  const scrollRanksToTop = useCallback(() => {
+    const ranksDiv = document.querySelector('div.ranks');
+    if (ranksDiv) {
+      ranksDiv.scrollTop = 0;
+    }
   }, []);
 
   // Wrapper for onSelectMovie that triggers scroll
   const handleSelectMovie = useCallback((id, type, title, poster, avgRating, voteText) => {
     onSelectMovie(id, type, title, poster, avgRating, voteText);
-    scrollToTop();
-  }, [onSelectMovie, scrollToTop]);
+    scrollRanksToTop();
+  }, [onSelectMovie, scrollRanksToTop]);
 
   useEffect(() => {
     console.log("Message changed: ", message);
