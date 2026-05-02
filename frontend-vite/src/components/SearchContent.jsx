@@ -25,20 +25,18 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
 
   const queryRef = useRef(query);
   const typeRef = useRef(type);
-  const resultsContainerRef = useRef(null);
+  const rootDivRef = useRef(null);
 
-  // Auto-scroll function - instant scroll (not smooth)
+  // Auto-scroll function for root div
   const scrollToTop = useCallback(() => {
-    if (resultsContainerRef.current) {
-      resultsContainerRef.current.scrollTop = 0;
+    if (rootDivRef.current) {
+      rootDivRef.current.scrollTop = 0;
     }
   }, []);
 
   // Wrapper for onSelectMovie that triggers scroll
   const handleSelectMovie = useCallback((id, type, title, poster, avgRating, voteText) => {
-    // Call the original onSelectMovie
     onSelectMovie(id, type, title, poster, avgRating, voteText);
-    // Auto-scroll to top of results container instantly
     scrollToTop();
   }, [onSelectMovie, scrollToTop]);
 
@@ -101,14 +99,11 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
       setMoviesRanks([...moviesRanks]);
       setPeopleRanks([...peopleRanks]);
       setResults(resultItems);
-      
-      // Scroll to top when new results are loaded
-      scrollToTop();
     } catch (error) {
       console.error("Error fetching movies:", error);
       setError("Failed to load results. Please try again.");
     }
-  }, [message, setLastQuery, scrollToTop]);
+  }, [message, setLastQuery]);
   
   useEffect(() => {
     if (sseData) {
@@ -172,7 +167,7 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   };
 
   return (
-    <div className="searchContent" style={{ display: isVisible ? "block" : "none" }}>
+    <div className="searchContent" ref={rootDivRef} style={{ display: isVisible ? "block" : "none" }}>
       <div className="searchDiv">
         <div className="searchContainer">
           <input
@@ -209,11 +204,7 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
         </label>
       </div>
 
-      <div 
-        className="resultContainer" 
-        ref={resultsContainerRef}
-        style={{ overflowY: "auto", maxHeight: "500px" }}
-      >
+      <div className="resultContainer">
         {error && <p className="error">{error}</p>}
         <div className="results">
           {results.map((item, index) => <div key={index}>{item}</div>)}
