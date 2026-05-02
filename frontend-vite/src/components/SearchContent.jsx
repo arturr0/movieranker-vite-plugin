@@ -25,15 +25,31 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
 
   const queryRef = useRef(query);
   const typeRef = useRef(type);
+  const resultsContainerRef = useRef(null);
 
-  
+  // Auto-scroll function - instant scroll (not smooth)
+  const scrollToTop = useCallback(() => {
+    if (resultsContainerRef.current) {
+      resultsContainerRef.current.scrollTop = 0;
+    }
+  }, []);
+
+  // Wrapper for onSelectMovie that triggers scroll
+  const handleSelectMovie = useCallback((id, type, title, poster, avgRating, voteText) => {
+    // Call the original onSelectMovie
+    onSelectMovie(id, type, title, poster, avgRating, voteText);
+    // Auto-scroll to top of results container instantly
+    scrollToTop();
+  }, [onSelectMovie, scrollToTop]);
 
   useEffect(() => {
     console.log("Message changed: ", message);
   }, [message]);
+  
   useEffect(() => {
     console.log("Last Query Updated:", lastQuery);
   }, [lastQuery]);
+  
   const searchMovies = useCallback(async () => {
     if (!queryRef.current.trim()) return;
 
@@ -85,16 +101,22 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
       setMoviesRanks([...moviesRanks]);
       setPeopleRanks([...peopleRanks]);
       setResults(resultItems);
+      
+      // Scroll to top when new results are loaded
+      scrollToTop();
     } catch (error) {
       console.error("Error fetching movies:", error);
       setError("Failed to load results. Please try again.");
     }
-  }, [message, setLastQuery]);
+  }, [message, setLastQuery, scrollToTop]);
+  
   useEffect(() => {
     if (sseData) {
       console.log("New SSE data in SearchContent:", sseData);
-      searchMovies();      }
+      searchMovies();      
+    }
   }, [sseData, searchMovies]);
+  
   useImperativeHandle(ref, () => ({ searchMovies }));
 
   const handleSearchChange = (event) => {
@@ -129,7 +151,7 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
           className="img" 
           style={{ backgroundImage: `url(${type === 'movie' ? item.poster : item.profile})` }} 
           id={item.id} 
-          onClick={() => onSelectMovie(item.id, type, title, type === 'movie' ? item.poster : item.profile, avgRating, voteText)}
+          onClick={() => handleSelectMovie(item.id, type, title, type === 'movie' ? item.poster : item.profile, avgRating, voteText)}
         ></div>
         <p className="votesNo">{voteText}</p>
         {createRatingElement(avgRating)}
@@ -160,7 +182,7 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
             defaultValue={query}
             onChange={handleSearchChange}
           />
-          <i className="icon-search-1 magnifier" onClick={searchMovies}></i>
+          <i className="icon-search-1 magnifier" onClick={handleSearchClick}></i>
         </div>
       </div>
 
@@ -187,7 +209,11 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
         </label>
       </div>
 
-      <div className="resultContainer">
+      <div 
+        className="resultContainer" 
+        ref={resultsContainerRef}
+        style={{ overflowY: "auto", maxHeight: "500px" }}
+      >
         {error && <p className="error">{error}</p>}
         <div className="results">
           {results.map((item, index) => <div key={index}>{item}</div>)}
