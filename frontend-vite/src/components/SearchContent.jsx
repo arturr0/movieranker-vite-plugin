@@ -183,7 +183,7 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
         </div>
       </div>
 
-      <div className="searchTypes" style={{ display: "flex" }}">
+      <div className="searchTypes" style={{ display: "flex" }}>
         <label style={{ display: "flex" }}>
           <input
             type="radio"
