@@ -26,19 +26,21 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
   const queryRef = useRef(query);
   const typeRef = useRef(type);
 
-  // Scroll div.ranks to top
-  const scrollRanksToTop = useCallback(() => {
-    const ranksDiv = document.querySelector('div.ranks');
-    if (ranksDiv) {
-      ranksDiv.scrollTop = 0;
+  // Scroll body.no-bg to top
+  const scrollBodyToTop = useCallback(() => {
+    const bodyElement = document.querySelector('body.no-bg');
+    if (bodyElement) {
+      bodyElement.scrollTop = 0;
     }
+    // Also try scrolling the window just in case
+    window.scrollTo(0, 0);
   }, []);
 
   // Wrapper for onSelectMovie that triggers scroll
   const handleSelectMovie = useCallback((id, type, title, poster, avgRating, voteText) => {
     onSelectMovie(id, type, title, poster, avgRating, voteText);
-    scrollRanksToTop();
-  }, [onSelectMovie, scrollRanksToTop]);
+    scrollBodyToTop();
+  }, [onSelectMovie, scrollBodyToTop]);
 
   useEffect(() => {
     console.log("Message changed: ", message);
@@ -181,7 +183,7 @@ const SearchContent = forwardRef(({ sseData, message, setMoviesRanks, setPeopleR
         </div>
       </div>
 
-      <div className="searchTypes" style={{ display: "flex" }}>
+      <div className="searchTypes" style={{ display: "flex" }}">
         <label style={{ display: "flex" }}>
           <input
             type="radio"
